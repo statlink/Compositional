@@ -1,0 +1,49 @@
+#useDynLib(Compositional, .registration = TRUE)
+
+importFrom("MASS", cov.rob, cov.trob)
+
+importFrom("graphics", filled.contour, contour, lines, plot, axis, par,
+           points, abline, hist, legend, text, image, segments, mtext)
+
+importFrom("stats", cor, lm, cov, optim, optimize, quantile, rnorm, sd, cmdscale,
+           qnorm, nlminb, nlm, lm.fit, rchisq, deviance, pchisq, qchisq, rgamma,
+           mahalanobis, runif, qt, qf, pf, model.matrix, prcomp, .lm.fit, na.omit,
+           ppr, predict, coef, cancor, loess, fitted, as.dist, rweibull)
+
+importFrom("grDevices", terrain.colors, grey, colorRampPalette)
+
+importFrom("Rfast", colVars, colMedians, colmeans, colsums, rowmeans, rowsums,
+           diri.nr2, colSort, mahala, rmvnorm, rmvt, sort_unique, rowMins,
+           rowMaxs, Dist, spat.med, lmfit, dista, Log, Var, knn, knn.cv, cova,
+           glm_logistic, glm_poisson, colhameans, spdinv, colnth, Table, Order,
+           eachrow, sscov, beta.mle, ibeta.mle, hsecant01.mle, logitnorm.mle,
+		       prop.reg, prop.regs, spatmed.reg, dcor, squareform, gammanb, Rnorm,
+		       dmvnorm, dmvt)
+
+importFrom("Rfast2", kumar.mle, propols.reg, prophelling.reg, zil.mle,
+           beta.nb, logitnorm.nb, cauchy.nb, laplace.nb, normlog.nb, weibull.nb,
+           pca, unitweibull.mle, colbeta.mle, collogitnorm.mle, colunitweibull.mle,
+           rbeta1, colGroup, Sample.int, Sample, Runif, gammareg)
+
+importFrom("RANN", nn2)
+importFrom("mda", fda)
+importFrom("sn", msn.mle, rmsn)
+importFrom("mixture", gpcm)
+importFrom("emplik", el.test)
+importFrom("FlexDir", FD.estimation, FD.density, FD.generate)
+importFrom("nnet", multinom)
+importFrom("codalm", codalm)
+importFrom("NlcOptim", solnl)
+importFrom("Directional", dkent)
+importFrom("glmnet", glmnet, cv.glmnet)
+importFrom("pchc", fedhc, pchc, mmhc, fedtabu, pctabu, mmtabu)
+importFrom("energy", eqdist.etest)
+
+import("doParallel")
+import("parallel")
+import("foreach")
+
+exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")
+
+

@@ -1,0 +1,59 @@
+dzad <- function(y, a, logged = TRUE) {
+
+  y <- as.matrix(y)
+  if ( dim(y)[2] == 1 )  y <- t(y)
+
+  dm <- dim(y)
+  D <- dm[2]   ;   d <- D - 1
+  ## d is the dimensionality of the simplex
+  n <- dm[1] ## sample size
+  x <- matrix(1, nrow = n, ncol = 1)
+  ## next we separate the compositional vectors, those which contain
+  ## zeros and those without. The same separation is performed for the
+  ## independent variable(s)
+  a1 <- which( Rfast::rowsums( y > 0 ) == D )
+  a2 <- which( Rfast::rowsums( y > 0 ) != D )
+  n1 <- length(a1)
+  n2 <- n - n1
+  ## n1 is the sample size of the compositional vectors with no zeros
+  ## n2 is the sample size of the compositional vectors with zeros
+  za <- y[a2, , drop = FALSE]
+  za[za == 0] <- 1
+  za[ za < 1 ] <- 0
+  theta <- table( apply(za, 1, paste, collapse = ",") )
+  theta <- as.vector(theta)
+  con <- n1 * log(n1/n) + sum( theta * log(theta/n) )
+
+  y1 <- y[a1, , drop = FALSE]
+  ly1 <- log( y1 )
+  x1 <- x[a1, , drop = FALSE]
+  ly2 <- log( y[a2, , drop = FALSE] )
+  x2 <- x[a2, , drop = FALSE]
+  n1 <- nrow(y1)    ;    n2 <- n - n1
+  z <- list(ly1 = ly1, ly2 = ly2, x1 = x1, x2 = x2, a1 = a1, a2 = a2)
+
+  phi <- exp( a[1] )   ;   para <- a[-1]
+  be <- matrix(para, ncol = d)   ## be is the matrix of the betas
+  be <- cbind(0, be)
+  mu1 <- exp(x1 %*% be)
+  mu <- mu1 / Rfast::rowsums(mu1) ## fitted values
+  ## next we find the fitted values for the compositional vectors with zeros
+  ly3 <- ly2
+  ind <- which(is.infinite(ly2))
+  ly3[ind] <- 0
+  mu2 <- exp(x2 %*% be )
+  mu2[ind] <- 0
+  mu2 <- mu2 / Rfast::rowsums(mu2)
+  ep <- lgamma(phi * mu2)
+  ep[is.infinite(ep)] <- 0
+  zeros <-  - Rfast::rowsums(ep) + Rfast::rowsums( (mu2 * phi - 1) * ly3 )
+  ba <- phi * mu
+  f1 <-  - lgamma(phi) + Rfast::rowsums( lgamma( ba ) ) - Rfast::rowsums( (ba - 1) * ly1 )
+  f2 <-  - lgamma(phi) - zeros
+
+
+  if ( logged ) {
+    f <- f
+  } else   f <- exp(f)
+  f
+}

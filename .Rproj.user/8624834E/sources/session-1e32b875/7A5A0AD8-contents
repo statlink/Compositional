@@ -1,0 +1,97 @@
+library(Rfast)
+library(Rfast2)
+library(bnlearn)
+library(pcalg)
+library(pchc)
+
+#### water
+bn <- readRDS(url("https://www.bnlearn.com/bnrepository/water/water.rds"))
+bnplot(bn, shape = "ellipse")
+dag <- amat(bn)[-c(3:8), -c(3:8)]
+g1 <- as( dag2essgraph( dag ), "graphNEL" )
+g2 <- as.vector( dag2essgraph( dag ) )
+
+n <- c(1e+4, 2e+4, 5e+4, 1e+5, 2e+5, 5e+5, 1e+6, 2e+6, 5e+6)
+TIME <- matrix(nrow = length(n), ncol = 6)
+rownames(TIME) <- paste("n=", n, sep = "")
+SHD <- FSCORE <- TIME
+R <- 20
+
+  for ( i in 1:length(n) ) {  ## sample size
+    t1 <- perf1 <- perf2 <- matrix(nrow = R, ncol = 6)
+    for (vim in 1:R) {
+      x <- bnlearn::rbn(n = n[i], bn)
+      y <- x
+      for (j in 1:dim(y)[2])  y[, j] <- as.numeric(x[, j]) - 1
+      y <- as.matrix(y)
+      a <- colMins(y, T)
+      b <- which(a > 0)
+      for (j in b) y[, j] <- y[, j] - 1
+ 
+      ind <- which( is.na( rowsums(y) ) )
+      if ( length(ind) > 0 )  y <- y[-ind, ]
+ 
+      a1 <- pchc(y[, -c(3:8)], method = "cat", score = "bde")
+      a2 <- pchc(y[, -c(3:8)], method = "cat", score = "loglik")
+      a3 <- pchc(y[, -c(3:8)], method = "cat", score = "bic")
+ 
+      a4 <- pctabu(y[, -c(3:8)], method = "cat", score = "bde")
+      a5 <- pctabu(y[, -c(3:8)], method = "cat", score = "loglik")
+      a6 <- pctabu(y[, -c(3:8)], method = "cat", score = "bic")
+      
+      ## performance evaluation
+      t1[vim, ] <- c( a1$runtime, a2$runtime, a3$runtime, a4$runtime,      
+                      a5$runtime, a6$runtime)
+ 
+      ag1 <- as( bnlearn::amat(a1$dag), "graphNEL" )   
+      ag2 <- as( bnlearn::amat(a2$dag), "graphNEL" )
+      ag3 <- as( bnlearn::amat(a3$dag), "graphNEL" )   
+      ag4 <- as( bnlearn::amat(a4$dag), "graphNEL" )
+      ag5 <- as( bnlearn::amat(a5$dag), "graphNEL" )   
+      ag6 <- as( bnlearn::amat(a6$dag), "graphNEL" )
+
+      perf1[vim, ] <- c( pcalg::shd(ag1, g1), pcalg::shd(ag2, g1), pcalg::shd(ag3, g1),
+                         pcalg::shd(ag4, g1), pcalg::shd(ag5, g1), pcalg::shd(ag6, g1) )
+
+      preds <- cbind( as.vector( bnlearn::amat(a1$dag) ), as.vector( bnlearn::amat(a2$dag) ),
+                      as.vector( bnlearn::amat(a3$dag) ), as.vector( bnlearn::amat(a4$dag) ),
+                      as.vector( bnlearn::amat(a5$dag) ), as.vector( bnlearn::amat(a6$dag) ) )
+      perf2[vim, ] <- colfscores( g2, preds )
+
+    }  ## end for (vim in 1:R) {
+
+    TIME[i, ] <- colmeans(t1)  
+    SHD[i, ] <- colmeans(perf1)
+    FSCORE[i, ] <- colmeans(perf2)
+    y <- x <- preds <- NULL
+    save.image("water.RData")
+  }  ##  end  for ( i in 1:length(n) ) {
+
+
+
+png(filename = paste("shd3.png", sep = ""), width = 6000, height = 5000, res = 700)
+
+plot(log(n), shdpc, type = "b", pch = 18, lwd = 2, ylim = c( min(shdpc, shdmm), max(shdpc, shdmm) ),   
+xlab = "Sample size in log-scale", ylab = "SHD", cex = 1.2, cex.lab = 1.2, cex.axis = 1.2)
+points(log(n), shdmm, col = 2, pch = 17)
+lines(log(n), shdmm, col = 2)
+
+abline(h = seq(20, 40, by = 2), col = "lightgrey", lwd = 2, lty = 2)
+legend("right", c("PCHC", "MMHC"), col = c(1:2), pch = c(18, 17), lwd = c(2, 2), cex = 1.2 )
+
+dev.off()
+
+png(filename = paste("time_ntests.png", sep = ""), width = 6000, height = 5000, res = 700)
+
+plot(log(n), timemm/timepc, type = "b", pch = 18, lwd = 2, ylim = c( min(timemm/timepc), max(timemm/timepc) ),   
+xlab = "Sample size in log-scale", ylab = "Ratio", cex = 1.2, cex.lab = 1.2, cex.axis = 1.2)
+points(log(n), ntestsmm/ntestspc, col = 2, pch = 17)
+lines(log(n), ntestsmm/ntestspc, col = 2)
+
+abline(h = 1:8, col = "lightgrey", lwd = 2, lty = 2)
+legend("topleft", c("Speed-up factor of PCHC vs MMHC", "Ratio of CI tests of PCHC to CI tests of MMHC"), 
+col = c(1, 2), pch = c(18, 17), lwd = c(2, 2), cex = 1.2 )
+
+dev.off()
+
+

@@ -1,0 +1,512 @@
+ly <- Rfast::Log(y)  ## dimensionality of the simplex
+dirireg2 <- function(param) {
+## param contains the parameter values
+phipar <- param[1:p]
+para <- param[ -c(1:p) ]
+phi <- exp( x %*% phipar )  ## phi is a function of the covariates
+be <- matrix(para, nrow = p)  ## puts the beta parameters in a matrix
+mu1 <- cbind( 1, exp(x %*% be) )
+ma <- mu1 / rowSums(mu1)  ## the fitted values
+ba <- as.vector(phi) * ma
+- sum( lgamma(phi) ) + sum( lgamma(ba) ) - sum( ly * (ba - 1) )
+}
+runtime <- proc.time()
+rla <- ly[, -1] - ly[, 1]    ##  log( y[, -1] / y[, 1] )  ## additive log-ratio transformation
+ini <- as.vector( Rfast::lmfit(x, rla)$coefficients )  ## initial values
+x
+x=x[,-1]
+x=x[,-1]
+x
+n <- dim(y)[1]  ## sample size
+x <- model.matrix(y ~ ., data.frame(x) )
+p <- dim(x)[2]  ## dimensionality of x
+d <- dim(y)[2] - 1
+ly <- Rfast::Log(y)  ## dimensionality of the simplex
+dirireg2 <- function(param) {
+## param contains the parameter values
+phipar <- param[1:p]
+para <- param[ -c(1:p) ]
+phi <- exp( x %*% phipar )  ## phi is a function of the covariates
+be <- matrix(para, nrow = p)  ## puts the beta parameters in a matrix
+mu1 <- cbind( 1, exp(x %*% be) )
+ma <- mu1 / rowSums(mu1)  ## the fitted values
+ba <- as.vector(phi) * ma
+- sum( lgamma(phi) ) + sum( lgamma(ba) ) - sum( ly * (ba - 1) )
+}
+runtime <- proc.time()
+rla <- ly[, -1] - ly[, 1]    ##  log( y[, -1] / y[, 1] )  ## additive log-ratio transformation
+ini <- as.vector( Rfast::lmfit(x, rla)$coefficients )  ## initi
+qa <- optim( as.vector(ini), dirireg2 )
+p
+ini
+qa <- optim( c(rnorm(p, 0, 0.1), dirireg2 ) )
+optim
+qa <- optim(qa$par, dirireg2, control = list(maxit = 5000) )
+ini <- as.vector( Rfast::lmfit(x, ly)$coefficients )  ## initial values
+ini
+ini <- as.vector( Rfast::lmfit(x, ly)$be )  ## initial values
+ini
+el <- NULL
+qa <- optim( ini, dirireg2, control = list(maxit = 5000)  )
+el1 <-  -qa$value
+qa <- optim(qa$par, dirireg2, control = list(maxit = 5000) )
+el2 <- -qa$value
+while (el2 - el1 > 1e-04) {
+## the tolerance value can of course change
+el1 < -el2
+qa <- optim(qa$par, dirireg2)
+el2 <-  -qa$value
+}
+library(Compositional)
+library(Compositional)
+library(Compositional)
+diri.nr
+library(Compositional)
+diri.nr
+Rfast::diri.nr2
+?diri.nr
+?diri.reg
+x <- as.vector(iris[, 4])
+y <- as.matrix(iris[, 1:3])
+y <- y / rowSums(y)
+mod1 <- diri.reg(y, x)
+mod2=kl.compreg(y,x)$be
+mod1$be
+mod2$be
+mod2
+library(Compositional)
+library(Compositional)
+x <- as.vector(iris[, 4])
+y <- as.matrix(iris[, 1:3])
+y <- y / rowSums(y)
+mod1 <- diri.reg(y, x)
+plot = FALSE
+xnew = NULL
+dm <- dim(y)
+n <- dm[1]  ## sample size
+## the design matrix is created
+x <- model.matrix(y ~ ., data.frame(x) )
+d <- dm[2] - 1  ## dimensionality of the simplex
+z <- Rfast::Log(y)
+dirireg <- function(param, z, x, n, d) {
+phi <- exp( param[1] )  ## this avoids negative values in phi
+para <- param[-1]
+be <- matrix(para, ncol = d)  ## puts the beta parameters in a matrix
+mu1 <- cbind( 1, exp(x %*% be) )
+ma <- mu1 / rowSums(mu1)  ## the fitted values
+ba <- phi * ma
+- n * lgamma(phi) + sum( lgamma(ba) ) - sum( z * (ba - 1 ) )
+}
+runtime <- proc.time()
+rla <- z[, -1] - z[, 1]   ##  log(y[, -1] / y[, 1])  ## additive log-ratio transformation
+beta.ini <- as.vector( Compositional::kl.compreg(y, x[, -1], con = TRUE)$be
+dm <- dim(y)
+n <- dm[1]  ## sample size
+## the design matrix is created
+beta.ini <- as.vector( Compositional::kl.compreg(y, x[, -1], con = TRUE)$be )
+ini.phi <- sum( Compositional::diri.nr(y)$param )
+x <- as.vector(iris[, 4])
+y <- as.matrix(iris[, 1:3])
+y <- y / rowSums(y)
+mod1 <- diri.reg(y, x)
+runtime <- proc.time()
+beta.ini <- as.vector( Compositional::kl.compreg(y, x[, -1], con = TRUE)$be )
+ini.phi <- sum( Compositional::diri.nr(y)$param )
+## based on the logistic normal
+## the next lines optimize the dirireg function and
+## estimate the parameter values
+el <- NULL
+suppressWarnings({
+qa <- optim( c(iniphi, ini), dirireg, z = z, x = x, n = n, d = d, control = list(maxit = 5000) )
+qa <- optim( qa$par, dirireg, z = z, x = x, n = n, d = d, control = list(maxit = 5000)  )
+qa <- optim( qa$par, dirireg, z = z, x = x, n = n, d = d, control = list(maxit = 5000)  )
+qa <- optim(qa$par, dirireg, z = z, x = x, n = n, d = d, control = list(maxit = 5000), hessian = TRUE)
+})
+library(Compositional)
+?diri.reg
+library(Compositional)
+library(Compositional)
+x <- as.vector(iris[, 4])
+y <- as.matrix(iris[, 1:3])
+y <- y / rowSums(y)
+mod1 <- diri.reg(y, x)
+mod1
+library(Compositional)
+library(Compositional)
+library(Compositional)
+library(Compositional)
+Compositional::alfa
+?kl.compreg
+?kl.compreg
+library(Compositional)
+x <- Sample.int(10, 1000, replace = TRUE)
+Sample(x,length(x))
+library(MASS)
+x <- as.vector(fgl[, 1])
+y <- as.matrix(fgl[, 2:9])
+y <- y / rowSums(y)
+mod1<- kl.compreg(y, x, B = 1, ncores = 1)
+library(MASS)
+x <- as.vector(fgl[, 1])
+y <- as.matrix(fgl[, 2:9])
+y <- y / rowSums(y)
+mod1<- kl.compreg(y, x, B = 1, ncores = 1)
+kl.compreg
+library(Compositional)
+?kl.compreg
+library(MASS)
+x <- as.vector(fgl[, 1])
+y <- as.matrix(fgl[, 2:9])
+y <- y / rowSums(y)
+mod1<- kl.compreg(y, x, B = 1, ncores = 1)
+library(MASS)
+x <- as.vector(fgl[, 1])
+y <- as.matrix(fgl[, 2:9])
+y <- y / rowSums(y)
+mod1<- kl.compreg(y, x, B = 10, ncores = 1)
+mod2 <- js.compreg(y, x, B = 10, ncores = 1)
+Compositional::klcompreg.boot
+con = TRUE
+B=10
+ncores = 1
+maxiters = 50
+tol = 1e-07
+xnew = NULL
+runtime <- proc.time()
+mod <- try( Compositional::kl.compreg2(y, x, con = con, xnew = xnew, tol = tol, maxiters = maxiters), silent = TRUE )
+if ( is.infinite(mod$loglik)  |  identical( class(mod), "try-error") )  {
+x <- model.matrix(y ~ ., data.frame(x) )
+x <- x[, -1, drop = FALSE]
+if ( !con )  {
+mod <- nnet::multinom(y ~ x - 1, trace = FALSE)
+} else  mod <- nnet::multinom(y ~ x, trace = FALSE)
+be <- t( coef(mod) )
+loglik <- mod$value
+iters <- maxiters
+est <- NULL
+if ( !is.null(xnew) ) {
+xnew <- model.matrix( ~., data.frame(xnew) )
+if ( !con )  xnew <- xnew[, -1, drop = FALSE]
+mu <- cbind( 1, exp(xnew %*% be) )
+est <- mu/Rfast::rowsums(mu)
+}
+} else {
+iters <- mod$iters
+loglik <- mod$loglik
+be <- mod$be
+est <- mod$est
+}  ##  end  if ( is.infinite(loglik)  |  identical( class(mod), "try-error") )  {
+mod
+X <- model.matrix( y~., data.frame(x) )
+if ( !con )  X <- X[, -1, drop = FALSE]
+p <- dim(X)[2]
+Y <- y[, -1, drop = FALSE]
+dm <- dim(Y)
+n <- dm[1]    ;   d <- dm[2]
+b1 <- mod$be
+betaboot <- matrix( nrow = B, ncol = prod( dim(b1) ) )
+id <- matrix(1:c(p * d), ncol = d)
+der <- numeric(d * p)
+der2 <- matrix(0, p * d, p * d)
+for (i in 1:B) {
+ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+yb <- Y[ida, ]
+xb <- X[ida, ]
+bb <- Compositional::klcompreg.boot(yb, xb, der, der2, id, b1, n, p, d, tol = tol, maxiters = maxiters)$be
+if ( is.infinite(bb$loglik)  |  identical( class(bb), "try-error") )  {
+mod <- nnet::multinom(yb ~ xb, trace = FALSE)
+bb <- t( coef(mod) )
+} else  betaboot[i, ] <- as.vector(bb)
+}  ##  end  for (i in 1:B) {
+bb
+i
+ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+yb <- Y[ida, ]
+xb <- X[ida, ]
+library(MASS)
+x <- as.vector(fgl[, 1])
+y <- as.matrix(fgl[, 2:9])
+y <- y / rowSums(y)
+mod1<- kl.compreg(y, x, B = 1, ncores = 1)
+library(Compositional)
+library(MASS)
+x <- as.vector(fgl[, 1])
+y <- as.matrix(fgl[, 2:9])
+y <- y / rowSums(y)
+mod1<- kl.compreg(y, x, B = 10, ncores = 1)
+mod1
+library(Compositional)
+?alfapcr.tune
+?alfapcr.tune
+?alfapcr.tune
+library(Compositional)
+library(Compositional)
+?alfapcr.tune
+library(MASS)
+y <- as.vector(fgl[, 1])
+x <- as.matrix(fgl[, 2:9])
+x <- x/ rowSums(x)
+mod <- alfapcr.tune(y, x, nfolds = 10, maxk = 50, a = seq(-1, 1, by = 0.1) )
+model = "gaussian"
+nfolds = 10
+maxk = 50
+a = seq(-1, 1, by = 0.1)
+folds = NULL
+seed = NULL
+col.nu = 15
+graph = TRUE
+ncores = 1
+n <- dim(x)[1]
+d <- dim(x)[2] - 1
+if ( min(x) == 0 )   a <- a[ a > 0 ]  ## checks for zero values in the data.
+da <- length(a)
+ina <- 1:n
+if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
+stratified = FALSE, seed = seed)
+nfolds <- length(folds)
+mspe2 <- array( dim = c( nfolds, d, da) )
+if ( model == 'gaussian' ) {
+tic <- proc.time()
+for ( i in 1:da ) {
+z <- Compositional::alfa(x, a[i])$aff
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mspe2[, , i] <- mod$msp
+}
+toc <- proc.time() - tic
+} else if ( model == "multinomial" )  {
+tic <- proc.time()
+for ( i in 1:da ) {
+z <- Compositional::alfa(x, a[i])$aff
+mod <- Compositional::multinompcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mspe2[, , i] <- mod$msp
+}
+toc <- proc.time() - tic
+} else if ( model == "binomial"  |  model == "poisson" ) {
+tic <- proc.time()
+for ( i in 1:da ) {
+z <- Compositional::alfa(x, a[i])$aff
+mod <- Compositional::glmpcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mspe2[, , i] <- mod$msp
+}
+toc <- proc.time() - tic
+}
+dimnames(mspe2) <- list(folds = 1:nfolds, PC = paste("PC", 1:d, sep = ""), a = a)
+mspe <- array( dim = c(da, d, nfolds) )
+for (i in 1:nfolds)  mspe[, , i] <- t( mspe2[i, , 1:da] )
+dimnames(mspe) <- list(a = a, PC = paste("PC", 1:d, sep = ""), folds = 1:nfolds )
+mean.mspe <- t( colMeans( aperm(mspe) ) )   ## apply(mspe, 1:2, mean)
+if ( model == "multinomial" ) {
+best.par <- which(mean.mspe == max(mean.mspe), arr.ind = TRUE)[1, ]
+} else  best.par <- which(mean.mspe == min(mean.mspe), arr.ind = TRUE)[1, ]
+performance <- mean.mspe[ best.par[1], best.par[2] ]
+names(performance) <- "mspe"
+rownames(mean.mspe) <- a
+colnames(mspe) <- paste("PC", 1:d, sep = "")
+## depending on the type of the independent variable
+## "normal" is set by default
+n <- dim(x)[1]
+d <- dim(x)[2] - 1
+if ( min(x) == 0 )   a <- a[ a > 0 ]  ## checks for zero values in the data.
+da <- length(a)
+ina <- 1:n
+if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
+stratified = FALSE, seed = seed)
+nfolds <- length(folds)
+mspe2 <- array( dim = c( nfolds, d, da) )
+if ( model == 'gaussian' ) {
+tic <- proc.time()
+for ( i in 1:da ) {
+z <- Compositional::alfa(x, a[i])$aff
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mspe2[, , i] <- mod$msp
+}
+toc <- proc.time() - tic
+} else if ( model == "multinomial" )  {
+tic <- proc.time()
+for ( i in 1:da ) {
+z <- Compositional::alfa(x, a[i])$aff
+mod <- Compositional::multinompcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mspe2[, , i] <- mod$msp
+}
+toc <- proc.time() - tic
+} else if ( model == "binomial"  |  model == "poisson" ) {
+tic <- proc.time()
+for ( i in 1:da ) {
+z <- Compositional::alfa(x, a[i])$aff
+mod <- Compositional::glmpcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mspe2[, , i] <- mod$msp
+}
+toc <- proc.time() - tic
+}
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+y
+x
+## x contains the independent variables(s)
+## M is the number of folds, set to 10 by default
+## maxk is the maximum number of eigenvectors to conside
+## ncores specifies how many cores to use
+n <- length(y)  ## sample size
+p <- dim(x)[2]  ## number of independent variables
+if ( maxk > p )  maxk <- p  ## just a check
+if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds,
+stratified = FALSE, seed = seed)
+nfolds <- length(folds)
+if (ncores <= 1) {
+runtime <- proc.time()
+msp <- matrix( nrow = nfolds, ncol = maxk )
+for (vim in 1:nfolds) {
+ytest <- y[ folds[[ vim ]] ]  ## test set dependent vars
+ytrain <- y[ -folds[[ vim ]] ]   ## train set dependent vars
+xtrain <- x[ -folds[[ vim ]], , drop = FALSE]   ## train set independent vars
+xtest <- x[ folds[[ vim ]], , drop = FALSE]  ## test set independent vars
+est <- Compositional::pcr(ytrain, xtrain, k = 1:maxk, xnew = xtest)$est
+msp[vim, ] <- Rfast::colmeans( (est - ytest)^2 )
+}
+runtime <- proc.time() - runtime
+} else {
+runtime <- proc.time()
+cl <- parallel::makePSOCKcluster(ncores)
+doParallel::registerDoParallel(cl)
+er <- numeric(maxk)
+if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds,
+stratified = FALSE, seed = seed)
+msp <- foreach::foreach(vim = 1:nfolds, .combine = rbind, .packages = c("Rfast", "Compositional") ) %dopar% {
+ytest <-  y[ folds[[ vim ]] ]  ## test set dependent vars
+ytrain <- y[ -folds[[ vim ]] ]   ## train set dependent vars
+xtrain <- x[ -folds[[ vim ]], , drop = FALSE]   ## train set independent vars
+xtest <- x[ folds[[ vim ]], , drop = FALSE]  ## test set independent vars
+est <- Compositional::pcr(ytrain, xtrain, k = 1:maxk, xnew = xtest)$est
+er <- Rfast::colmeans( (est - ytest)^2 )
+return(er)
+}
+parallel::stopCluster(cl)
+runtime <- proc.time() - runtime
+}
+mspe <- Rfast::colmeans(msp)
+if ( graph )  plot(1:maxk, mspe, xlab = "Number of principal components", ylab = "MSPE", type = "b",
+cex.lab = 1.2, cex.axis = 1.2, col = "green", pch = 16)
+abline(v = 1:maxk, col = "lightgrey", lty = 2)
+abline(h = seq(min(mspe), max(mspe), length = 10), col = "lightgrey", lty = 2)
+?pcr.tune
+pcr.tune(y,x)
+z <- Compositional::alfa(x, a[i])$aff
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+n <- dim(x)[1]
+d <- dim(x)[2] - 1
+if ( min(x) == 0 )   a <- a[ a > 0 ]  ## checks for zero values in the data.
+da <- length(a)
+ina <- 1:n
+if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
+stratified = FALSE, seed = seed)
+nfolds <- length(folds)
+mspe2 <- array( dim = c( nfolds, d, da) )
+if ( model == 'gaussian' ) {
+tic <- proc.time()
+for ( i in 1:da ) {
+z <- Compositional::alfa(x, a[i])$aff
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mspe2[, , i] <- mod$msp
+}
+toc <- proc.time() - tic
+}
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = TRUE)
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+mod <- Compositional::pcr.tune(y, z, nfolds = nfolds, maxk = maxk, folds = folds, ncores = ncores, seed = seed, graph = FALSE)
+library(Compositional)
+?pcr
+library(MASS)
+x <- as.matrix(fgl[, 2:9])
+y <- as.vector(fgl[, 1])
+mod1 <- pcr(y, x, 1)
+mod2 <- pcr(y, x, 2)
+mod <- pcr(y, x, k = 1:4)  ## many results at once
+mod
+mod1
+mod2
+library(MASS)
+x <- as.matrix(fgl[, 2:9])
+y <- as.vector(fgl[, 1])
+mod1 <- pcr(y, x, 1)
+mod2 <- pcr(y, x, 2)
+mod <- pcr(y, x, k = 1:2)  ## many results at once
+mod2
+mod
+library(MASS)
+x <- as.matrix(fgl[, 2:9])
+y <- as.vector(fgl[, 1])
+mod1 <- pcr(y, x, 1)
+mod2 <- pcr(y, x, 2)
+mod <- pcr(y, x, k = 1:2,xnew=x)  ## many results at once
+mod
+?alfa.pcr
+library(MASS)
+y <- as.vector(fgl[, 1])
+x <- as.matrix(fgl[, 2:9])
+x <- x / rowSums(x)
+mod <- alfa.pcr(y = y, x = x, 0.7, 1)
+library(MASS)
+y <- as.vector(fgl[, 1])
+x <- as.matrix(fgl[, 2:9])
+x <- x / rowSums(x)
+mod <- alfa.pcr(y = y, x = x, 0.7, k=1:2)
+dim(x)
+a=0.7
+k=1:2
+x <- Compositional::alfa(x, a, h = TRUE)$aff ## apply the alpha-transformation
+dm <- dim(x)
+p <- dm[2]
+if (k > p)   k <- p
+k
+glm.pcr
+?glm.pcr
+source('C:/Users/Michail/Desktop/Folder/paketo/Compositional/R/alfa.pcr.R')
+?alfa.pcr
+library(Compositional)
+library(MASS)
+y <- as.vector(fgl[, 1])
+x <- as.matrix(fgl[, 2:9])
+x <- x / rowSums(x)
+mod <- alfa.pcr(y = y, x = x, 0.7, 1)
+library(MASS)
+y <- as.vector(fgl[, 1])
+x <- as.matrix(fgl[, 2:9])
+x <- x / rowSums(x)
+mod <- alfa.pcr(y = y, x = x, 0.7, 1:2)
+mod
+library(MASS)
+y <- as.vector(fgl[, 1])
+x <- as.matrix(fgl[, 2:9])
+x <- x / rowSums(x)
+mod <- alfa.pcr(y = y, x = x, 0.7, 1:2,xnew=x)
+mod
+library(Compositional)
+library(Compositional)
+?kl.compreg
+library(MASS)
+x <- as.vector(fgl[, 1])
+y <- as.matrix(fgl[, 2:9])
+y <- y / rowSums(y)
+mod1<- kl.compreg(y, x, B = 1, ncores = 1)
+mod2 <- js.compreg(y, x, B = 1, ncores = 1)
+mod1
+mod2
+js.compreg
+ols.compreg
+length(ina) %% nfolds
+ina=rnorm(39)
+nfolds=10
+length(ina) %% nfolds
+library(Compositional)
+install.packages("Rfast")
+library(Rfast)
+install.packages("Rfast")
+install.packages("Rfast")
+install.packages("Rfast")
+install.packages("Rfast")
+install.packages("Rfast")
+library(Rfast)
+install.packages("Rfast2")
+install.packages("Rfast")
+library(Compositional)
+library(Compositional)
