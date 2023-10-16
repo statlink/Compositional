@@ -14,7 +14,7 @@ A Collection of Functions for Compositional Data Analysis.
 Package: \tab Compositional\cr
 Type: \tab Package\cr
 Version: \tab 6.4 \cr
-Date: \tab 2023-09-19\cr
+Date: \tab 2023-10-08\cr
 License: \tab GPL-2\cr
 }
 }
@@ -49,6 +49,7 @@ of the divergence based regression models. John Barry from the Centre for Enviro
 Science (UK) suggested that I should add more explanation in the "diri.est" function. I hope it is clearer now.
 Charlotte Fabri and Laura Byrne spotted a possible problem in the function "zadr" and they are greatly acknowledged
 for that. Levi Bankston found a bug in the bootstrap version of the "kl.compreg" function and he is greatly acknowledged for that.
+Sucharitha Dodamgodage suggested to add an extra case in the function "dirimean.test" and she is acknowledged for that. 
 }
 
 \keyword{ Compositional data }
