@@ -1,10 +1,10 @@
 lc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL) {
 
-  p <- dim(x)[2]
   nama <- colnames(x)
   if ( is.null(nama) )   nama <- c( "constant", paste("X", 1:p, sep = "") )
 
   x <- Compositional::alr(x)
+  p <- dim(x)[2] + 1
 
   if ( is.null(z) ) {
     if ( model == "logistic" ) {
