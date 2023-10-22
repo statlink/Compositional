@@ -8,12 +8,12 @@ lc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
 
   poisdev <- function(be) {
     est <- x %*% be
-     -2 * sum( y * est, na.rm = TRUE )
+    - 2 * sum(y * est)
   }
 
   if ( is.null(z) ) {
     beini <- Compositional::lc.reg(y, x)$be
-    x <- cbind( 1, log(x) )
+    x <- cbind(1, log(x))
 
     con <- function(be){
       f <- sum(be[-1])
@@ -34,7 +34,7 @@ lc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
     }
     runtime <- proc.time() - runtime
 
-    devi <- f2$fn + 2 * sum( y * log(y), na.rm = TRUE ) * ( model == "poisson" )
+    devi <- f2$fn + 2 * sum( y * log(y) ) * (model == "poisson")
     be <- as.vector(f2$par)
     if ( is.null( colnames(x) ) ) {
       names(be) <- c( "constant", paste("X", 1:p, sep = "") )
@@ -42,7 +42,7 @@ lc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
 
     est <- NULL
     if ( !is.null(xnew) ) {
-      est <- cbind(1, log(xnew) ) %*% be
+      est <- cbind(1, log(xnew) %*% be )
       if ( model == "logistic" ) {
         est <- 1 / ( 1 + exp(-est) )
       } else  est <- exp(est)
@@ -76,7 +76,7 @@ lc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
     }
     runtime <- proc.time() - runtime
 
-    devi <- f2$fn + 2 * sum( y * log(y) ) * ( model == "poisson" )
+    devi <- f2$fn + 2 * sum( y * log(y) ) * (model == "poisson")
     be <- as.vector(f2$par)
     nama <- colnames(x)
     if ( is.null(nama) )  nama <- c( "constant", paste("X", 1:p, sep = ""),
