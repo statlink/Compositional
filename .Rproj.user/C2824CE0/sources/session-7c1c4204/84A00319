@@ -1,0 +1,26 @@
+{
+    "id": "84A00319",
+    "path": "~/GitHub/Compositional/R/lc.glm.R",
+    "project_path": "R/lc.glm.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1697998256032.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "21,0",
+        "scrollLine": "6"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1697997463,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1697997463,
+    "read_only": false,
+    "read_only_alternatives": []
+}
