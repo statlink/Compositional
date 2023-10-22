@@ -1,8 +1,7 @@
-lc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL) {
+ulc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL) {
 
   p <- dim(x)[2]
-
-  x <- Compositional::alr(x)
+  x <- log(x)
 
   if ( is.null(z) ) {
 
@@ -12,24 +11,32 @@ lc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
 
     est <- NULL
     if ( !is.null(xnew) ) {
-      est <- cbind(1, log(xnew) %*% be )
+      est <- cbind(1, log(xnew) ) %*% be
       if ( model == "logistic" ) {
         est <- 1 / ( 1 + exp(-est) )
       } else  est <- exp(est)
     }
 
-    be <- c( mod$be[1], -sum(mod$be[-1]), mod$be[-1] )
+    nama <- colnames(x)
+    if ( is.null(nama) )  nama <- c( "constant", paste("X", 1:p, sep = "") )
+    if ( nama[1] == "" )  nama[1] <- "constant"
+    be <- as.vector(mod$be)
+    names(be) <- nama
+
     res <- list( devi = mod$devi, be = be, est = est )
 
   } else {
 
-    z <- model.matrix( y~., data=as.data.frame(z) )[, -1, drop = FALSE]
-    nama <- c( nama, colnames(z) )
+    z <- model.matrix( y~., as.data.frame(z) )[, -1]
     d <- dim(z)[2]
-    x <- cbind(x, z)
-    if ( model == "logistic" ) {
-      mod <- Rfast::glm_logistic(x, y)
-    } else  mod <- Rfast::glm_poisson(x, y)
+    x <- cbind(log(x), z)
+
+    nama <- colnames(x)
+    if ( is.null(nama) )  nama <- c( "constant", paste("X", 1:p, sep = ""),
+                                     paste("Z", 1:d, sep = "") )
+    if ( nama[1] == "" )  nama[1] <- "constant"
+    be <- as.vector(mod$be)
+    names(be) <- nama
 
     est <- NULL
     if ( !is.null(xnew)  &  !is.null(znew) ) {
@@ -40,7 +47,6 @@ lc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
       } else  est <- exp(est)
     }
 
-    be <- c( mod$be[1], -sum(mod$be[2:p]), mod$be[-1] )
     res <- list( devi = mod$devi, be = be, est = est )
 
   }

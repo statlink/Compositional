@@ -1,15 +1,15 @@
-\name{Log-contrast logistic or Poisson regression with compositional predictor variables}
-\alias{lc.glm}
+\name{Log-contrast logistic or Poisson regression with with multiple compositional predictors}
+\alias{lc.glm2}
 \title{
-Log-contrast logistic or Poisson regression with compositional predictor variables
+Log-contrast logistic or Poisson regression with with multiple compositional predictors
 }
 
 \description{
-Log-contrast logistic or Poisson regression with compositional predictor variables.
+Log-contrast logistic or Poisson regression with with multiple compositional predictors.
 }
 
 \usage{
-lc.glm(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
+lc.glm2(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
 }
 
 \arguments{
@@ -39,7 +39,7 @@ If you have no new data, leave this NULL as is by default.
 The function performs the log-contrast logistic or Poisson regression model. The logarithm of the
 compositional predictor variables is used (hence no zero values are allowed). The response variable
 is linked to the log-transformed data with the constraint that the sum of the regression coefficients
-equals 0. If you want the regression without the zum-to-zero contraints see \code{\link{ulc.glm}}.
+equals 0. If you want the regression without the zum-to-zero contraints see \code{\link{ulc.glm2}}.
 Extra predictors variables are allowed as well, for instance categorical or continuous.
 }
 
@@ -74,13 +74,18 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 %}
 
 \seealso{
-\code{\link{ulc.glm}, \link{lc.reg}, \link{lc.reg2}, \link{alfa.pcr}, \link{glm.pcr}
+\code{\link{ulc.glm2}, \link{ulc.glm}, \link{lc.glm}
 }
 }
 
 \examples{
 y <- rbinom(150, 1, 0.5)
-x <- rdiri(150, runif(3, 1, 4) )
-mod1 <- lc.glm(y, x)
+x <- list()
+x1 <- as.matrix(iris[, 2:4])
+x1 <- x1 / rowSums(x1)
+x[[ 1 ]] <- x1
+x[[ 2 ]] <- rdiri(150, runif(4) )
+x[[ 3 ]] <- rdiri(150, runif(5) )
+mod <- lc.glm2(y, x)
 }
 

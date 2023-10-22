@@ -1,11 +1,11 @@
-\name{Unconstrained linear regression with compositional predictor variables}
+\name{Unconstrained log-contrast regression with compositional predictor variables}
 \alias{ulc.reg}
 \title{
-Unconstrained linear regression with compositional predictor variables
+Unconstrained log-contrast regression with compositional predictor variables
 }
 
 \description{
-Unconstrained linear regression with compositional predictor variables.
+Unconstrained log-contrast regression with compositional predictor variables.
 }
 
 \usage{
