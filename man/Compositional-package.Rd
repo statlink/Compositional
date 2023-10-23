@@ -45,9 +45,9 @@ Manos Papadakis, undergraduate student in the department of computer science, un
 
 Ermanno Affuso from the university of South Alabama suggested that I have a default value in the function \code{\link{mkde}}.
 
-Van Thang Hoang from Hasselt university spotted a bug in the function \code{\link{js.compreg}} function and is greatly acknowledged for that.
+Van Thang Hoang from Hasselt university spotted a bug in the function \code{\link{js.compreg}}.
 
-Claudia Wehrhahn Cortes spotted a bug in the function \code{\link{diri.reg}} and she is greatly acknowledged for that.
+Claudia Wehrhahn Cortes spotted a bug in the function \code{\link{diri.reg}}.
 
 Philipp Kynast from Bruker Daltonik GmbH found a mistake in the function \code{\link{mkde}} which is now fixed.
 
