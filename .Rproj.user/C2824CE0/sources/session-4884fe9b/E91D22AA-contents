@@ -1,9 +1,11 @@
-ulc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL) {
-
-  p <- dim(x)[2]
-  x <- log(x)
+ulc.glm2 <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL) {
 
   if ( is.null(z) ) {
+
+    X <- NULL
+    for ( i in 1:length(x) )  X <- cbind(X, x[[ i ]] )
+    x <- log(X)
+    X <- NULL
 
     if ( model == "logistic" ) {
       mod <- Rfast::glm_logistic(x, y)
@@ -23,6 +25,9 @@ ulc.glm <- function(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL
   } else {
 
     z <- model.matrix( y~., as.data.frame(z) )[, -1]
+    X <- NULL
+    for ( i in 1:length(x) )  X <- cbind(X, x[[ i ]] )
+    X <- NULL
     x <- cbind(log(x), z)
 
     if ( model == "logistic" ) {
