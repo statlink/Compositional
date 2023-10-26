@@ -4,22 +4,23 @@ ols.compcomp <- function(y, x, xnew = NULL) {
   pyx <- py * px
 
   ols <- function(be) {
-    be <- matrix(be, ncol = py - 1)
-    be <- cbind( be, 1 - rowSums(be) )
+    be <- matrix(be, ncol = py)
+    be <- be / rowsums(be)
     mu <- x %*% be
     sum( (y - mu)^2 )
   }
 
   runtime <- proc.time()
-  mod <- optim( runif(pyx - px), ols, method = "L-BFGS-B", lower = rep(0, pyx - px),
-                upper = rep(1, pyx - px), control = list(maxit = 10000) )
-  mod <- optim( mod$par, ols, method = "L-BFGS-B", lower = rep(0, pyx - px),
-                upper = rep(1, pyx - px), control = list(maxit = 10000) )
+  mod <- optim( runif(pyx), ols, method = "L-BFGS-B", lower = rep(0, pyx),
+                upper = rep(1, pyx), control = list(maxit = 10000) )
+  mod <- optim( mod$par, ols, method = "L-BFGS-B", lower = rep(0, pyx),
+                upper = rep(1, pyx), control = list(maxit = 10000) )
   runtime <- proc.time() - runtime
 
   be <- mod$par
-  be <- matrix(be, ncol = py - 1)
-  be <- cbind( be, 1 - rowSums(be) )
+  be <- matrix(be, ncol = py)
+  be <- be / rowsums(be)
+
 
   if ( is.null( colnames(y) ) ) {
     colnames(be) <- paste("Y", 1:py, sep = "")
