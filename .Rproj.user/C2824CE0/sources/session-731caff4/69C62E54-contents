@@ -1,6 +1,5 @@
 \name{Unconstrained regression models with compositional predictor variables}
 \alias{ulc.glm}
-\alias{ulc.mod}
 \title{
 Unconstrained regression models with compositional predictor variables
 }
@@ -11,7 +10,6 @@ Unconstrained regression models regression with compositional predictor variable
 
 \usage{
 ulc.glm(y, x, z = NULL, model = "logistic", xnew = NULL, znew = NULL)
-ulc.mod(y, x, z = NULL, model = "normlog", xnew = NULL, znew = NULL)
 }
 
 \arguments{
@@ -25,7 +23,7 @@ A matrix with the predictor variables, the compositional data. No zero values ar
 A matrix, data.frame, factor or a vector with some other covariate(s).
 }
 \item{model}{
-For the ulc.glm(), this can be either "logistic" or "poisson". For the "ulc.mod" this can be "normlog" (normal regression with log-link), "gamma" (gamma regression), "negbin" (negative binomial regression), "weib" ((censored) Weibull regression), "beta" (beta regression) or "unitweib" (unit-Weibull regression).
+This can be either "logistic" or "poisson".
 }
 \item{xnew}{
 A matrix containing the new compositional data whose response is to be predicted.

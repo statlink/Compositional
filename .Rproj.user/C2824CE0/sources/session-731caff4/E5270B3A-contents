@@ -1,6 +1,5 @@
 \name{Unconstrained regression models with compositional predictor variables}
 \alias{ulc.glm}
-\alias{ulc.mod}
 \title{
 Unconstrained regression models with compositional predictor variables
 }
