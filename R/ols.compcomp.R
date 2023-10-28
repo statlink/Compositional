@@ -15,7 +15,7 @@ ols.compcomp <- function(y, x, xnew = NULL) {
   A <- t( rbind( A, diag(pyx), -diag(pyx) ) )
   A <- A[, -c( (px + 1): pyx) ]
   bvec <- c( rep(1, px), rep(0, pyx), rep(-1, pyx) )   
-  f <- quadprog::solve.QP(Dmat = 2 * XX, dvec = dvec, Amat = A, bvec = bvec, meq=8, factorized=FALSE)
+  f <- quadprog::solve.QP(Dmat = 2 * XX, dvec = dvec, Amat = A, bvec = bvec, meq = px, factorized=FALSE)
   be <- matrix(f$solution, ncol = py) 
   mse <- ( sum(y^2) + f$value ) / n
   
