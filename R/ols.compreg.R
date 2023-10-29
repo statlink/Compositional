@@ -18,7 +18,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
     be <- matrix(para, byrow = TRUE, ncol = d)
     mu1 <- cbind(1, exp(x %*% be))
     mu <- mu1 / rowSums(mu1)
-    sum( (y - mu)^2 )
+    - 2 * sum( diag( crossprod(y, mu) ) ) + sum( diag( crossprod(mu) ) )
   }
 
   runtime <- proc.time()

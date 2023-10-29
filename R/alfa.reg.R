@@ -11,7 +11,7 @@ alfa.reg <- function(y, x, a, xnew = NULL, yb = NULL, seb = FALSE) {
   ## x is the independent variables
   ## a is the value of alpha
   ## internal function for the alfa-regression
-  reg <- function(para, ya, x, ha, n, px, d, D) {
+  reg <- function(para, ya, x, a, ha, n, px, d, D) {
     be <- matrix(para, ncol = d)
     mu1 <- cbind( 1, exp(x %*% be) )
     zz <- mu1^a
@@ -42,12 +42,12 @@ alfa.reg <- function(y, x, a, xnew = NULL, yb = NULL, seb = FALSE) {
 
     ha <- t( helm(D) )
     ini <- as.vector( solve(crossprod(x), crossprod(x, ya) ) )
-    qa1 <- nlminb( ini, reg, ya = ya, x = x, ha = ha, n = n, px = p, d = d, D = D, control = list(iter.max = 2000) )
-    qa1 <- optim( qa1$par, reg, ya = ya, x = x, ha = ha, n = n, px = p, d = d, D = D, control = list(maxit = 5000) )
-    qa2 <- optim( qa1$par, reg, ya = ya, x = x, ha = ha, n = n, px = p, d = d, D = D, control = list(maxit = 5000) )
+    qa1 <- nlminb( ini, reg, ya = ya, x = x, a = a, ha = ha, n = n, px = p, d = d, D = D, control = list(iter.max = 2000) )
+    qa1 <- optim( qa1$par, reg, ya = ya, x = x, a = a, ha = ha, n = n, px = p, d = d, D = D, control = list(maxit = 5000) )
+    qa2 <- optim( qa1$par, reg, ya = ya, x = x, a = a, ha = ha, n = n, px = p, d = d, D = D, control = list(maxit = 5000) )
     while (qa1$value - qa2$value > 1e-04) {
       qa1 <- qa2
-      qa2 <- optim( qa1$par, reg, ya = ya, x = x, ha = ha, n = n, px = p, d = d, D = D, control = list(maxit = 5000), hessian = TRUE )
+      qa2 <- optim( qa1$par, reg, ya = ya, x = x, a = a, ha = ha, n = n, px = p, d = d, D = D, control = list(maxit = 5000), hessian = TRUE )
     }
     be <- matrix(qa2$par, ncol = d)
     runtime <- proc.time() - runtime
