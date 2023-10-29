@@ -18,8 +18,7 @@ alfa.reg <- function(y, x, a, xnew = NULL, yb = NULL, seb = FALSE) {
     ta <- rowSums(zz)
     za <- zz / ta
     ma <- ( D / a * za - 1/a ) %*% ha
-    sa <- crossprod(ya - ma) / (n - px)
-    det(sa, log = TRUE)
+    - 2 * sum( diag( crossprod(ya, ma) ) ) + sum( diag( crossprod(ma) ) )
   }
 
   if ( is.null(yb) ) {
@@ -63,7 +62,7 @@ alfa.reg <- function(y, x, a, xnew = NULL, yb = NULL, seb = FALSE) {
   if ( !is.null(xnew) ) {
     xnew <- model.matrix(~., data.frame(xnew) )
     est <- cbind( 1, exp(xnew %*% be) )
-	  est <- est/Rfast::rowsums(est)
+          est <- est/Rfast::rowsums(est)
   }
 
   if ( is.null( colnames(x) ) ) {
@@ -77,22 +76,3 @@ alfa.reg <- function(y, x, a, xnew = NULL, yb = NULL, seb = FALSE) {
 
   list(runtime = runtime, be = be, seb = seb, est = est)
 }
-
-
-
-
-
-### old reg function
-##  reg <- function(para, ya, x, d, n, D) {
-##    be <- matrix(para, ncol = d)
-##    mu1 <- cbind( 1, exp(x %*% be) )
-##    zz <- mu1^a
-##    ta <- rowSums(zz)
-##    za <- zz / ta
-##    za <- D / a * za - 1/a
-##    ma <- za %*% ha
-##    esa <- ya - ma
-##    sa <- crossprod(esa) / (n - p)
-##    su <- solve(sa)
-##    n/2 * log(det(sa)) + 0.5 * sum(esa %*% su * esa)
-##  }
