@@ -30,6 +30,9 @@ The function performs least squares regression where the beta coefficients are c
 
 \value{
 A list including:
+\item{runtime}{
+The time required by the regression.
+}
 \item{mse}{
 The mean squared errors.
 }
