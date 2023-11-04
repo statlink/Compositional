@@ -36,7 +36,7 @@ alfa.knn <- function(xnew, x, ina, a = 1, k = 5, mesos = TRUE, apostasi = "eucli
 
   if ( rann ) {
     klen <- length(k)
-    di <- RANN::nn2( data = x, query = xnew, k = max(k) )$nn.idx
+    di <- Rnanoflann::nn( data = x, query = xnew, k = max(k), square = TRUE )$nn.idx
     g <- matrix(nrow = nu, ncol = klen)
     m1 <- matrix(nrow = max(k), ncol = nu)
     for ( i in 1:nu )  m1[, i] <- ina[ di[i, ] ]
