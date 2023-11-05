@@ -90,7 +90,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 %}
 
 \seealso{
-\code{ \link{alfa.rda}, \link{alfa.fda}, \link{rda.tune} }
+\code{ \link{alfa.rda}, \link{alfa.fda} }
 }
 
 \examples{
