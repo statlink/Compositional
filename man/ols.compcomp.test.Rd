@@ -34,12 +34,12 @@ MSE is computed. The p-value is then computed in the usual way.
 The p-value for the test of independence between Y and X.
 }
 
-\references{
-Jacob Fiksel, Scott Zeger and Abhirup Datta (2020). A transformation-free linear regression for
-compositional outcomes and predictors. https://arxiv.org/pdf/2004.07881.pdf
+%\references{
+%Jacob Fiksel, Scott Zeger and Abhirup Datta (2020). A transformation-free linear regression for
+%compositional outcomes and predictors. https://arxiv.org/pdf/2004.07881.pdf
 
 %Murteira, Jose MR, and Joaquim JS Ramalho 2016. Regression analysis of multivariate fractional data. Econometric Reviews 35(4): 515-552.
-}
+%}
 
 \author{
 Michail Tsagris.
