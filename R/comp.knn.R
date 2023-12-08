@@ -1,4 +1,4 @@
-comp.knn <- function(xnew, x, ina, a = 1, k = 5, apostasi = "ESOV", mesos = TRUE) {
+comp.knn2 <- function(xnew, x, ina, a = 1, k = 5, apostasi = "ESOV", mesos = TRUE) {
   n <- dim(x)[1]
   p <- dim(x)[2]
   ina <- as.numeric(ina)
@@ -48,6 +48,13 @@ comp.knn <- function(xnew, x, ina, a = 1, k = 5, apostasi = "ESOV", mesos = TRUE
       disa[disa >= 1] <- 1
       disa[ disa <=  -1 ] <-  -1
       disa <- acos(disa)
+      disa <- Rfast::rowOrder(disa)
+      for (j in 1:klen) {
+        for (i in 1:nu) {
+          mod <- table( ina[ which(disa[i, ] <= k[j]) ] )
+          g[i, j] <- as.numeric( names(mod)[ which.max(mod) ] )
+        }
+      }
 
     } else if ( apostasi == "CS" ) {
       if ( is.null(a) ) {
@@ -69,6 +76,14 @@ comp.knn <- function(xnew, x, ina, a = 1, k = 5, apostasi = "ESOV", mesos = TRUE
       }  ## end for (i in 1:nu)
         ## disa <- sqrt(disa) / abs(a) * sqrt(2 * p) not necessary to take the sqrt and then divide and multiply with constants everywhere
 
+      disa <- Rfast::rowOrder(disa)
+      for (j in 1:klen) {
+        for (i in 1:nu) {
+          mod <- table( ina[ which(disa[i, ] <= k[j]) ] )
+          g[i, j] <- as.numeric( names(mod)[ which.max(mod) ] )
+        }
+      }
+
     } else if ( apostasi == "ESOV" ) {
 	if ( is.null(a) ) {
         zx <- x
@@ -79,23 +94,17 @@ comp.knn <- function(xnew, x, ina, a = 1, k = 5, apostasi = "ESOV", mesos = TRUE
         za <- xnew^a
         znew <- za / Rfast::rowsums( za )  ## The power transformation is applied
 	}
-      tzx <- t(zx)
-      disa <- matrix( nrow = nu, ncol = dim(tzx)[2] )
-      for (i in 1:nu) {
-        zan <- znew[i, ]
-        ma <- 0.5 * ( tzx + zan )
-        disa[i, ] <- colSums( zan * log( zan / ma ) + tzx * log( tzx/ma ), na.rm = TRUE )
-      }
+      di <- Rnanoflann::nn(zx, znew, k = max(k), method = "jensen_shannon")$indices
+
+      for (j in 1:klen) {
+        for (i in 1:nu) {
+          mod <- table( ina[ di[i, 1:k[j]] ] )
+          g[i, j] <- as.numeric( names(mod)[ which.max(mod) ] )
+        }
+      }      
+
 
     }  ## end if ( apostasi == "ESOV" )
-
-    disa <- Rfast::rowOrder(disa)
-    for (j in 1:klen) {
-       for (i in 1:nu) {
-         mod <- table( ina[ which(disa[i, ] <= k[j]) ] )
-         g[i, j] <- as.numeric( names(mod)[ which.max(mod) ] )
-       }
-    }
 
   }  ## end of other methods
 
