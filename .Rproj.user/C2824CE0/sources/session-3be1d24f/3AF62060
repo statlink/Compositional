@@ -1,0 +1,26 @@
+{
+    "id": "3AF62060",
+    "path": "~/GitHub/Compositional/R/comp.knn.R",
+    "project_path": "R/comp.knn.R",
+    "type": "r_source",
+    "hash": "845359397",
+    "contents": "",
+    "dirty": false,
+    "created": 1702115805557.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "77,0",
+        "scrollLine": "66"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1702115921,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1702115921961,
+    "read_only": false,
+    "read_only_alternatives": []
+}
