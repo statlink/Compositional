@@ -1,4 +1,4 @@
-alfasvm.tune <- function(y, x, folds = NULL, nfolds = 10, type, cost = seq(0.2, 2, by = 0.2), gamma = NULL ) {
+svm.tune <- function(y, x, folds = NULL, nfolds = 10, type, cost = seq(0.2, 2, by = 0.2), gamma = NULL ) {
 
   if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds)
   nfolds <- length(folds)
