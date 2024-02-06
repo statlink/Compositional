@@ -1,6 +1,13 @@
-svm.tune <- function(y, x, folds = NULL, nfolds = 10, type, cost = seq(0.2, 2, by = 0.2), gamma = NULL ) {
+alfasvm.tune(y, x, a, type, cost = seq(0.2, 2, by = 0.2), gamma = NULL, ncores = 1,
+             folds = NULL, nfolds = 10, stratified = TRUE, seed = NULL)
 
-  if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds)
+
+
+
+.svm.tune <- function(y, x, task = "R", cost = seq(0.2, 2, by = 0.2), gamma = NULL,
+                      folds = NULL, nfolds = 10, stratified = TRUE, seed = NULL) {
+
+  if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, statified = stratified, seed = seed )
   nfolds <- length(folds)
   if ( is.null(gamma) ) {
     gam <- 1/dim(x)[2]
@@ -9,6 +16,9 @@ svm.tune <- function(y, x, folds = NULL, nfolds = 10, type, cost = seq(0.2, 2, b
   config <- expand.grid(gamma, cost)
   p <- dim(config)[1]
   per <- matrix(nrow = nfolds, ncol = p)
+  if ( is.factor(y) ) {
+    type <- "C"
+  } else type = "R"
 
   if ( type == "R" ) {
 
@@ -37,7 +47,6 @@ svm.tune <- function(y, x, folds = NULL, nfolds = 10, type, cost = seq(0.2, 2, b
 
   } else {
 
-    runtime <- proc.time()
     for ( k in 1:10 ) {
       ytrain <- y[ -folds[[ k ]] ]
       ytest <- y[ folds[[ k ]] ]
@@ -49,19 +58,17 @@ svm.tune <- function(y, x, folds = NULL, nfolds = 10, type, cost = seq(0.2, 2, b
       for ( j in 1:p ) {
         mod <- e1071::svm(ytrain ~., data = as.data.frame(xtrain), type = "C-classification",
                           gamma = config[j, 1], cost = config[j, 2], scale = FALSE)
-        st[, j] <- as.numeric( predict(mod, xnew) )
+        st[, j] <- as.numeric( predict(mod, xnew) ) - 1
       }  ##  end  for ( j in 1:p ) {
       per[k, ] <- Rfast::colaccs(ytest, st)
 
     }  ##  end  for (k in 1:nfolds) {
 
-    runtime <- proc.time() - runtime
     per <- cbind(config, Rfast::colmeans(per) )
     colnames(per) <- c("gamma", "cost", "mse")
     ind <- which.max(per[, 3])
 
   }
 
-
-  list(per = per, perf = per[ind, ], runtime = runtime)
+  list(per = per, perf = per[ind, ])
 }
