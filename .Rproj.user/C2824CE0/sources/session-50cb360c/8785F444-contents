@@ -54,7 +54,7 @@ Do you want the folds to be created in a stratified way? TRUE or FALSE.
 You can specify your own seed number here or leave it NULL.
 }
 \item{graph}{
-If graph is TRUE (default value) a plot will appear.
+If graph is TRUE (default value) a filled contour plot will appear.
 }
 }
 

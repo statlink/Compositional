@@ -22,11 +22,13 @@ Depending on the nature of the response variable the function will proceed with 
 A matrix with the compositional data.
 }
 \item{a}{
-A vector with a grid of values of the power transformation, it has to be between -1 and 1. If zero values are present it has to be greater than 0. If a=0, the isometric log-ratio transformation is applied.
+A vector with a grid of values of the power transformation, it has to be
+between -1 and 1. If zero values are present it has to be greater than 0.
+If a=0, the isometric log-ratio transformation is applied.
 }
 \item{cost}{
 A grid of values for the cost of constraints violation. The cost is the
-‘C’-constant of the regularization term in the Lagrange formulation.
+"C"-constant of the regularization term in the Lagrange formulation.
 }
 \item{gamma}{
 A grid of values for the \eqn{\gamma} parameter of the Gaussian kernel.
@@ -51,27 +53,29 @@ Do you want the folds to be created in a stratified way? TRUE or FALSE.
 \item{seed}{
 You can specify your own seed number here or leave it NULL.
 }
+\item{graph}{
+If graph is TRUE (default value) a plot will appear.
+}
 }
 
 \details{
 Cross validation is performed to select the optimal parameters for the SVM
-and also estimate the rate of accuracy.
+and also estimate the rate of accuracy. For continuous responses the estimated
+performance translates to the MSE, while for categorical responses (factors) this
+is the accuracy (percentage of crrect classification).
 }
 
 \value{
+If graph is true, a graph with the estimated performance for each value of \eqn{\alpha}.
 A list including:
 \item{per}{
-An array with the estimate rate of correct classification for every fold.
-For each of the M matrices, the row values correspond to gam and the columns to the del parameter.
+A vector with the estimated performance for each value of \eqn{\alpha}.
 }
-\item{percent}{
-A matrix with the mean estimated rates of correct classification. The row values correspond to gam and the columns to the del parameter.
+\item{performance}{
+A vector with the optimal performance and the optimal combinations of cost and gamma values.
 }
-\item{se}{
-A matrix with the standard error of the mean estimated rates of correct classification. The row values correspond to gam and the columns to the del parameter.
-}
-\item{result}{
-The estimated rate of correct classification along with the best gam and del parameters.
+\item{best_a}{
+The value of \eqn{\alpha} corresponding to the optimal performance.
 }
 \item{runtime}{
 The time required by the cross-validation procedure.
