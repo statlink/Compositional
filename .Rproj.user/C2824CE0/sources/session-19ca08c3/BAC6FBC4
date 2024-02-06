@@ -1,26 +1,27 @@
 {
-    "id": "3AF62060",
-    "path": "~/GitHub/Compositional/R/comp.knn.R",
-    "project_path": "R/comp.knn.R",
+    "id": "BAC6FBC4",
+    "path": "~/GitHub/Compositional/R/alfasvm.tune.R",
+    "project_path": "R/alfasvm.tune.R",
     "type": "r_source",
-    "hash": "845359397",
+    "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1702115805557.0,
+    "created": 1707226506539.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
+        "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "77,0",
-        "scrollLine": "66"
+        "cursorPosition": "28,0",
+        "scrollLine": "17"
     },
     "folds": "",
-    "lastKnownWriteTime": 1702115921,
+    "lastKnownWriteTime": 1707226910,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1702115921961,
+    "last_content_update": 1707226910816,
     "read_only": false,
     "read_only_alternatives": []
 }
