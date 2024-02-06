@@ -2,7 +2,7 @@ alfasvm.tune <- function(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by =
                          folds = NULL, nfolds = 10, stratified = TRUE, seed = NULL, graph = FALSE) {
 
   if ( min(x) == 0 )  a <- a[a > 0]
-  if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, statified = stratified, seed = seed )
+  if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = stratified, seed = seed )
   nfolds <- length(folds)
 
   if ( is.factor(y) ) {
@@ -59,13 +59,13 @@ alfasvm.tune <- function(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by =
       ytest <- y[ folds[[ k ]] ]
       xtrain <- x[-folds[[ k ]], ]
       xtest <- as.data.frame( x[folds[[ k ]], ] )
-      colnames(xnew) <- colnames(xtrain)
+      colnames(xtest) <- colnames(xtrain)
       st <- matrix(nrow = length(ytest), ncol = p)
 
       for ( j in 1:p ) {
         mod <- e1071::svm(ytrain ~., data = as.data.frame(xtrain), type = "eps-regression",
                          gamma = config[j, 1], cost = config[j, 2], scale = FALSE)
-        st[, j] <- as.numeric( predict(mod, xnew) )
+        st[, j] <- as.numeric( predict(mod, xtest) )
       }  ##  end  for ( j in 1:p ) {
       per[k, ] <- Rfast2::colmses(ytest, st)
 
@@ -83,15 +83,15 @@ alfasvm.tune <- function(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by =
       ytest <- y[ folds[[ k ]] ]
       xtrain <- x[-folds[[ k ]], ]
       xtest <- as.data.frame( x[folds[[ k ]], ] )
-      colnames(xnew) <- colnames(xtrain)
+      colnames(xtest) <- colnames(xtrain)
       st <- matrix(nrow = length(ytest), ncol = p)
 
       for ( j in 1:p ) {
         mod <- e1071::svm(ytrain ~., data = as.data.frame(xtrain), type = "C-classification",
                           gamma = config[j, 1], cost = config[j, 2], scale = FALSE)
-        st[, j] <- as.numeric( predict(mod, xnew) ) - 1
+        st[, j] <- as.numeric( predict(mod, xtest) ) - 1
       }  ##  end  for ( j in 1:p ) {
-      per[k, ] <- Rfast::colaccs(ytest, st)
+      per[k, ] <- Rfast2::colaccs(ytest, st)
 
     }  ##  end  for (k in 1:nfolds) {
 
