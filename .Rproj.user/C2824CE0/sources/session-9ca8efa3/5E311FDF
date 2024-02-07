@@ -1,26 +1,27 @@
 {
-    "id": "EFBA0273",
-    "path": "~/GitHub/Compositional/man/alfasvm.tune.Rd",
-    "project_path": "man/alfasvm.tune.Rd",
+    "id": "5E311FDF",
+    "path": "~/GitHub/Compositional/man/alfa.svm.Rd",
+    "project_path": "man/alfa.svm.Rd",
     "type": "r_doc",
-    "hash": "0",
+    "hash": "1045176240",
     "contents": "",
     "dirty": false,
-    "created": 1707252024260.0,
+    "created": 1707331635073.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
+        "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "108,0",
-        "scrollLine": "91"
+        "cursorPosition": "13,0",
+        "scrollLine": "7"
     },
     "folds": "",
-    "lastKnownWriteTime": 1707252016,
+    "lastKnownWriteTime": 1707331659,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1707252016,
+    "last_content_update": 1707331659048,
     "read_only": false,
     "read_only_alternatives": []
 }

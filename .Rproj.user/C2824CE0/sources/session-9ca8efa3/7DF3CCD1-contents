@@ -1,0 +1,39 @@
+alfa.svm <- function(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by = 0.2), gamma = NULL, ncores = 1,
+                         folds = NULL, nfolds = 10, stratified = TRUE, seed = NULL, graph = FALSE) {
+
+  if ( min(x) == 0 )  a <- a[a > 0]
+
+  if ( is.factor(y) ) {
+    task <- "C"
+    if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = stratified, seed = seed )
+    nfolds <- length(folds)
+  } else {
+    task = "R"
+    if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = FALSE, seed = seed )
+    nfolds <- length(folds)
+  }
+
+  per <- matrix(nrow = length(a), ncol = 3)
+  rownames(per) <- paste("alpha=", a, sep = "")
+  colnames(per) <- c("gamma", "cost", "performance")
+
+  runtime <- proc.time()
+  for ( k in 1:length(a) ) {
+    z <- Compositional::alfa(x, a[k])$aff
+    per[k, ] <- as.numeric( .svm.tune(y, z, task = task, cost = cost, gamma = gamma, folds = folds)$perf )
+  }
+  runtime <- proc.time() - runtime
+
+  if (graph) {
+    plot(a, per[, 3], type = "b", ylim = c( min(per[, 3]), max(per[, 3]) ), ylab = "Estimated performance",
+         xlab = expression( paste(alpha, " values") ), cex.lab = 1.2, cex.axis = 1.2, pch = 16, col = "green")
+    abline(v = a, col = "lightgrey", lty = 2)
+    abline(h = seq(min(per[ ,3]), max(per[, 3]), length = 10), col = "lightgrey", lty = 2)
+  }
+
+  if (task == "C") {
+    ind <- which.max(per[, 3])
+  } else ind <- which.min(per[, 3])
+
+  list(per = per, performance = per[ind, 3], best_a = a[ind], runtime = runtime)
+}

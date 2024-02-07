@@ -1,17 +1,15 @@
-\name{Tuning the parameters of the alpha-SVM}
-\alias{alfasvm.tune}
+\name{alpha-SVM}
+\alias{alfa.svm}
 \title{
-Tuning the parameters of the \eqn{\alpha}-SVM
+\eqn{\alpha}-SVM
 }
 
 \description{
-Tuning the parameters of the \eqn{\alpha}-SVM.
+\eqn{\alpha}-SVM.
 }
 
 \usage{
-alfasvm.tune(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by = 0.2), gamma = NULL,
-ncores = 1, folds = NULL, nfolds = 10, stratified = TRUE, seed = NULL, graph = FALSE)
-}
+alfa.svm(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by = 0.2), gamma = NULL)
 
 \arguments{
 \item{y}{
@@ -35,27 +33,6 @@ A grid of values for the \eqn{\gamma} parameter of the Gaussian kernel.
 If no values are supplied the default grid is used, ten equidistant values
 from \eqn{1/D^2} to \eqn{\sqrt{D}},
 }
-\item{ncores}{
-The number of cores to use. If more than 1, parallel computing will take place.
-It is advisable to use it if you have many observations and or many variables,
-otherwise it will slow down the process.
-}
-\item{folds}{
-If you have the list with the folds supply it here. You can also leave it
-NULL and it will create folds.
-}
-\item{nfolds}{
-The number of folds in the cross validation.
-}
-\item{stratified}{
-Do you want the folds to be created in a stratified way? TRUE or FALSE.
-}
-\item{seed}{
-You can specify your own seed number here or leave it NULL.
-}
-\item{graph}{
-If graph is TRUE (default value) a plot will appear.
-}
 }
 
 \details{
@@ -66,19 +43,9 @@ is the accuracy (percentage of crrect classification).
 }
 
 \value{
-If graph is true, a graph with the estimated performance for each value of \eqn{\alpha}.
 A list including:
-\item{per}{
-A vector with the estimated performance for each value of \eqn{\alpha}.
-}
-\item{performance}{
-A vector with the optimal performance and the optimal combinations of cost and gamma values.
-}
-\item{best_a}{
-The value of \eqn{\alpha} corresponding to the optimal performance.
-}
-\item{runtime}{
-The time required by the cross-validation procedure.
+\item{mod}{
+A list with the results of the SVM model for each value of \eqn{\alpha} that includes the SVM output (an svm class object) as provided by the function "svm" of the package \bold{e1071}, the configurations used (cost and gamma values) and the predicted values if the argument "xnew" is not NULL.
 }
 }
 
@@ -106,8 +73,10 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 }
 
 \examples{
-mod <- alfasvm.tune(iris[, 5], as.matrix(iris[, 1:4]),
-a = c(0, 0.5, 1), cost = c(0.2, 0.4), gamma = c(0.1, 0.2) )
+x <- as.matrix(iris[, 1:4])
+x <- x/ rowSums(x)
+y <- iris[, 5]
+mod <- alfa.svm(x, y, x, a = c(0, 0.5, 1), cost = c(0.2, 0.4), gamma = c(0.1, 0.2) )
 mod
 }
 
