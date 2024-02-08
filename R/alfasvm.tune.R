@@ -5,7 +5,6 @@ alfasvm.tune <- function(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by =
 
   if (ncores > 1) {
     runtime <- proc.time()
-    group <- matrix(nrow = length(gam), ncol = length(del) )
     cl <- parallel::makePSOCKcluster(ncores)
     doParallel::registerDoParallel(cl)
     if ( is.factor(y) ) {
