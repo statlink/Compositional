@@ -3,26 +3,49 @@ alfasvm.tune <- function(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by =
 
   if ( min(x) == 0 )  a <- a[a > 0]
 
-  if ( is.factor(y) ) {
-    task <- "C"
-    if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = stratified, seed = seed )
-    nfolds <- length(folds)
+  if (ncores > 1) {
+    runtime <- proc.time()
+    group <- matrix(nrow = length(gam), ncol = length(del) )
+    cl <- parallel::makePSOCKcluster(ncores)
+    doParallel::registerDoParallel(cl)
+    if ( is.factor(y) ) {
+      task <- "C"
+      if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = stratified, seed = seed )
+      nfolds <- length(folds)
+    } else {
+      task <- "R"
+      if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = FALSE, seed = seed )
+      nfolds <- length(folds)
+    }
+    ww <- foreach(k = 1:length(a), .combine = cbind, .export = c(".svmtune", "svm", "colaccs",
+                  "colmses", "colmeans"), .packages = c("e1071", "Rfast", "Rfast2") ) %dopar% {
+     z <- Compositional::alfa(x, a[k])$aff
+     per <- as.numeric( .svmtune(y, z, task = task, cost = cost, gamma = gamma, folds = folds)$perf )
+     return(per)
+   }
+   parallel::stopCluster(cl)
+   per <- ww
+   runtime <- proc.time() - runtime
+
   } else {
-    task = "R"
-    if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = FALSE, seed = seed )
-    nfolds <- length(folds)
-  }
+    if ( is.factor(y) ) {
+      task <- "C"
+      if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = stratified, seed = seed)
+      nfolds <- length(folds)
+    } else {
+      task <- "R"
+      if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = FALSE, seed = seed)
+      nfolds <- length(folds)
+    }
+    per <- matrix(nrow = length(a), ncol = 3)
+    runtime <- proc.time()
 
-  per <- matrix(nrow = length(a), ncol = 3)
-  rownames(per) <- paste("alpha=", a, sep = "")
-  colnames(per) <- c("gamma", "cost", "performance")
-
-  runtime <- proc.time()
-  for ( k in 1:length(a) ) {
-    z <- Compositional::alfa(x, a[k])$aff
-    per[k, ] <- as.numeric( .svm.tune(y, z, task = task, cost = cost, gamma = gamma, folds = folds)$perf )
+    for ( k in 1:length(a) ) {
+      z <- Compositional::alfa(x, a[k])$aff
+      per[k, ] <- as.numeric( .svmtune(y, z, task = task, cost = cost, gamma = gamma, folds = folds)$perf )
+    }
+    runtime <- proc.time() - runtime
   }
-  runtime <- proc.time() - runtime
 
   if (graph) {
     plot(a, per[, 3], type = "b", ylim = c( min(per[, 3]), max(per[, 3]) ), ylab = "Estimated performance",
@@ -30,6 +53,9 @@ alfasvm.tune <- function(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by =
     abline(v = a, col = "lightgrey", lty = 2)
     abline(h = seq(min(per[ ,3]), max(per[, 3]), length = 10), col = "lightgrey", lty = 2)
   }
+
+  rownames(per) <- paste("alpha=", a, sep = "")
+  colnames(per) <- c("gamma", "cost", "performance")
 
   if (task == "C") {
     ind <- which.max(per[, 3])
@@ -42,7 +68,7 @@ alfasvm.tune <- function(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by =
 
 
 
-.svm.tune <- function(y, x, task = "R", cost = seq(0.2, 2, by = 0.2), gamma = NULL,
+.svmtune <- function(y, x, task = "R", cost = seq(0.2, 2, by = 0.2), gamma = NULL,
                       folds = NULL) {
 
   nfolds <- length(folds)
