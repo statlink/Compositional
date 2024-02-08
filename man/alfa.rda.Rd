@@ -16,10 +16,10 @@ alfa.fda(xnew, x, ina, a)
 
 \arguments{
 \item{xnew}{
-A matrix with the new compositional data whose group is to be predicted. Zeros are allowed, but you must be carefull to choose strictly positive vcalues of \eqn{\alpha}.
+A matrix with the new compositional data whose group is to be predicted. Zeros are allowed, but you must be careful to choose strictly positive vcalues of \eqn{\alpha}.
 }
 \item{x}{
-A matrix with the available compositional data. Zeros are allowed, but you must be carefull to choose strictly positive vcalues of \eqn{\alpha}.
+A matrix with the available compositional data. Zeros are allowed, but you must be careful to choose strictly positive vcalues of \eqn{\alpha}.
 }
 \item{ina}{
 A group indicator variable for the available data.

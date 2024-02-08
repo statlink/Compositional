@@ -9,13 +9,18 @@
 }
 
 \usage{
-alfa.svm(y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by = 0.2), gamma = NULL)
+alfa.svm(xnew, y, x, a = seq(-1, 1, by = 0.1), cost = seq(0.2, 2, by = 0.2), gamma = NULL)
 }
 
 \arguments{
+\item{xnew}{
+A matrix with the new compositional data whose group is to be predicted.
+Zeros are allowed, but you must be careful to choose strictly positive vcalues of \eqn{\alpha}.
+}
 \item{y}{
-The response variable, it can either be a factor (for classification) or a numeric vector (for regression).
-Depending on the nature of the response variable the function will proceed with the necessary task.
+The response variable, it can either be a factor (for classification) or a
+numeric vector (for regression). Depending on the nature of the response
+variable, the function will proceed with the necessary task.
 }
 \item{x}{
 A matrix with the compositional data.
@@ -37,16 +42,17 @@ from \eqn{1/D^2} to \eqn{\sqrt{D}},
 }
 
 \details{
-Cross validation is performed to select the optimal parameters for the SVM
-and also estimate the rate of accuracy. For continuous responses the estimated
-performance translates to the MSE, while for categorical responses (factors) this
-is the accuracy (percentage of crrect classification).
+For each value of \eqn{\alpha}, the compositional data are transformed and then
+the SVM is applied for one or more combinations of the cost and \eqn{\gamma} parameters.
 }
 
 \value{
 A list including:
 \item{mod}{
-A list with the results of the SVM model for each value of \eqn{\alpha} that includes the SVM output (an svm class object) as provided by the function "svm" of the package \bold{e1071}, the configurations used (cost and gamma values) and the predicted values if the argument "xnew" is not NULL.
+A list with the results of the SVM model for each value of \eqn{\alpha} that
+includes the SVM output (an svm class object) as provided by the function "svm"
+of the package \bold{e1071}, the configurations used (cost and \eqn{\gamma} values) and
+the predicted values if the argument "xnew" is not NULL.
 }
 }
 

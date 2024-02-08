@@ -3,7 +3,7 @@
     "path": "~/GitHub/Compositional/man/alfa.svm.Rd",
     "project_path": "man/alfa.svm.Rd",
     "type": "r_doc",
-    "hash": "1045176240",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1707331635073.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "13,0",
-        "scrollLine": "7"
+        "cursorPosition": "53,74",
+        "scrollLine": "34"
     },
     "folds": "",
-    "lastKnownWriteTime": 1707331659,
+    "lastKnownWriteTime": 1707332263,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1707331659048,
+    "last_content_update": 1707332263218,
     "read_only": false,
     "read_only_alternatives": []
 }
