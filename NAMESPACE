@@ -27,7 +27,6 @@ importFrom("Rfast2", kumar.mle, propols.reg, prophelling.reg, zil.mle,
            negbin.reg, colaccs, colmses)
 
 importFrom("regda", rda, rda.tune)
-importFrom("e1071", svm)
 importFrom("quadprog", solve.QP)
 importFrom("Rnanoflann", nn)
 importFrom("mda", fda)
