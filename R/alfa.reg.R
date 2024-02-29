@@ -6,7 +6,7 @@
 #### Regression analysis with compositional data containing zero values
 #### Chilean Journal of Statistics, 6(2): 47-57
 ################################
-alfa.reg <- function(y, ax, a, xnew = NULL, yb = NULL, seb = FALSE) {
+alfa.reg <- function(y, x, a, xnew = NULL, yb = NULL, seb = FALSE) {
   ## y is the compositional data (dependent variable)
   ## x is the independent variables
   ## a is the value of alpha
