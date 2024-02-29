@@ -6,7 +6,7 @@
 #### Regression analysis with compositional data containing zero values
 #### Chilean Journal of Statistics, 6(2): 47-57
 ################################
-alfa.reg <- function(y, ax, a, xnew = NULL, yb = NULL, seb = FALSE) {
+alfa.reg <- function(y, x, a, xnew = NULL, yb = NULL, seb = FALSE) {
   ## y is the compositional data (dependent variable)
   ## x is the independent variables
   ## a is the value of alpha
@@ -44,7 +44,7 @@ alfa.reg <- function(y, ax, a, xnew = NULL, yb = NULL, seb = FALSE) {
     qa2 <- optim( qa1$par, reg, ya = ya, ax = ax, a = a, ha = ha, d = d, D = D, control = list(maxit = 5000) )
     while (qa1$value - qa2$value > 1e-04) {
       qa1 <- qa2
-      qa2 <- optim( qa1$par, reg, ya = ya, ax = ax, a = a, ha = ha, ha = ha, d = d, D = D, control = list(maxit = 5000), hessian = TRUE )
+      qa2 <- optim( qa1$par, reg, ya = ya, ax = ax, a = a, ha = ha, d = d, D = D, control = list(maxit = 5000), hessian = TRUE )
     }
     be <- matrix(qa2$par, ncol = d)
     runtime <- proc.time() - runtime
