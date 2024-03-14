@@ -73,8 +73,8 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 \examples{
 \donttest{
 library(MASS)
-y <- rdiri(214, runif(3, 1, 3))
-x <- as.matrix(fgl[, 2:9])
+y <- rdiri(100, runif(3, 1, 3))
+x <- as.matrix(fgl[1:100, 2:9])
 x <- x / rowSums(x)
 mod <- cv.tflr(y, x)
 mod
