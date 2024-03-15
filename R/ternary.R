@@ -31,36 +31,12 @@ ternary <- function(x, dg = FALSE, hg = FALSE, means = TRUE, pca = FALSE, colour
   proj <- matrix(c(0, 1, 0.5, 0, 0, sqrt(3)/2), ncol = 2)
   d <- x %*% proj
   if ( is.null(colour) )  colour <- numeric(n) + 1
-  points( d[1:n, 1], d[1:n, 2], col = colour )
+  
   text( b[1, 1], b[1, 2] + 0.02, nam[3], cex = 1.1 )
   text( b[2, 1] + 0.02, b[2, 2] - 0.02, nam[1], cex = 1.1 )
   text( b[3, 1] - 0.02, b[2, 2] - 0.02, nam[2], cex = 1.1 )
 
-  if ( means ) {
-    ## should the means appear in the plot?
-    points( d[c(n + 1), 1], d[c(n + 1), 2], pch = 2, col = 2, lwd = 2 )
-    points( d[c(n + 2), 1], d[c(n + 2), 2], pch = 3, col = 3, lwd = 2 )
-    legend("topright", c("closed geometric mean"," arithmetic mean"),
-    pch = c(2, 3), col = c(2, 3), bg = 'gray90')
-  }
-
-  if (pca  &  min(x) > 0 ) {
-    ## should the first principal component appear?
-    zx <- log(x[1:n, ])
-    z <- zx - Rfast::rowmeans( zx )  ## clr transformation
-    m <- Rfast::colmeans(z)  ## mean vector in the clr space
-    a <- eigen( Rfast::cova(z) )$vectors[, 1] + m  ## move the unit vector a bit
-    sc <- z %*% a
-    lam <- seq( min(sc) - 1.5, max(sc) + 1.5, length = n )
-    x1 <- cbind( a[1] * lam, a[2] * lam, a[3] * lam) + cbind( m[1] * (1 - lam),
-    m[2] * (1 - lam), m[3] * (1 - lam) )
-    expx1 <- exp(x1)
-    wa1 <- expx1 / Rfast::rowsums( expx1 )  ## first principal component in S^2
-    wa <- wa1 %*% proj
-    lines(wa, lwd = 2, lty = 2)
-  }
-
-  if ( dg ) {
+ if ( dg ) {
     a1 <- matrix(0, nrow = 11, ncol = 3)
     a1[, 2] <- seq(0, 1, by = 0.1)
     a1[, 3] <- seq(1, 0, by = -0.1)
@@ -106,7 +82,32 @@ ternary <- function(x, dg = FALSE, hg = FALSE, means = TRUE, pca = FALSE, colour
     }
   } ## end if hg
 
-  mu <- rbind(m1, m2)
+  points( d[1:n, 1], d[1:n, 2], col = colour, pch = 16 )
+  if ( means ) {
+    ## should the means appear in the plot?
+    points( d[c(n + 1), 1], d[c(n + 1), 2], pch = 2, col = 2, lwd = 2 )
+    points( d[c(n + 2), 1], d[c(n + 2), 2], pch = 3, col = 3, lwd = 2 )
+    legend("topright", c("closed geometric mean"," arithmetic mean"),
+    pch = c(2, 3), col = c(2, 3), bg = 'gray90')
+  }
+
+  if (pca  &  min(x) > 0 ) {
+    ## should the first principal component appear?
+    zx <- log(x[1:n, ])
+    z <- zx - Rfast::rowmeans( zx )  ## clr transformation
+    m <- Rfast::colmeans(z)  ## mean vector in the clr space
+    a <- eigen( Rfast::cova(z) )$vectors[, 1] + m  ## move the unit vector a bit
+    sc <- z %*% a
+    lam <- seq( min(sc) - 1.5, max(sc) + 1.5, length = n )
+    x1 <- cbind( a[1] * lam, a[2] * lam, a[3] * lam) + cbind( m[1] * (1 - lam),
+    m[2] * (1 - lam), m[3] * (1 - lam) )
+    expx1 <- exp(x1)
+    wa1 <- expx1 / Rfast::rowsums( expx1 )  ## first principal component in S^2
+    wa <- wa1 %*% proj
+    lines(wa, lwd = 2, lty = 2)
+  }
+
+   mu <- rbind(m1, m2)
   rownames(mu) <- c("closed geometric", "arithmetic mean")
   colnames(mu) <- nam
   mu
