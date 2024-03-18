@@ -10,7 +10,7 @@ Cross-validation for LASSO with compositional predictors using the \eqn{alpha}-t
 
 \usage{
 alfalasso.tune(y, x, a = seq(-1, 1, by = 0.1), model = "gaussian", lambda = NULL,
-type.measure = "mse", nfolds = 10, folds = NULL, stratified = FALSE)
+type.measure = "mse", nfolds = NULL, folds = NULL, stratified = FALSE)
 }
 
 \arguments{
@@ -85,6 +85,6 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 \examples{
 y <- iris[, 1]
 x <- rdiri(150, runif(20, 2, 5) )
-mod <- alfalasso.tune( y, x, a = c(0.2, 0.5, 1) )
+mod <- alfalasso.tune(y, x, a = c(0.2, 0.5, 1), nfolds = 10)
 }
 
