@@ -1,16 +1,16 @@
-\name{LASSO with compositional predictors using the alpha-transformation}
-\alias{alfa.lasso}
+\name{Cross-validation for LASSO with compositional predictors using the alpha-transformation}
+\alias{alfalasso.tune}
 \title{
-LASSO with compositional predictors using the \eqn{alpha}-transformation
+Cross-validation for LASSO with compositional predictors using the \eqn{alpha}-transformation
 }
 
 \description{
-LASSO with compositional predictors using the \eqn{alpha}-transformation.
+Cross-validation for LASSO with compositional predictors using the \eqn{alpha}-transformation.
 }
 
 \usage{
-alfa.lasso(y, x, a = seq(-1, 1, by = 0.1), model = "gaussian", lambda = NULL,
-xnew = NULL)
+alfalasso.tune(y, x, a = seq(-1, 1, by = 0.1), model = "gaussian", lambda = NULL,
+type.measure = "mse", nfolds = NULL, folds = NULL)
 }
 
 \arguments{
@@ -36,8 +36,15 @@ Supplying a value of lambda overrides this. WARNING: use with care. Avoid supply
 lambda (for predictions after CV use predict() instead). Supply instead a decreasing sequence of lambda values.
 glmnet relies on its warms starts for speed, and its often faster to fit a whole path than compute a single fit.
 }
-\item{xnew}{
-If you have new data use it, otherwise leave it NULL.
+\item{type.measure}{
+\bold{This information is taken from the package glmnet.} The loss function to use for cross-validation. For gaussian models this can be "mse", "deviance" for logistic and poisson regression, "class" applies to binomial and multinomial logistic regression only, and gives misclassification error. "auc" is for two-class logistic regression only, and gives The area under the ROC curve. "mse" or "mae" (mean absolute error) can be used by all models.
+}
+\item{nfolds}{
+The number of folds. Set to 10 by default.
+}
+\item{folds}{
+If you have the list with the folds supply it here. You can also leave it NULL
+and it will create folds.
 }
 }
 
@@ -47,14 +54,7 @@ function in that package.
 }
 
 \value{
-A list including sublists for each value of \eqn{\alpha}:
-\item{mod}{
-We decided to keep the same list that is returned by glmnet. So, see the function in that package
-for more information.
-}
-\item{est}{If you supply a matrix in the "xnew" argument this will return an array of many matrices
-with the fitted values, where each matrix corresponds to each value of \eqn{\lambda}.
-}
+A matrix with two columns and number of rows equal to the number of \eqn{\alpha} values used. Each row contains, the optimal value of the \eqn{\lambda} penalty parameter for the LASSO and the optimal value of the loss function, for each value of \eqn{\alpha}.
 }
 
 \references{
@@ -75,13 +75,13 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
     %}
 
 \seealso{
-\code{\ling{alfalasso.tune}, \link{cv.lasso.klcompreg}, \link{lasso.compreg}, \link{alfa.knn.reg}
+\code{\ling{alfa.lasso}, \link{cv.lasso.klcompreg}, \link{lasso.compreg}, \link{alfa.knn.reg}
 }
 }
 
 \examples{
 y <- as.matrix(iris[, 1])
 x <- rdiri(150, runif(20, 2, 5) )
-mod <- alfa.lasso(y, x, a = c(0, 0.5, 1))
+mod <- alfalasso.tune(y, x, a = c(0, 0.5, 1))
 }
 

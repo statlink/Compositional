@@ -75,7 +75,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
     %}
 
 \seealso{
-\code{\ling{alfalasso.tune}, \link{cv.lasso.klcompreg}, \link{lasso.compreg}, \link{alfa.knn.reg}
+\code{\link{lassocoef.plot}, \link{cv.lasso.klcompreg}, \link{kl.compreg}, \link{lasso.compreg}, \link{ols.compreg}, \link{alfa.pcr}, \link{alfa.knn.reg}
 }
 }
 
