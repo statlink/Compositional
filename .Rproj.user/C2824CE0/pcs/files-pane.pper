@@ -6,8 +6,8 @@
         },
         {
             "columnIndex": 4,
-            "ascending": false
+            "ascending": true
         }
     ],
-    "path": "~/GitHub/Compositional"
+    "path": "~/GitHub/Compositional/R"
 }
