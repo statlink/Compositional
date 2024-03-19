@@ -35,9 +35,9 @@ ternary.cr <- function(x, type = "alr", conf = 0.95, dg = FALSE, hg = FALSE, col
   lines(scr[-1, ], col = "blue", lwd = 2)
   points( dx[1:n, 1], dx[1:n, 2], col = colour, pch = 16 )
   points(scr[1, 1], scr[1, 2], col = "blue", pch = 3)
-  text( b[1, 1], b[1, 2] + 0.02, nam[3], cex = 1.1 )
-  text( b[2, 1] + 0.02, b[2, 2] - 0.02, nam[1], cex = 1.1 )
-  text( b[3, 1] - 0.02, b[2, 2] - 0.02, nam[2], cex = 1.1 )
+  text( b[1, 1], b[1, 2] + 0.02, nam[3], col = "black", font = 2 )
+  text( b[2, 1] + 0.02, b[2, 2] - 0.02, nam[1], col = "black", font = 2 )
+  text( b[3, 1] - 0.02, b[2, 2] - 0.02, nam[2], col = "black", font = 2 )
 
   if ( dg ) {
     a1 <- matrix(0, nrow = 11, ncol = 3)
