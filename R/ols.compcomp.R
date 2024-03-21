@@ -21,7 +21,7 @@ ols.compcomp <- function(y, x, xnew = NULL) {
   }
 
   be <- matrix(f$solution, ncol = py)
-  mse <- ( sum(y^2) + f$value ) / n
+  mse <- ( sum(y^2) + 2 * f$value ) / n
 
   if ( is.null( colnames(y) ) ) {
     colnames(be) <- paste("Y", 1:py, sep = "")
