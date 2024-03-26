@@ -14,10 +14,10 @@ tflr <- function(y, x, xnew = NULL) {
     rownames(be) <- paste("X", 1:p, sep = "")
   } else rownames(be) <- colnames(x)
 
-  yhat <- abs(x %*% be)
+  yhat <- x %*% be
   loglik <-  - sum( y * log(y / yhat), na.rm = TRUE )
   est <- NULL
-  if ( !is.null(xnew) )  est <- abs(xnew %*% be)
+  if ( !is.null(xnew) )  est <- xnew %*% be
 
   list(runtime = runtime, loglik = loglik, be = be, est = est)
 }

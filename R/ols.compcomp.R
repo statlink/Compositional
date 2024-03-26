@@ -20,7 +20,7 @@ ols.compcomp <- function(y, x, xnew = NULL) {
     f <- quadprog::solve.QP( Dmat = 2 * Matrix::nearPD(XX)$mat, dvec = dvec, Amat = A, bvec = bvec, meq = px )
   }
 
-  be <- matrix(f$solution, ncol = py)
+  be <- matrix( abs(f$solution), ncol = py) 
   mse <- ( sum(y^2) + 2 * f$value ) / n
 
   if ( is.null( colnames(y) ) ) {
@@ -32,7 +32,7 @@ ols.compcomp <- function(y, x, xnew = NULL) {
 
   est <- NULL
   if ( !is.null(xnew) ) {
-    est <- abs(xnew %*% be)
+    est <- xnew %*% be
   }
 
   list( mse = mse, be = be, est = est )
