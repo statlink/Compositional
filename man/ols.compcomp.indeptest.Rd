@@ -1,15 +1,15 @@
-\name{Permutation independence test in the constrained linear least squares for compositional responses and predictors}
-\alias{ols.compcomp.test}
+\name{Permutation linear independence test in the constrained linear least squares for compositional responses and predictors}
+\alias{ols.compcomp.indeptest}
 \title{
-Permutation independence test in the constrained linear least squares for compositional responses and predictors
+Permutation linear independence test in the constrained linear least squares for compositional responses and predictors
 }
 
 \description{
-Permutation independence test in the constrained linear least squares for compositional responses and predictors.
+Permutation linear independence test in the constrained linear least squares for compositional responses and predictors.
 }
 
 \usage{
-ols.compcomp.test(y, x, B = 999)
+ols.compcomp.indeptest(y, x, B = 999)
 }
 
 \arguments{
@@ -26,7 +26,8 @@ The number of permutations to perform.
 
 \details{
 Permutation independence test in the constrained linear least squares for compositional
-responses and predictors is performed. The observed test statistic is the MSE computed by \code{\link{ols.compcomp}}. Then, the rows of X are permuted B times and each time the constrained OLS is performed and the
+responses and predictors is performed. The observed test statistic is the MSE computed by \code{\link{ols.compcomp}}. 
+Then, the rows of X are permuted B times and each time the constrained OLS is performed and the
 MSE is computed. The p-value is then computed in the usual way.
 }
 
@@ -61,6 +62,6 @@ set.seed(1234)
 y <- rdiri(214, runif(4, 1, 3))
 x <- as.matrix(fgl[, 2:9])
 x <- x / rowSums(x)
-ols.compcomp.test(y, x, B = 99)
+ols.compcomp.indeptest(y, x, B = 99)
 }
 

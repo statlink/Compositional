@@ -59,7 +59,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
     %}
 
 \seealso{
-\code{\link{cv.olscompcomp}, \link{tflr}, \link{kl.alfapcr}  }
+\code{\link{cv.olscompcomp}, \link{tflr}, \link{ols.compcomp.indeptest}  }
 }
 
 \examples{

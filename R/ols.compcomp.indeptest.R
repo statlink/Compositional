@@ -1,4 +1,4 @@
-ols.compcomp.test <- function(y, x, B = 999) {
+ols.compcomp.indeptest <- function(y, x, B = 999) {
 
   stat <- Compositional::ols.compcomp(y, x)$mse
   tb <- numeric(B)
