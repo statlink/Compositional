@@ -28,7 +28,7 @@ If you have new data use it, otherwise leave it NULL.
 
 \details{
 The transformation-free linear regression for compositional responses and predictors is implemented.
-The function to be minized is \eqn{-\sum_{i=1}^ny_i\log{y_i/(X_iB)}}. The tflr() imports the \bold{codalm} package, whereas the tflr2() is a self implementation.
+The function to be minized is \eqn{-\sum_{i=1}^ny_i\log{y_i/(X_iB)}}. The tflr() imports the \textit{codalm} package, whereas the tflr2() is a self implementation.
 }
 
 \value{
