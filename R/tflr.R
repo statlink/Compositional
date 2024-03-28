@@ -15,7 +15,7 @@ tflr <- function(y, x, xnew = NULL) {
   } else rownames(be) <- colnames(x)
 
   yhat <- x %*% be
-  loglik <-  - sum( y * log(y / yhat), na.rm = TRUE )
+  loglik <- sum( y * log(yhat), na.rm = TRUE )
   est <- NULL
   if ( !is.null(xnew) )  est <- xnew %*% be
 
