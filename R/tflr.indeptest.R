@@ -15,7 +15,7 @@ tflr.indeptest <- function(y, x, B = 999, ncores = 1) {
     cl <- parallel::makePSOCKcluster(ncores)
     doParallel::registerDoParallel(cl)
     pkl <- foreach::foreach(i = 1:R, .combine = "c", 
-                .packages = c("Compositional", "Rfast", "Rfast2") %dopar% {
+                   .packages = c("Compositional", "Rfast", "Rfast2") %dopar% {
       id <- Rfast2::Sample.int(n, n)
       return( Compositional::tflr(y, x[id, ])$kl )
     }

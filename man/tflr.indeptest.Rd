@@ -9,7 +9,7 @@ Permutation linear independence test in the tansformation-free linear regression
 }
 
 \usage{
-tflr.indeptest(y, x, B = 999)
+tflr.indeptest(y, x, B = 999, ncores = 1)
 }
 
 \arguments{
@@ -22,11 +22,16 @@ A matrix with the compositional predictors. Zero values are in general allowed, 
 \item{B}{
 The number of permutations to perform.
 }
+\item{ncores}{
+The number of cores to use in case you are interested for parallel computations.
+}
 }
 
 \details{
 Permutation independence test in the constrained linear least squares for compositional
-responses and predictors is performed. The observed test statistic is the Kullback-Leibler divergence computed by \code{\link{tflr}}. Then, the rows of X are permuted B times and each time the TFLR is performed and the Kullback-Leibler is computed. The p-value is then computed in the usual way.
+responses and predictors is performed. The observed test statistic is the Kullback-Leibler divergence computed by \code{\link{tflr}}. 
+Then, the rows of X are permuted B times and each time the TFLR is performed and the Kullback-Leibler is computed. 
+The p-value is then computed in the usual way.
 }
 
 \value{
@@ -34,7 +39,8 @@ The p-value for the test of linear independence between the simplicial response 
 }
 
 \references{
-Fiksel J., Zeger S. and Datta A. (2022). A transformation-free linear regression for compositional outcomes and predictors. Biometrics, 78(3): 974--987.
+Fiksel J., Zeger S. and Datta A. (2022). A transformation-free linear regression for compositional outcomes and predictors. 
+Biometrics, 78(3): 974--987.
 }
 
 \author{
