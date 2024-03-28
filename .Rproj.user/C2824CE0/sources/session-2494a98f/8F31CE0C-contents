@@ -1,6 +1,5 @@
 \name{Transformation-free linear regression for compositional responses and predictors}
 \alias{tflr}
-\alias{tflr2}
 \title{
 Transformation-free linear regression for compositional responses and predictors
 }
@@ -11,7 +10,6 @@ Transformation-free linear regression for compositional responses and predictors
 
 \usage{
 tflr(y, x, xnew = NULL)
-tflr2(y, x, xnew = NULL)
 }
 
 \arguments{
@@ -19,7 +17,7 @@ tflr2(y, x, xnew = NULL)
 A matrix with the compositional response. Zero values are allowed.
 }
 \item{x}{
-A matrix with the compositional predictors. Zero values are allowed.
+A matrix with the compositional predictors. Zero values are in general allowed, but there can be cases when these are problematic.
 }
 \item{xnew}{
 If you have new data use it, otherwise leave it NULL.
@@ -28,7 +26,7 @@ If you have new data use it, otherwise leave it NULL.
 
 \details{
 The transformation-free linear regression for compositional responses and predictors is implemented.
-The function to be minized is \eqn{-\sum_{i=1}^ny_i\log{y_i/(X_iB)}}. The tflr() imports the \bold{codalm} package, whereas the tflr2() is a self implementation.
+The function to be minized is \eqn{-\sum_{i=1}^ny_i\log{y_i/(X_iB)}}. This is a self implementation of the function that can be found in the package codalm.
 }
 
 \value{
