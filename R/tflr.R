@@ -27,6 +27,7 @@ tflr <- function(y, x, xnew = NULL) {
   i <- 2
 
   while(f1 - f2 > 1e-6) {
+    i <- i + 1
     f1 <- f2
     b <- as.vector(B)
     pijk <- Rfast::eachrow(X, b, oper = "*")
@@ -51,7 +52,7 @@ tflr <- function(y, x, xnew = NULL) {
   est <- NULL
   if ( !is.null(xnew) )  est <- xnew %*% B
 
-  list(runtime = runtime, kl = kl, be = B, est = est)
+  list(runtime = runtime, iters = i, kl = kl, be = B, est = est)
 }
 
 
