@@ -1,19 +1,40 @@
-ternary.coef <- function(B, dg = FALSE, hg = FALSE, colour = NULL) {
+ternary.cr <- function(x, type = "alr", conf = 0.95, dg = FALSE, hg = FALSE, colour = NULL) {
 
-  if ( !is.null( colnames(B) ) ) {
-    nam <- colnames(B)
-  } else nam <- paste("Y", 1:3, sep = "")
+  if ( !is.null( colnames(x) ) ) {
+    nam <- colnames(x)
+  } else nam <- paste("X", 1:3, sep = "")
 
-  n <- dim(B)[1]
+  if (type == "alr") {
+    y <- Compositional::alr(x)
+  } else  y <- Compositional::alfa(x, 0)
+  n <- dim(x)[1]  ;   p <- 2
+  s <- cov(y)
+  m <- Rfast::colmeans(y)
+  theta <- seq(0, 2 * pi, length = 100)
+  cr <- m + sqrt( (n - 1) * p / (n - p) / n * qf(conf, p, n - p) ) *
+        t( chol(s) ) %*% rbind( cos(theta), sin(theta) )
+  cr <- t(cr)
+  cr <- rbind(m, cr)
+
+  if (type == "alr") {
+    scr <- Compositional::alrinv(cr)
+  } else {
+    scr <- Compositional::alfainv(cr, 0)
+  }
+
+  ## the next code checks for zeros
   b1 <- c(0.5, 0, 1, 0.5)
   b2 <- c(sqrt(3)/2, 0, 0, sqrt(3)/2)
   b <- cbind(b1, b2)
   plot(b[, 1], b[, 2], type = "l", xlab = " ", ylab = " ", pty = "s",
   xaxt = "n", yaxt = "n", bty = "n", lwd = 2)
   proj <- matrix(c(0, 1, 0.5, 0, 0, sqrt(3)/2), ncol = 2)
-  d <- B %*% proj
+  dx <- x %*% proj
+  scr <- scr %*% proj
   if ( is.null(colour) )  colour <- numeric(n) + 1
-
+  lines(scr[-1, ], col = "blue", lwd = 2)
+  points( dx[1:n, 1], dx[1:n, 2], col = colour, pch = 16 )
+  points(scr[1, 1], scr[1, 2], col = "blue", pch = 3)
   text( b[1, 1], b[1, 2] + 0.02, nam[3], col = "black", font = 2 )
   text( b[2, 1] + 0.02, b[2, 2] - 0.02, nam[1], col = "black", font = 2 )
   text( b[3, 1] - 0.02, b[2, 2] - 0.02, nam[2], col = "black", font = 2 )
@@ -64,8 +85,4 @@ ternary.coef <- function(B, dg = FALSE, hg = FALSE, colour = NULL) {
     }
   } ## end if hg
 
-  for (i in 1:n)  text(d[i, 1], d[i, 2],  substitute( B[i], list(i = i) ), col = colour)
-
 }
-
-
