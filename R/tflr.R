@@ -1,7 +1,7 @@
 tflr <- function(y, x, xnew = NULL) {
 
   runtime <- proc.time()
-  B <- Compositional::ols.compcomp(y, x)$be
+  B <- Compositional::scls(y, x)$be
   Dr <- dim(y)[2]   ;    Dp <- dim(x)[2]  ;  Drp <- Dr * Dp
   id <- matrix(1:Drp, ncol = Dr)
 

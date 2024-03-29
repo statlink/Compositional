@@ -7,7 +7,7 @@ scls2 <- function(y, x, wei = FALSE, xnew = NULL) {
     xc <- cbind(xc, x[[ i ]] / dx )
     px[i] <- dim(x[[ i]] )[2]
   }
-  mod <- Compositional::ols.compcomp(y, xc)
+  mod <- Compositional::scls(y, xc)
   ini.be <- abs(mod$be)
   px <- c(0, cumsum(px) )
 

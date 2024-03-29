@@ -12,7 +12,7 @@ cv.scls <- function(y, x, nfolds = 10, folds = NULL, seed = NULL) {
     ytrain <- y[ -folds[[ i ]], ]  ## train set dependent vars
     xtest <- x[ folds[[ i ]], ]  ## test set independent vars
     xtrain <- x[ -folds[[ i ]], ]  ## train set independent vars
-    est <- Compositional::ols.compcomp(ytrain, xtrain, xnew = xtest)$est
+    est <- Compositional::scls(ytrain, xtrain, xnew = xtest)$est
     ela <- abs( ytest * log( ytest / est ) )
     ela[ is.infinite(ela) ] <- NA
     kl[i] <-  2 * mean(ela, na.rm = TRUE)
