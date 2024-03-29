@@ -1,15 +1,15 @@
-\name{Permutation linear independence test in the TFLR model}
-\alias{tflr.indeptest}
+\name{Permutation test for the matrix of coefficients in the TFLR model}
+\alias{tflr.betest}
 \title{
-Permutation linear independence test in the TFLR model
+Permutation test for the matrix of coefficients in the TFLR model
 }
 
 \description{
-Permutation linear independence test in the TFLR model.
+Permutation test for the matrix of coefficients in the TFLR model.
 }
 
 \usage{
-tflr.indeptest(y, x, R = 999, ncores = 1)
+tflr.betest(y, x, B, R = 999, ncores = 1)
 }
 
 \arguments{
@@ -18,6 +18,9 @@ A matrix with the compositional data (dependent variable). Zero values are allow
 }
 \item{x}{
 A matrix with the compositional predictors. Zero values are in general allowed, but there can be cases when these are problematic.
+}
+\item{B}{
+A specific matrix of coefficients to test. Under the null hypothesis, the matrix of coefficients is equal to this matrix.
 }
 \item{R}{
 The number of permutations to perform.
@@ -51,15 +54,13 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
     %}
 
 \seealso{
-\code{\link{tflr}, \link{scls}, \link{tflr.betest} }
+\code{\link{tflr}, \link{tflr.indeptest}, \link{scls}, \link{scls.indeptest} }
 }
 
 \examples{
-library(MASS)
-set.seed(1234)
-y <- rdiri(214, runif(4, 1, 3))
-x <- as.matrix(fgl[, 2:9])
-x <- x / rowSums(x)
-tflr.indeptest(y, x, R = 19)
+y <- rdiri(100, runif(3, 1, 3) )
+x <- rdiri(100, runif(3, 1, 3) )
+B <- diag(3)
+tflr.betest(y, x, B = B, R = 99)
 }
 
