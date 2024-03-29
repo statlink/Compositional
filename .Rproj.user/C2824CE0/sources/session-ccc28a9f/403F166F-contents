@@ -1,4 +1,4 @@
-cv.ascls <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = NULL, seed = NULL) {
+cv.atflr <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = NULL, seed = NULL) {
 
   n <- dim(y)[1]
   ina <- 1:n
@@ -17,7 +17,7 @@ cv.ascls <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = NULL,
       ytrain <- ya[ -folds[[ i ]], ]  ## train set dependent vars
       xtest <- x[ folds[[ i ]], ]  ## test set independent vars
       xtrain <- x[ -folds[[ i ]], ]  ## train set independent vars
-      est <- Compositional::sclsp(ytrain, xtrain, xnew = xtest)$est^( 1 / a[j] )
+      est <- Compositional::tflr(ytrain, xtrain, xnew = xtest)$est^( 1 / a[j] )
       est <- est / Rfast::rowsums(est)
       ela <- abs( ytest * log( ytest / est ) )
       ela[ is.infinite(ela) ] <- NA
