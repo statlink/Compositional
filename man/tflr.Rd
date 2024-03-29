@@ -63,7 +63,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 %}
 
 \seealso{
-\code{\link{cv.tflr}, \link{ols.compcomp} \link{kl.alfapcr}
+\code{\link{cv.tflr}, \link{scls} \link{kl.alfapcr}
 }
 }
 

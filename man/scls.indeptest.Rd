@@ -26,7 +26,7 @@ The number of permutations to perform.
 
 \details{
 Permutation independence test in the constrained linear least squares for compositional
-responses and predictors is performed. The observed test statistic is the MSE computed by \code{\link{ols.compcomp}}. Then, the rows of X are permuted B times and each time the constrained OLS is performed and the MSE is computed. The p-value is then computed in the usual way.
+responses and predictors is performed. The observed test statistic is the MSE computed by \code{\link{scls}}. Then, the rows of X are permuted B times and each time the constrained OLS is performed and the MSE is computed. The p-value is then computed in the usual way.
 }
 
 \value{

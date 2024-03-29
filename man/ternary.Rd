@@ -71,7 +71,7 @@ and Giorgos Athineou <gioathineou@gmail.com>.
 %}
 
 \seealso{
-\code{\link{ternary.cr}, \link{ternary.reg}, \link{diri.contour}
+\code{\link{ternary.mcr}, \link{ternary.reg}, \link{diri.contour}
 }
 }
 

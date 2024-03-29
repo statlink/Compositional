@@ -71,7 +71,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
     %}
 
 \seealso{
-\code{\link{ols.compcomp}, \link{cv.tflr}, \link{klalfapcr.tune} }
+\code{\link{scls}, \link{cv.tflr}, \link{klalfapcr.tune} }
 }
 
 \examples{

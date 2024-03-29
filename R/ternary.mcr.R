@@ -1,4 +1,4 @@
-ternary.cr <- function(x, type = "alr", conf = 0.95, dg = FALSE, hg = FALSE, colour = NULL) {
+ternary.mcr <- function(x, type = "alr", conf = 0.95, dg = FALSE, hg = FALSE, colour = NULL) {
 
   if ( !is.null( colnames(x) ) ) {
     nam <- colnames(x)

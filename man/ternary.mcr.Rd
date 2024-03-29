@@ -1,5 +1,5 @@
 \name{Ternary diagram with confidence region for the mean}
-\alias{ternary.cr}
+\alias{ternary.mcr}
 
 \title{
 Ternary diagram with confidence region for the mean
@@ -10,7 +10,7 @@ Ternary diagram with confidence region for the mean.
 }
 
 \usage{
-ternary.cr(x, type = "alr", conf = 0.95, dg = FALSE, hg = FALSE, colour = NULL)
+ternary.mcr(x, type = "alr", conf = 0.95, dg = FALSE, hg = FALSE, colour = NULL)
 }
 
 \arguments{
@@ -69,5 +69,5 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 \examples{
 x <- as.matrix(iris[, 1:3])
 x <- x / rowSums(x)
-ternary(x, dg = TRUE, hg = TRUE)
+ternary.mcr(x, type = "alr", dg = TRUE, hg = TRUE)
 }
