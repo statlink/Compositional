@@ -1,4 +1,4 @@
-tflr2 <- function(y, x, wei = FALSE, xnew = NULL) {
+scls2 <- function(y, x, wei = FALSE, xnew = NULL) {
 
   dx <- length(x)
   px <- numeric(dx)
@@ -7,8 +7,8 @@ tflr2 <- function(y, x, wei = FALSE, xnew = NULL) {
     xc <- cbind(xc, x[[ i ]] / dx )
     px[i] <- dim(x[[ i]] )[2]
   }
-  mod <- Compositional::tflr(y, xc)
-  ini.be <- mod$be
+  mod <- Compositional::scls(y, xc)
+  ini.be <- abs(mod$be)
   px <- c(0, cumsum(px) )
 
   est <- NULL
@@ -18,7 +18,7 @@ tflr2 <- function(y, x, wei = FALSE, xnew = NULL) {
   }
 
   weights <- am <- NULL
-  kl <- mod$kl
+  mse <- mod$mse
 
   if (wei) {
     reg <- function(a, y = y, est = est) {
@@ -27,9 +27,7 @@ tflr2 <- function(y, x, wei = FALSE, xnew = NULL) {
       b <- round(b, 6)
       ma <- 0
       for ( i in 1:length(b) )  ma <- ma + b[i] * est[[ i ]]
-      f <- y * log(est)
-      f[is.infinite(f)] <- NA
-      sum(f)
+      - 2 * sum( diag( crossprod(y, ma) ) ) + sum( diag( crossprod(ma) ) )
     }
 
     est <- list()
@@ -39,7 +37,7 @@ tflr2 <- function(y, x, wei = FALSE, xnew = NULL) {
     b <- c(1, exp(a) )
     b <- b / sum(b)
     am <- round(b, 6)
-    kl <- sum(y * log(y), na.rm = FALSE) - f$value
+    mse <- ( sum(y^2) + f$value) / dim(y)[1]
     be <- NULL
     for (i in 1:dx)  be <- rbind(be, am[i] * ini.be[(px[i] + 1):px[i + 1], ] )
     weights <- Rfast::rowsums(be)
@@ -50,6 +48,5 @@ tflr2 <- function(y, x, wei = FALSE, xnew = NULL) {
     }
   }
 
-  list(ini.kl = mod$kl, be = ini.be, kl = kl, weights = weights, am = am, est = est)
+  list(ini.mse = mod$mse, be = ini.be, mse = mse, weights = weights, am = am, est = est)
 }
-
