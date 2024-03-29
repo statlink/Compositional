@@ -1,15 +1,15 @@
-\name{Cross-validation for the alpha-SCLS model}
-\alias{cv.ascls}
+\name{Cross-validation for the alpha-TFLR model}
+\alias{cv.atflr}
 \title{
-Cross-validation for the \eqn{alpha}-SCLS model
+Cross-validation for the \eqn{alpha}-TFLR model
 }
 
 \description{
-Cross-validation for the \eqn{alpha}-SCLS model.
+Cross-validation for the \eqn{alpha}-TFLR model.
 }
 
 \usage{
-cv.ascls(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = NULL, seed = NULL)
+cv.atflr(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = NULL, seed = NULL)
 }
 
 \arguments{
@@ -34,7 +34,7 @@ You can specify your own seed number here or leave it NULL.
 }
 
 \details{
-The K-fold cross validation is performed in order to select the optimal value for \eqn{\alpha} of the \eqn{\alpha}-SCLS model.
+The K-fold cross validation is performed in order to select the optimal value for \eqn{\alpha} of the \eqn{\alpha}-TFLR model.
 }
 
 \value{
@@ -68,7 +68,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 %}
 
 \seealso{
-\code{\link{ascls}, \link{cv.atflr}
+\code{\link{atflr}, \link{cv.ascls}
 }
 }
 
@@ -76,6 +76,6 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 library(MASS)
 y <- rdiri( 214, runif(4, 1, 3) )
 x <- as.matrix( fgl[, 2:9] )
-mod <- cv.ascls(y, x, nfolds = 5)
+mod <- cv.ascls(y, x, nfolds = 2, a = c(0.5, 1))
 }
 
