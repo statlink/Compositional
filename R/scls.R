@@ -1,4 +1,4 @@
-ols.compcomp <- function(y, x, xnew = NULL) {
+scls <- function(y, x, xnew = NULL) {
 
   py <- dim(y)[2]   ;    px <- dim(x)[2]
   pyx <- py * px    ;    n <- dim(y)[1]
@@ -20,7 +20,7 @@ ols.compcomp <- function(y, x, xnew = NULL) {
     f <- quadprog::solve.QP( Dmat = 2 * Matrix::nearPD(XX)$mat, dvec = dvec, Amat = A, bvec = bvec, meq = px )
   }
 
-  be <- matrix( abs(f$solution), ncol = py) 
+  be <- matrix( abs(f$solution), ncol = py)
   mse <- ( sum(y^2) + f$value ) / n
 
   if ( is.null( colnames(y) ) ) {

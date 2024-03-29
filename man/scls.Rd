@@ -1,5 +1,5 @@
 \name{Constrained linear least squares for compositional responses and predictors}
-\alias{ols.compcomp}
+\alias{scls}
 \title{
 Constrained linear least squares for compositional responses and predictors
 }
@@ -9,7 +9,7 @@ Constrained linear least squares for compositional responses and predictors.
 }
 
 \usage{
-ols.compcomp(y, x, xnew = NULL)
+scls(y, x, xnew = NULL)
 }
 
 \arguments{
@@ -59,7 +59,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
     %}
 
 \seealso{
-\code{\link{cv.olscompcomp}, \link{tflr}, \link{ols.compcomp.indeptest}  }
+\code{\link{cv.scls}, \link{tflr}, \link{scls.indeptest}  }
 }
 
 \examples{
@@ -68,7 +68,7 @@ set.seed(1234)
 y <- rdiri(214, runif(4, 1, 3))
 x <- as.matrix(fgl[, 2:9])
 x <- x / rowSums(x)
-mod <- ols.compcomp(y, x)
+mod <- scls(y, x)
 mod
 }
 

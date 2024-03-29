@@ -1,5 +1,5 @@
 \name{Cross-validation for the constrained linear least squares for compositional responses and predictors}
-\alias{cv.olscompcomp}
+\alias{cv.scls}
 \title{
 Cross-validation for the constrained linear least squares for compositional
 responses and predictors
@@ -11,7 +11,7 @@ responses and predictors.
 }
 
 \usage{
-cv.olscompcomp(y, x, nfolds = 10, folds = NULL, seed = NULL)
+cv.scls(y, x, nfolds = 10, folds = NULL, seed = NULL)
 }
 
 \arguments{
@@ -81,7 +81,7 @@ set.seed(1234)
 y <- rdiri(214, runif(3, 1, 3))
 x <- as.matrix(fgl[, 2:9])
 x <- x / rowSums(x)
-mod <- cv.olscompcomp(y, x, nfolds = 5, seed = 12345)
+mod <- cv.scls(y, x, nfolds = 5, seed = 12345)
 mod
 }
 }

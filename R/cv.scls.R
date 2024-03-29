@@ -1,4 +1,4 @@
-cv.olscompcomp <- function(y, x, nfolds = 10, folds = NULL, seed = NULL) {
+cv.scls <- function(y, x, nfolds = 10, folds = NULL, seed = NULL) {
 
   n <- dim(y)[1]
   ina <- 1:n
