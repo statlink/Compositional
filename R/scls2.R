@@ -39,7 +39,7 @@ scls2 <- function(y, x, wei = FALSE, xnew = NULL) {
     am <- round(b, 6)
     mse <- ( sum(y^2) + f$value) / dim(y)[1]
     be <- NULL
-    for (i in 1:dx)  be <- rbind(be, am[i] * ini.be[(px[i] + 1):px[i + 1], ] )
+    for (i in 1:dx)  be <- rbind( be, am[i] * ini.be[(px[i] + 1):px[i + 1], ] )
     weights <- Rfast::rowsums(be)
     est <- NULL
     if ( !is.null(xnew) ) {

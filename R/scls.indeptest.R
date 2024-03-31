@@ -6,7 +6,7 @@ scls.indeptest <- function(y, x, R = 999) {
   dvec <- 2 * as.vector( crossprod(x, y) )
   xx <- crossprod(x)
   XX <- matrix(0, pyx, pyx)
-  ind <- matrix( 1:pyx, ncol = px, byrow = TRUE)
+  ind <- matrix( 1:pyx, ncol = px, byrow = TRUE )
   for ( i in 1:py )  XX[ ind[i, ], ind[i, ] ] <- xx
   A <- matrix(0, pyx, pyx)
   for ( i in 1:px )  A[i, ind[, i]] <- 1
