@@ -6,12 +6,6 @@
 #### Principal Component Analysis p. 167-188.
 ################################
 pcr <- function (y, x, k = 1, xnew = NULL) {
-  ## xnew is the new independent variables values
-  ## whose values of y you want to estimate
-  ## by default xnew is the x, so you will get the fitted values
-  ## y is the univariate dependent variable
-  ## x contains the independent variables
-  ## k shows the number of components to keep
   my <- mean(y)
   y <- y - my
   dm <- dim(x)
