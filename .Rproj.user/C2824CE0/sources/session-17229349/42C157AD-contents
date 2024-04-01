@@ -1,15 +1,15 @@
-\name{Permutation linear independence test in the SCLS model}
-\alias{scls.indeptest}
+\name{Permutation test for the matrix of coefficients in the SCLS model}
+\alias{scls.betest}
 \title{
-Permutation linear independence test in the SCLS model
+Permutation test for the matrix of coefficients in the SCLS model
 }
 
 \description{
-Permutation linear independence test in the SCLS model.
+Permutation test for the matrix of coefficients in the SCLS model.
 }
 
 \usage{
-scls.indeptest(y, x, R = 999)
+scls.betest(y, x, B, R = 999)
 }
 
 \arguments{
@@ -18,6 +18,9 @@ A matrix with the compositional data (dependent variable). Zero values are allow
 }
 \item{x}{
 A matrix with the compositional predictors. Zero values are allowed.
+}
+\item{B}{
+A specific matrix of coefficients to test. Under the null hypothesis, the matrix of coefficients is equal to this matrix.
 }
 \item{R}{
 The number of permutations to perform.
@@ -34,6 +37,8 @@ The p-value for the test of independence between Y and X.
 }
 
 \references{
+Fiksel J., Zeger S. and Datta A. (2022). A transformation-free linear regression for compositional outcomes and predictors. Biometrics, 78(3): 974--987.
+
 Tsagris. M. (2024). Constrained least squares simplicial-simplicial regression.
 https://arxiv.org/pdf/2403.19835.pdf
 }
@@ -49,15 +54,14 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
     %}
 
 \seealso{
-\code{\link{scls}, \link{scls2}, \link{tflr}, \link{scls.betest} }
+\code{\link{scls}, \link{scls2}, \link{tflr}, \link{scls.indeptest},
+\link{tflr.indeptest} }
 }
 
 \examples{
-library(MASS)
-set.seed(1234)
-y <- rdiri(214, runif(4, 1, 3))
-x <- as.matrix(fgl[, 2:9])
-x <- x / rowSums(x)
-scls.indeptest(y, x, R = 99)
+y <- rdiri(100, runif(3, 1, 3) )
+x <- rdiri(100, runif(3, 1, 3) )
+B <- diag(3)
+scls.betest(y, x, B = B, R = 99)
 }
 

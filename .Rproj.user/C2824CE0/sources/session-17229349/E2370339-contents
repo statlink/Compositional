@@ -1,15 +1,15 @@
-\name{Cross validation for the TFLR model}
-\alias{cv.tflr}
+\name{Cross-validation for the SCLS model}
+\alias{cv.scls}
 \title{
-Cross validation for the TFLR model
+Cross-validation for the SCLS model
 }
 
 \description{
-Cross validation for the TFLR model.
+Cross-validation for the SCLS model.
 }
 
 \usage{
-cv.tflr(y, x, nfolds = 10, folds = NULL, seed = NULL)
+cv.scls(y, x, nfolds = 10, folds = NULL, seed = NULL)
 }
 
 \arguments{
@@ -28,13 +28,13 @@ If you have the list with the folds supply it here. You can also leave it NULL
 and it will create folds.
 }
 \item{seed}{
-If seed is TRUE the results will always be the same.
+You can specify your own seed number here or leave it NULL.
 }
 }
 
 \details{
-A k-fold cross validation for the transformation-free linear regression for
-compositional responses and predictors is performed.
+The function performs k-fold cross-validation for the least squares regression
+where the beta coefficients are constained to be positive and sum to 1.
 }
 
 \value{
@@ -67,22 +67,21 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 }
 
 %\note{
-%%  ~~further notes~~
-%}
+  %%  ~~further notes~~
+    %}
 
 \seealso{
-\code{ \link{tflr}, \link{cv.scls}, \link{klalfapcr.tune}
-}
+\code{\link{scls}, \link{cv.tflr}, \link{klalfapcr.tune} }
 }
 
 \examples{
 \donttest{
 library(MASS)
-y <- rdiri(100, runif(3, 1, 3))
-x <- as.matrix(fgl[1:100, 2:9])
+set.seed(1234)
+y <- rdiri(214, runif(3, 1, 3))
+x <- as.matrix(fgl[, 2:9])
 x <- x / rowSums(x)
-mod <- cv.tflr(y, x)
+mod <- cv.scls(y, x, nfolds = 5, seed = 12345)
 mod
 }
 }
-
