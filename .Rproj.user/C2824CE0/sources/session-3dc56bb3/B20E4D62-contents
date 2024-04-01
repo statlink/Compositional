@@ -21,8 +21,9 @@ vector with discrete (count) data.
 A matrix with the predictor variable(s), they have to be continuous.
 }
 \item{k}{
-A number greater than or equal to 1. How many principal components to use. 
-You may get results for the sequence of principal components.
+A number greater than or equal to 1. How many principal components to use. In the case of
+"pcr" this can be a single number or a vector. In the second case you get results for the
+sequence of principal components.
 }
 \item{xnew}{
 If you have new data use it, otherwise leave it NULL.
