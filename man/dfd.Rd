@@ -59,6 +59,6 @@ dfd(x, alpha, prob, tau)
 }
 
 \seealso{
-\code{ \link{fd.est}, \link{rfd} }
+\code{\link{rfd} }
 }
 
