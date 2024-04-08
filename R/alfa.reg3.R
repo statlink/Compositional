@@ -13,7 +13,7 @@ alfa.reg3 <- function(y, x, a = c(-1, 1), xnew = NULL) {
     ya <- Compositional::alfa(y, a)$aff
     ax <- a * x
     ini <- as.vector( solve(crossprod(x), crossprod(x, ya) ) )
-    mod <- minpack.lm::nls.lm(par = ini, fn = reg, ya = ya, ax = ax, a = a, ha = ha, d = d, D = D)
+    mod <- minpack.lm::nls.lm(par = ini, fn = reg, ya = ya, ax = ax, a = a, ha = ha, d = d, D = D, control = list(maxiter = 500))
     be <- matrix(mod$par, ncol = d)
     est <- cbind( 1, exp(x %*% be) )
     est <- est/Rfast::rowsums(est)
