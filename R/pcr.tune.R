@@ -38,7 +38,7 @@ pcr.tune <- function(y, x, nfolds = 10, maxk = 50, folds = NULL, ncores = 1, see
   } else {
 
     runtime <- proc.time()
-
+    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
     cl <- parallel::makePSOCKcluster(ncores)
     doParallel::registerDoParallel(cl)
     er <- numeric(maxk)
