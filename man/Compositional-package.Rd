@@ -14,7 +14,7 @@ A Collection of Functions for Compositional Data Analysis.
 Package: \tab Compositional\cr
 Type: \tab Package\cr
 Version: \tab 6.9 \cr
-Date: \tab 2024-04-02\cr
+Date: \tab 2024-04-04\cr
 License: \tab GPL-2\cr
 }
 }
