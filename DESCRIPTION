@@ -10,8 +10,8 @@ Authors@R: c(person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsag
 Author: Michail Tsagris [aut, cre], Giorgos Athineou [aut], Abdulaziz Alenazi [ctb], Christos Adam [ctb]
 Maintainer: Michail Tsagris <mtsagris@uoc.gr>
 Depends: R (>= 4.0)
-Imports: cluster, Directional, doParallel, emplik, energy, foreach, glmnet, graphics, grDevices, MASS, Matrix, mda, minpack.lm, mixture, mvhtests, nnet, pchc, quadprog, regda, Rfast, Rfast2, Rnanoflann, sn, stats
-Suggests: codalm, FlexDir
+Imports: cluster, Directional, emplik, energy, foreach, glmnet, graphics, grDevices, MASS, Matrix, mda, minpack.lm, mixture, mvhtests, nnet, pchc, quadprog, regda, Rfast, Rfast2, Rnanoflann, sn, stats
+Suggests: codalm, doParallel, FlexDir
 Description: Regression, classification, contour plots, hypothesis testing and fitting of distributions for compositional data are some of the functions included. We further include functions for percentages (or proportions).
              The standard textbook for such data is John Aitchison's (1986) "The statistical analysis of compositional data". Relevant papers include:
 			       a) Tsagris M.T., Preston S. and Wood A.T.A. (2011). "A data-based power transformation for compositional data". Fourth International International Workshop on Compositional Data Analysis. <doi:10.48550/arXiv.1106.1451>
