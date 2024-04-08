@@ -56,7 +56,7 @@ tflr <- function(y, x, xnew = NULL) {
     colnames(B) <- paste("Y", 1:Dr, sep = "")
   } else colnames(B) <- colnames(y)
 
-  if ( is.null( rownames(y) ) )  {
+  if ( is.null( colnames(x) ) )  {
     rownames(B) <- paste("X", 1:Dp, sep = "")
   } else rownames(B) <- colnames(x)
 
