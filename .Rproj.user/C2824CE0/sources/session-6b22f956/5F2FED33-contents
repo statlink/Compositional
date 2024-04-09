@@ -63,7 +63,7 @@ otherwise it is NULL.
 \references{
 Aitchison J. (1986). The statistical analysis of compositional data. Chapman & Hall.
 
-Koenker R. W. and Bassett G. W. (1978). Regression Quantiles, Econometrica, 46(1): 33--50.
+Koenker R. W. and Bassett G. W. (1978). Regression Quantiles, Econometrica, 46(1): 33-–50.
 
 Koenker R. W. and d'Orey V. (1987). Algorithm AS 229: Computing Regression Quantiles.
 Applied Statistics, 36(3): 383--393.

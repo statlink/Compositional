@@ -40,7 +40,8 @@ If you have no new data, leave this NULL as is by default.
 The function performs the quantile regression model. The logarithm of the compositional
 predictor variables is used (hence no zero values are allowed). The response variable is
 linked to the log-transformed data with the constraint that the sum of the regression
-coefficients equals 0. If you want the regression without the zum-to-zero contraints see \code{\link{ulc.rq}}. Extra predictor variables are allowed as well, for instance categorical
+coefficients equals 0. If you want the regression without the zum-to-zero contraints see \code{\link{ulc.rq}}. 
+Extra predictor variables are allowed as well, for instance categorical
 or continuous.
 }
 
@@ -62,7 +63,7 @@ otherwise it is NULL.
 \references{
 Aitchison J. (1986). The statistical analysis of compositional data. Chapman & Hall.
 
-Koenker R. W. and Bassett G. W. (1978). Regression Quantiles, Econometrica, 46(1): 33-–50.
+Koenker R. W. and Bassett G. W. (1978). Regression Quantiles, Econometrica, 46(1): 33--50.
 
 Koenker R. W. and d'Orey V. (1987). Algorithm AS 229: Computing Regression Quantiles.
 Applied Statistics, 36(3): 383--393.
