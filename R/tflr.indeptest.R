@@ -1,4 +1,4 @@
-tflr.indeptest <- function(y, x, xnew = NULL) {
+tflr.indeptest <- function(y, x, R = 999, ncores = 1) {
   py <- dim(y)[2]   ;    px <- dim(x)[2]
   pyx <- py * px    ;    n <- dim(y)[1]
   n <- dim(y)[1]    ;    npy <- n * py
@@ -24,15 +24,33 @@ tflr.indeptest <- function(y, x, xnew = NULL) {
   kl <- sum(y * log(y / est), na.rm = TRUE)
 
   pkl <- rep(NA, R)
-  for (i in 1:R) {
-    id <- sample(n,n)
-    Yp <- as.vector(y[id, ])
-    a <- goric::orglm(Yp ~ X - 1, family = quasibinomial(link="identity"),
-                      data = data.frame(Yp = Yp, X = X), constr = A, rhs = bvec, nec = px)
-    be <- matrix( abs(coef(a)), ncol = py)
-    est <- x %*% be
-    pkl[i] <- sum(y * log(y / est), na.rm = TRUE)
+  if ( ncores <= 1 ) {
+    for (i in 1:R) {
+      id <- Rfast2::Sample.int(n,n)
+      Yp <- as.vector(y[id, ])
+      a <- goric::orglm(Yp ~ X - 1, family = quasibinomial(link="identity"),
+                        data = data.frame(Yp = Yp, X = X), constr = A, rhs = bvec, nec = px)
+      be <- matrix( abs(coef(a)), ncol = py)
+      est <- x %*% be
+      pkl[i] <- sum(y * log(y / est), na.rm = TRUE)
+    }
+
+  } else {
+    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
+    cl <- parallel::makePSOCKcluster(ncores)
+    doParallel::registerDoParallel(cl)
+    pkl <- foreach::foreach(i = 1:R, .combine = "c",
+                   .packages = c("Compositional", "Rfast", "Rfast2", "goric") ) %dopar% {
+      id <- Rfast2::Sample.int(n, n)
+      Yp <- as.vector(y[id, ])
+      a <- goric::orglm(Yp ~ X - 1, family = quasibinomial(link="identity"),
+                        data = data.frame(Yp = Yp, X = X), constr = A, rhs = bvec, nec = px)
+      be <- matrix( abs(coef(a)), ncol = py)
+      est <- x %*% be
+      return( sum(y * log(y / est), na.rm = TRUE) )
+    }
   }
+
   ( sum(pkl < kl) + 1 ) / (R + 1)
 }
 
