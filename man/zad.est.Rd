@@ -14,7 +14,7 @@ zad.est(y)
 
 \arguments{
 \item{y}{
-A matrix with the compositional data (dependent variable). The number of observations (vectors)
+A matrix with the compositional data. The number of observations (vectors)
 with no zero values should be more than the columns of the predictor variables. Otherwise,
 the initial values will not be calculated.
 }
