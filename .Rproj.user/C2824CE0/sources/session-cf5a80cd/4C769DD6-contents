@@ -64,7 +64,7 @@ Sucharitha Dodamgodage suggested to add an extra case in the function \code{\lin
 
 Loic Mangnier found a bug in the function \code{\link{lc.glm}} which is now fixed and also became faster.
 
-Ravi Varadhan found a package in \code{\link{diri.reg}} and he is acknowledged for that.
+Ravi Varadhan found a bug in \code{\link{diri.reg}} and he is acknowledged for that.
 
 }
 
