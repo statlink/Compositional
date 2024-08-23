@@ -44,11 +44,12 @@ diri.reg <- function(y, x, plot = FALSE, xnew = NULL) {
   } else  seb <- NULL
 
   est <- NULL
+  lev <- NULL
+
   if ( !is.null(xnew) ) {
     xnew <- model.matrix(~., data.frame(xnew) )
     mu <- cbind( 1, exp(xnew %*% be) )
     est <- mu / Rfast::rowsums(mu)
-    lev <- NULL
   } else {
     if ( plot ) {
     mu <- cbind( 1, exp(x %*% be) )
