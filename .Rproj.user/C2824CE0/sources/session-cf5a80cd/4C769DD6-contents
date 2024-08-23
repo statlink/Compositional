@@ -66,6 +66,8 @@ Loic Mangnier found a bug in the function \code{\link{lc.glm}} which is now fixe
 
 Ravi Varadhan found a package in \code{\link{diri.reg}} and he is acknowledged for that.
 
+}
+
 \keyword{ Compositional data }
 \keyword{ Regression }
 \keyword{ Contour plots }
