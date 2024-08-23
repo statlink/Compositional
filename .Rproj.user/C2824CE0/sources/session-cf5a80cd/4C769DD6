@@ -1,26 +1,26 @@
 {
-    "id": "7B288D91",
+    "id": "4C769DD6",
     "path": "~/GitHub/Compositional/man/Compositional-package.Rd",
     "project_path": "man/Compositional-package.Rd",
     "type": "r_doc",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1724392889077.0,
+    "created": 1724393210328.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "68,0",
-        "scrollLine": "58"
+        "cursorPosition": "66,55",
+        "scrollLine": "56"
     },
     "folds": "",
-    "lastKnownWriteTime": 1724393002,
+    "lastKnownWriteTime": 1724393181,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1724393002826,
+    "last_content_update": 1724393181,
     "read_only": false,
     "read_only_alternatives": []
 }
