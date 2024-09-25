@@ -34,7 +34,7 @@ You can specify your own seed number here or leave it NULL.
 }
 
 \details{
-The K-fold cross validation is performed in order to select the optimal value for \eqn{\alpha} of the \eqn{\alpha}-SCLS model.
+The K-fold cross validation is performed in order to select the optimal value for \eqn{\alpha} of the \eqn{\alpha}-SCRQ model.
 }
 
 \value{
