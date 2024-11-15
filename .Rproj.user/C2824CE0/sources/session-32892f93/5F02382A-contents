@@ -10,7 +10,7 @@ Authors@R: c(person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsag
 Author: Michail Tsagris [aut, cre], Giorgos Athineou [aut], Abdulaziz Alenazi [ctb], Christos Adam [ctb]
 Maintainer: Michail Tsagris <mtsagris@uoc.gr>
 Depends: R (>= 4.0)
-Imports: bigstatsr, cluster, doParallel, emplik, energy, foreach, glmnet, graphics, grDevices, quantreg, MASS, Matrix, mda, minpack.lm, mixture, nnet, quadprog, Rfast, Rfast2, Rnanoflann, sn, stats
+Imports: bigstatsr, cluster, doParallel, emplik, energy, foreach, glmnet, graphics, grDevices, quantreg, MASS, Matrix, mda, minpack.lm, mixture, mvhtests, nnet, quadprog, Rfast, Rfast2, Rnanoflann, sn, stats
 Suggests: bigparallelr, codalm, FlexDir, 
 Description: Regression, classification, contour plots, hypothesis testing and fitting of distributions for compositional data are some of the functions included. We further include functions for percentages (or proportions).
              The standard textbook for such data is John Aitchison's (1986) "The statistical analysis of compositional data". Relevant papers include:
