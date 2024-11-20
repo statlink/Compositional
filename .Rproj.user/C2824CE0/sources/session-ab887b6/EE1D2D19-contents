@@ -50,7 +50,8 @@ The maximum number of Newton-Raphson iterations.
 \details{
 In the kl.compreg() the Kullback-Leibler divergence is adopted as the objective function. In case of problematic
 convergence the "multinom" function by the "nnet" package is employed. This will obviously be slower. The
-js.compreg() uses the Jensen-Shannon divergence and the symkl.compreg() uses the symmetric Kullback-Leibler divergence. The tv.compreg() uses the Total Variation divergence. There is no actual log-likelihood for the last three regression models. The hellinger.compreg() minimizes the Hellinger distance.
+js.compreg() uses the Jensen-Shannon divergence and the symkl.compreg() uses the symmetric Kullback-Leibler divergence.
+The tv.compreg() uses the Total Variation divergence. There is no actual log-likelihood for the last three regression models.
 }
 
 \value{

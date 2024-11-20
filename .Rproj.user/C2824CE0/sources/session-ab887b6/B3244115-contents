@@ -36,10 +36,8 @@ alfa.reg <- function(y, x, a, xnew = NULL, yb = NULL) {
     runtime <- proc.time()
     ha <- t( Compositional::helm(D) )
     ini <- as.vector( solve(crossprod(x), crossprod(x, ya) ) )
-    suppressWarnings({
-      mod <- minpack.lm::nls.lm( par = ini, fn = reg, ya = ya, ax = ax, a = a, ha = ha, d = d, D = D,
-                                 control = minpack.lm::nls.lm.control(maxiter = 5000) )
-    })
+    mod <- minpack.lm::nls.lm( par = ini, fn = reg, ya = ya, ax = ax, a = a, ha = ha, d = d, D = D,
+                               control = minpack.lm::nls.lm.control(maxiter = 5000) )
     be <- matrix(mod$par, ncol = d)
     runtime <- proc.time() - runtime
     seb <- sqrt( diag( solve(mod$hessian) ) )
