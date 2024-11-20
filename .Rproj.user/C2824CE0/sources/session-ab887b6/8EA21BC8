@@ -3,7 +3,7 @@
     "path": "~/GitHub/Compositional/DESCRIPTION",
     "project_path": "DESCRIPTION",
     "type": "dcf",
-    "hash": "0",
+    "hash": "3465385852",
     "contents": "",
     "dirty": false,
     "created": 1732118922297.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "25,24",
-        "scrollLine": "10"
+        "cursorPosition": "27,12",
+        "scrollLine": "9"
     },
     "folds": "",
-    "lastKnownWriteTime": 1732118964,
+    "lastKnownWriteTime": 1732119035,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1732118964085,
+    "last_content_update": 1732119035658,
     "read_only": false,
     "read_only_alternatives": []
 }
