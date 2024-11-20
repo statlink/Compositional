@@ -13,15 +13,15 @@ scls.betest <- function(y, x, B, R = 999) {
   A <- A[, -c( (px + 1): pyx) ]
   bvec <- c( rep(1, px), rep(0, pyx), rep(-1, pyx) )
 
-  Dmat <- 2 * XX
+  Dmat <- XX
   if ( det(Dmat) < 1e-20 )  Dmat <- Matrix::nearPD(Dmat)$mat
 
   ma <- x %*% B
-  mse <-  - 2 * sum( diag( crossprod(y, ma) ) ) + sum( diag( crossprod(ma) ) )
+  mse <-  - sum( diag( crossprod(y, ma) ) ) + 0.5 * sum( diag( crossprod(ma) ) )
   pmse <- numeric(R)
   for (i in 1:R) {
     id <- Rfast2::Sample.int(n, n)
-    dvec <- 2 * as.vector( crossprod(x[id, ], y) )
+    dvec <- as.vector( crossprod(x[id, ], y) )
     pf <- quadprog::solve.QP( Dmat = Dmat, dvec = dvec, Amat = A, bvec = bvec, meq = px )
     pmse[i] <- pf$value
   }
