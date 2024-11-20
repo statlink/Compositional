@@ -77,19 +77,22 @@ The fitted values of xnew if xnew is not NULL.
 }
 
 \references{
-Murteira, Jose MR, and Joaquim JS Ramalho 2016. Regression analysis of multivariate fractional data.
+Murteira Jose MR, and Joaquim JS Ramalho (2016). Regression analysis of multivariate fractional data.
 Econometric Reviews 35(4): 515-552.
 
-Tsagris, Michail (2015). A novel, divergence based, regression for compositional data.
+Tsagris Michail (2015). A novel, divergence based, regression for compositional data.
 Proceedings of the 28th Panhellenic Statistics Conference, 15-18/4/2015, Athens, Greece.
 https://arxiv.org/pdf/1511.07600.pdf
 
-Endres, D. M. and Schindelin, J. E. (2003). A new metric for probability distributions.
+Endres D. M. and Schindelin J. E. (2003). A new metric for probability distributions.
 Information Theory, IEEE Transactions on 49, 1858-1860.
 
-Osterreicher, F. and Vajda, I. (2003). A new class of metric divergences on probability
+Osterreicher F. and Vajda I. (2003). A new class of metric divergences on probability
 spaces and its applicability in statistics. Annals of the Institute of Statistical
 Mathematics 55, 639-653.
+
+Alenazi A. A. (2022). f-divergence regression models for compositional data. 
+Pakistan Journal of Statistics and Operation Research, 18(4): 867--882.
 }
 
 \author{
