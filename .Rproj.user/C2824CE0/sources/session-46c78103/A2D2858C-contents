@@ -3,7 +3,7 @@
 ####  2/2015
 #### mtsagris@yahoo.gr
 ################################
-diri.reg22 <- function(y, x, xnew = NULL) {
+diri.reg2 <- function(y, x, xnew = NULL) {
   
   n <- dim(y)[1]  ## sample size
   x <- model.matrix(y ~ ., data.frame(x) )
