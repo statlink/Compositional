@@ -2,7 +2,7 @@ Package: Compositional
 Type: Package
 Title: Compositional Data Analysis
 Version: 7.2
-Date: 2024-11-20
+Date: 2024-12-04
 Authors@R: c(person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsagris@uoc.gr"),
            person("Giorgos", "Athineou", role = "aut", email = "gioathineou@gmail.com"),
            person("Abdulaziz", "Alenazi", role = "ctb", email = "a.alenazi@nbu.edu.sa"),
