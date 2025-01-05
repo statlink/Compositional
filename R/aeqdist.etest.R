@@ -1,6 +1,6 @@
 aeqdist.etest <- function(x, sizes, a = 1, R = 999) {
   if ( length(a) == 1 ) {
-    x <- Compositional::alfa(x, a)$aff
+    x <- Compositional::alfa(x, a)$aff 
     res <- energy::eqdist.etest(x, sizes, R = R)$p.value
   } else {
     if ( min(x) == 0 )  a = a[ a > 0 ]
