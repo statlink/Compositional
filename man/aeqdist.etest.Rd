@@ -14,7 +14,7 @@ aeqdist.etest(x, sizes, a = 1, R = 999)
 
 \arguments{
 \item{x}{
-A matrix with the compositional data with all groups stacked one under the other.
+A matrix with the compositional data with all groups stacked one under the other. 
 }
 \item{sizes}{
 A numeric vector matrix with the sample sizes.
