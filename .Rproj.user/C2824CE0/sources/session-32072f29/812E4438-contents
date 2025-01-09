@@ -9,7 +9,7 @@ Tuning of the \eqn{alpha}-generalised correlations between two compositional dat
 }
 
 \usage{
-acor.tune(y, x, a = c(-1, 1), type = "dcor")
+acor.tune(y, x, a, type = "dcor")
 }
 
 \arguments{
@@ -72,7 +72,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 
 \examples{
 y <- rdiri(30, runif(3) )
-x <- rdiri(30, runif(3) )
-acor.tune(y, x)
+x <- rdiri(30, runif(4) )
+acor(y, x, a = 0.4)
 }
 
