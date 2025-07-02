@@ -11,10 +11,12 @@ akern.reg <- function(xnew, y, x, a = seq(0.1, 1, by = 0.1), h = seq(0.1, 1, len
   est <- sapply(names, function(x) NULL)
 
   if (type == "gauss") {
-    di <-  - 0.5 * Rfast::dista( xnew, x, square = TRUE)
-    h <- h^2
-  } else  di <-  - Rfast::dista(xnew, x, type = "manhattan" )
-
+    di <- Rfast::dista( xnew, x, square = TRUE)
+    h <-  - 2 * h^2
+  } else  {
+    di <- Rfast::dista(xnew, x, type = "manhattan" )
+    h <-  -h
+  }	
   for ( i in 1:la ) {
     if ( abs( a[i] ) < 1e-9 ) {
       ua <- Compositional::alef(y, 0)$aff
