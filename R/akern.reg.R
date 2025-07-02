@@ -9,7 +9,6 @@ akern.reg <- function(xnew, y, x, a = seq(0.1, 1, by = 0.1), h = seq(0.1, 1, len
   D <- dim(y)[2]
   names <- paste("alpha", a)
   est <- sapply(names, function(x) NULL)
-  di <-  -0.5 * Rfast::dista( xnew, x, square = TRUE)
 
   if (type == "gauss") {
     di <-  - 0.5 * Rfast::dista( xnew, x, square = TRUE)
