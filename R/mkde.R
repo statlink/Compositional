@@ -11,7 +11,7 @@
 #### B.W. Silverman (1986)
 #### Density estimation for statistics and data analysis, pages 76-78.
 ################################
-mkde <- function(x, h = NULL, thumb = "silverman") {
+mkde <- function(x, h = NULL, thumb = "silverman", ncores = 1) {
   ## h is the h you want, which is either a vector or a single number
   ## thumb can be either "none" so the specified h is used, or
   ## "scott", or "silverman"
@@ -37,5 +37,11 @@ mkde <- function(x, h = NULL, thumb = "silverman") {
   # a1 <- Rfast::Dist(y, method = "euclidean", square = TRUE)
   # (0.5 / pi)^(d/2) * con * ( Rfast::rowsums( exp( - 0.5 * a1 ) ) - 1 ) / (n - 1)
   if ( length(h) == 1 )  h <- rep(h, d)
-  Rfast2::kernel(x, h = h)
+  parallel <- FALSE
+  cores <- 0
+  if ( ncores > 1 )  {
+    parallel <- TRUE
+    cores <- ncores
+  }
+  Rfast2::kernel(x, h = h, parallel = parallel, cores = cores)
 }
