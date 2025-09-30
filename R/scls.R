@@ -21,9 +21,9 @@ scls <- function(y, x, xnew = NULL, nbcores = 4) {
   for ( i in 1:py )  XX[ ind[i, ], ind[i, ] ] <- xx
   A <- matrix(0, pyx, pyx)
   for ( i in 1:px )  A[i, ind[, i]] <- 1
-  A <- t( rbind( A, diag(pyx), -diag(pyx) ) )
+  A <- t( rbind( A, diag(pyx) ) )
   A <- A[, -c( (px + 1): pyx) ]
-  bvec <- c( rep(1, px), rep(0, pyx), rep(-1, pyx) )
+  bvec <- c( rep(1, px), rep(0, pyx) )
 
   f <- try( quadprog::solve.QP( Dmat = XX, dvec = dvec, Amat = A, bvec = bvec,
                                 meq = px ), silent = TRUE )

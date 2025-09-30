@@ -12,8 +12,8 @@ scrq <- function(y, x, xnew = NULL) {
 
   R <- NULL
   for (i in 1:py)  R <- cbind(R, diag(px))
-  R <- rbind( R, -R, diag(pyx), -diag(pyx) )
-  r <- c( rep(1, px), rep(-1, px), rep(0, pyx), rep(-1, pyx) )
+  R <- rbind( R, -R, diag(pyx) )
+  r <- c( rep(1, px), rep(-1, px), rep(0, pyx) )
 
   a <- quantreg::rq(Y ~ X - 1, data = data.frame(Y = Y, X = X), method = "fnc", R = R, r = r)
   be <- matrix(coef(a), ncol = py)
