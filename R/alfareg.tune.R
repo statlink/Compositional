@@ -35,7 +35,7 @@ alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = N
         yb <- ytr[ -folds[[ i ]], ]
         mod <- Compositional::alfa.reg(yu, xa, a[j], xnew = xu, yb = yb)
         yest <- mod$est
-        kula[i, j] <- 2 * mean(yu * log(yu / yest), na.rm = TRUE)
+        kula[i, j] <- sum(yu * log(yu / yest), na.rm = TRUE)
       }
     }
 
@@ -68,7 +68,7 @@ alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = N
             yb <- ytr[ -folds[[ i ]], ]
             mod <- Compositional::alfa.reg(yu, xa, ba[l], xnew = xu, yb = yb)
             yest <- mod$est
-            ww[i, l] <- 2 * mean(yu * log(yu / yest), na.rm = TRUE)
+            ww[i, l] <- sum(yu * log(yu / yest), na.rm = TRUE)
           }
        }
        return(ww)
