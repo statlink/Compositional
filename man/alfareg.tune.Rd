@@ -41,26 +41,26 @@ If graph is TRUE a plot of the performance for each fold along the values of \eq
 }
 
 \details{
-The \eqn{\alpha}-transformation is applied to the compositional data and the numerical optimisation is performed for the regression, unless \eqn{\alpha=0}, where the coefficients are available in closed form.
+Tuning the value of \eqn{\alpha} in the \eqn{\alpha}-regression takes place using k-fold cross-validation.
 }
 
 \value{
-A plot of the estimated Kullback-Leibler divergences (multiplied by 2) along the values of \eqn{\alpha} (if graph is set to TRUE).
+A plot of the estimated Kullback-Leibler divergences along the values of \eqn{\alpha} (if graph is set to TRUE).
 A list including:
 \item{runtime}{
 The runtime required by the cross-validation.
 }
 \item{kula}{
-A matrix with twice the Kullback-Leibler divergence of the observed from the fitted values. Each row corresponds to a fold and each column to a value of \eqn{\alpha}. The average over the columns equal the next argument, "kl".
+A matrix with the Kullback-Leibler divergence of the observed from the fitted values. Each row corresponds to a fold and each column to a value of \eqn{\alpha}. The average over the columns equal the next argument, "kl".
 }
 \item{kl}{
-A vector with twice the Kullback-Leibler divergence of the observed from the fitted values. Every value corresponds to a value of \eqn{\alpha}.
+A vector with the Kullback-Leibler divergence of the observed from the fitted values. Every value corresponds to a value of \eqn{\alpha}.
 }
   \item{opt}{
 The optimal value of \eqn{\alpha}.
 }
   \item{value}{
-The minimum value of twice the Kullback-Leibler.
+The minimum value of the Kullback-Leibler.
 }
 }
 
