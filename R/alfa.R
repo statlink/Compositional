@@ -19,7 +19,7 @@ alfa <- function(x, a, h = TRUE) {
   }
 
   if ( h ) {
-    aff <- tcrossprod(z, helm( D ) ) ## multiply by the Helmert sub-matrix
+    aff <- tcrossprod(z, Compositional::helm( D ) ) ## multiply by the Helmert sub-matrix
     res <- list(sa = sa, aff = aff)
   } else  res <- list(sa = sa, aff = z)
 
