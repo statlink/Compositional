@@ -6,10 +6,10 @@ tflr <- function(y, x, xnew = NULL) {
   id <- matrix(1:Drp, ncol = Dr)
 
   X <- NULL
-  for (j in 1:Dr)  X <- cbind(X, x)
+  for ( j in 1:Dr )  X <- cbind(X, x)
   b <- as.vector(B)
   pijk <- Rfast::eachrow(X, b, oper = "*")
-  for (j in 1:Dr)  {
+  for ( j in 1:Dr )  {
     pijk[, id[, j]] <- pijk[, id[, j]] / Rfast::rowsums( pijk[, id[, j]] )
     pijk[ which(is.na(pijk)) ] <- 0
     B[, j] <- Rfast::eachcol.apply( pijk[, id[, j]], y[, j] )
@@ -22,7 +22,7 @@ tflr <- function(y, x, xnew = NULL) {
 
   b <- as.vector(B)
   pijk <- Rfast::eachrow(X, b, oper = "*")
-  for (j in 1:Dr) {
+  for ( j in 1:Dr ) {
     pijk[, id[, j]] <- pijk[, id[, j]] / Rfast::rowsums( pijk[, id[, j]] )
     pijk[ which(is.na(pijk)) ] <- 0
     B[, j] <- Rfast::eachcol.apply( pijk[, id[, j]], y[, j] )
@@ -39,7 +39,7 @@ tflr <- function(y, x, xnew = NULL) {
     f1 <- f2
     b <- as.vector(B)
     pijk <- Rfast::eachrow(X, b, oper = "*")
-    for (j in 1:Dr) {
+    for ( j in 1:Dr ) {
       pijk[, id[, j]] <- pijk[, id[, j]] / Rfast::rowsums( pijk[, id[, j]] )
       pijk[ which(is.na(pijk)) ] <- 0
       B[, j] <- Rfast::eachcol.apply( pijk[, id[, j]], y[, j] )
