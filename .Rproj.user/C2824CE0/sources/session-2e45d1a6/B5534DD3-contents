@@ -27,7 +27,7 @@ If you have new data use it, otherwise leave it NULL.
 \item{tol}{
 The tolerance value to terminate the constrained iteratively reweighted least squares (CIRLS) algorithm.
 }
-\item{maxit}{
+\item{tmaxit}{
 The maximum number of iterations allowed for the CIRLS algorithm.
 }
 }
