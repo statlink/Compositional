@@ -36,7 +36,9 @@ The maximum number of iterations allowed for the CIRLS algorithm.
 The transformation-free linear regression for compositional responses and predictors is implemented.
 The function to be minized is \eqn{-\sum_{i=1}^ny_i\log{y_i/(X_iB)}}. This is an efficient self implementation of the EM algorithm of Fiksel, Zeger and Datta (2022).
 
-The function tflr.irls() uses the CIRLS algorithm and is faster.
+The function tflr.irls() uses the CIRLS algorithm and is faster, but the resulting value is slightly higher in the 4rth of 5th digit. 
+Also, this function is used to obtain initial values for the tflr(), rendering it faster than previous implementations where the 
+\code{\link{scls}} was used for the initial values. 
 }
 
 \value{
