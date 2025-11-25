@@ -1,4 +1,4 @@
-tflr2 <- function(y, x, xnew = NULL) {
+tflr <- function(y, x, xnew = NULL) {
 
   runtime <- proc.time()
   #B <- Compositional::scls(y, x)$be
@@ -18,7 +18,7 @@ tflr2 <- function(y, x, xnew = NULL) {
   B <- B / Rfast::rowsums(B)
   yest <- x %*% B
   a <- y * log(yest)
-  a[is.infinite(a)] <- NA
+  a[ is.infinite(a) ] <- NA
   f1 <-  - sum(a, na.rm = TRUE)
 
   b <- as.vector(B)
@@ -31,7 +31,7 @@ tflr2 <- function(y, x, xnew = NULL) {
   B <- B / Rfast::rowsums(B)
   yest <- x %*% B
   a <- y * log(yest)
-  a[is.infinite(a)] <- NA
+  a[ is.infinite(a) ] <- NA
   f2 <-  - sum(a, na.rm = TRUE)
   i <- 2
 
@@ -48,7 +48,7 @@ tflr2 <- function(y, x, xnew = NULL) {
     B <- B / Rfast::rowsums(B)
     yest <- x %*% B
     a <- y * log(yest)
-    a[is.infinite(a)] <- NA
+    a[ is.infinite(a) ] <- NA
     f2 <-  - sum(a, na.rm = TRUE)
   }
   runtime <- proc.time() - runtime
