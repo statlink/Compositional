@@ -35,7 +35,7 @@ tflr <- function(y, x, xnew = NULL) {
   f2 <-  - sum(a, na.rm = TRUE)
   i <- 2
 
-  while(f1 - f2 > 1e-8) {
+  while ( f1 - f2 > 1e-8 ) {
     i <- i + 1
     f1 <- f2
     b <- as.vector(B)
