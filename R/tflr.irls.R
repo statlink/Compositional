@@ -1,4 +1,4 @@
-tflr.irls <- function(y, x, xnew = NULL, tol = 1e-06, maxit = 100) {
+tflr.irls <- function(y, x, xnew = NULL, tol = 1e-08, maxit = 100) {
 
   runtime <- proc.time()
   py <- dim(y)[2]   ;    px <- dim(x)[2]
