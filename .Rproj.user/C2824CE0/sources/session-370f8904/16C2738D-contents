@@ -1,4 +1,4 @@
-tflr2 <- function(y, x, tol = 1e-6, wei = FALSE, xnew = NULL) {
+tflr2 <- function(y, x, wei = FALSE, xnew = NULL) {
 
   dx <- length(x)
   px <- numeric(dx)
@@ -7,7 +7,7 @@ tflr2 <- function(y, x, tol = 1e-6, wei = FALSE, xnew = NULL) {
     xc <- cbind(xc, x[[ i ]] / dx )
     px[i] <- dim(x[[ i]] )[2]
   }
-  mod <- Compositional::tflr(y, xc, tol = tol)
+  mod <- Compositional::tflr(y, xc)
   ini.be <- mod$be
   px <- c(0, cumsum(px) )
 

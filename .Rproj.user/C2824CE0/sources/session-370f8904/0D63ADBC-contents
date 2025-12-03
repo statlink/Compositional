@@ -25,7 +25,7 @@ A matrix with the compositional predictors. Zero values are in general allowed, 
 If you have new data use it, otherwise leave it NULL.
 }
 \item{tol}{
-The tolerance value to terminate the EM and the constrained iteratively reweighted least squares (CIRLS) algorithm.
+The tolerance value to terminate the constrained iteratively reweighted least squares (CIRLS) algorithm.
 }
 \item{maxit}{
 The maximum number of iterations allowed for the CIRLS algorithm.
@@ -84,7 +84,7 @@ library(MASS)
 y <- rdiri(214, runif(3, 1, 3))
 x <- as.matrix(fgl[, 2:9])
 x <- x / rowSums(x)
-mod <- tflr(y, x, xnew = x)
+mod <- tflr(y, x, x)
 mod
 }
 
