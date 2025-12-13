@@ -89,7 +89,9 @@ rda.tune <- function(x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0
         for ( k2 in 1:length(del) ) {
           for (j in 1:nc) {
             Ska <- del[k2] * sk[, , j] + (1 - del[k2]) * Sa
-            gr[, j] <- ci[j] - log( det( Ska ) ) - Rfast::mahala( test, mesi[j, ], Ska )
+            mah <- try( Rfast::mahala( test, mesi[j, ], Ska ), silent = TRUE )
+            if ( identical(class(mah), "try-error") )  mah <- NA 
+            gr[, j] <- ci[j] - log( det( Ska ) ) - mah
             ## the scores are doubled, for efficiency I did not multiply with 0.5
           }
           g <- Rfast::rowMaxs(gr)
@@ -104,7 +106,7 @@ rda.tune <- function(x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0
   percent <- t( colMeans( aperm(per) ) )
   su <- apply(per, 1:2, sd)
   dimnames(percent) <- dimnames(su) <- list(gamma = gam, delta = del)
-  confa <- as.vector( which(percent == max( percent ), arr.ind = TRUE )[1, ] )
+  confa <- as.vector( which(percent == max( percent, na.rm = TRUE ), arr.ind = TRUE )[1, ] )
   result <- cbind( max(percent), gam[ confa[1] ], del[ confa[2] ] )
   colnames(result) <- c('optimal', 'best gamma', 'best delta')
   list(per = per, percent = percent, se = su, result = result, runtime = runtime)
