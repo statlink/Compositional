@@ -29,7 +29,7 @@ tflr.irls <- function(y, x, xnew = NULL, tol = 1e-08, maxit = 100) {
   dev1 <-  - sum(a, na.rm = TRUE)
 
   # Working weights and response
-  w <- 1 / (pi_hat * (1 - pi_hat) )
+  w <- 1 / ( pi_hat * (1 - pi_hat) )
   # z <- y
   # Weighted least squares update: beta = (X'WX)^(-1) X'Wz
   #wx <- w * x
@@ -38,8 +38,19 @@ tflr.irls <- function(y, x, xnew = NULL, tol = 1e-08, maxit = 100) {
   f <- try( quadprog::solve.QP( Dmat = XX, dvec = dvec, Amat = A, bvec = bvec,
                                 meq = px ), silent = TRUE )
   if ( identical(class(f), "try-error") ) {
-    f <- quadprog::solve.QP( Dmat = Matrix::nearPD(XX)$mat, dvec = dvec, Amat = A, bvec = bvec, meq = px )
+    f <- try( quadprog::solve.QP( Dmat = Matrix::nearPD(XX)$mat, dvec = dvec, Amat = A, bvec = bvec, 
+                                meq = px), silent = TRUE )
   }
+  if ( identical(class(f), "try-error") ) {
+    w <- 1 / ( pi_hat * (1 - pi_hat) + 1e-7)
+    # z <- y
+    # Weighted least squares update: beta = (X'WX)^(-1) X'Wz
+    #wx <- w * x
+    for ( i in 1:py )  XX[ ind[i, ], ind[i, ] ] <- crossprod(x, w[, i] * x)
+    dvec <- as.vector( crossprod( x, w * y ) )
+    f <- quadprog::solve.QP( Dmat = XX, dvec = dvec, Amat = A, bvec = bvec, meq = px )
+  } 
+   
   be2 <- matrix( f$solution, ncol = py)
   pi_hat <- x %*% be2
   #dev2 <- sum( y * log(y / pi_hat) )
@@ -49,18 +60,29 @@ tflr.irls <- function(y, x, xnew = NULL, tol = 1e-08, maxit = 100) {
   i <- 2
 
   # IRLS iteration
-  while ( dev1 - dev2 > tol  &  i < maxit ) {
+  while ( dev1 - dev2 > tol  |  i < maxit ) {
     i <- i + 1
     dev1 <- dev2
     be1 <- be2
     w <- 1 / ( pi_hat * (1 - pi_hat) )
-    for ( i in 1:py )  XX[ ind[i, ], ind[i, ] ] <- crossprod(x, w[, i] * x)
+    for ( j in 1:py )  XX[ ind[j, ], ind[j, ] ] <- crossprod(x, w[, j] * x)
     dvec <- as.vector( crossprod( x, w * y ) )
     f <- try( quadprog::solve.QP( Dmat = XX, dvec = dvec, Amat = A, bvec = bvec,
                                   meq = px ), silent = TRUE )
     if ( identical(class(f), "try-error") ) {
-      f <- quadprog::solve.QP( Dmat = Matrix::nearPD(XX)$mat, dvec = dvec, Amat = A, bvec = bvec, meq = px )
+      f <- try( quadprog::solve.QP( Dmat = Matrix::nearPD(XX)$mat, dvec = dvec, Amat = A, bvec = bvec, 
+                                    meq = px ), silent = TRUE )
     }
+    if ( identical(class(f), "try-error") ) {
+      w <- 1 / ( pi_hat * (1 - pi_hat) + 1e-7)
+      # z <- y
+      # Weighted least squares update: beta = (X'WX)^(-1) X'Wz
+      #wx <- w * x
+      for ( j in 1:py )  XX[ ind[j, ], ind[j, ] ] <- crossprod(x, w[, j] * x)
+      dvec <- as.vector( crossprod( x, w * y ) )
+      f <- quadprog::solve.QP( Dmat = XX, dvec = dvec, Amat = A, bvec = bvec, meq = px )
+    } 
+
     be2 <- matrix( abs(f$solution), ncol = py)
     pi_hat <- x %*% be2
     #dev2 <- sum( y * log(y / pi_hat) )
