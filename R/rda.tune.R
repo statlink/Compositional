@@ -1,5 +1,5 @@
-rda.tune <- function(x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0, 1, by = 0.1),
-                     ncores = 1, folds = NULL, stratified = TRUE, seed = NULL) {
+rda.tune <- function( x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0, 1, by = 0.1),
+                      ncores = 1, folds = NULL, stratified = TRUE, seed = NULL ) {
   ## x contains the data
   ## gam is between pooled covariance and diagonal
   ## gam*Spooled+(1-gam)*diagonal
@@ -22,12 +22,11 @@ rda.tune <- function(x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0
   if (ncores > 1) {
     runtime <- proc.time()
     group <- matrix(nrow = length(gam), ncol = length(del) )
-    cl <- parallel::makePSOCKcluster(ncores)
-    doParallel::registerDoParallel(cl)
-    if ( is.null(folds) )  folds <- .makefolds(ina, nfolds = nfolds,
-                                                             stratified = stratified, seed = seed)
-    ww <- foreach::foreach(vim = 1:nfolds, .combine = cbind, .export = c("mahala", "rowMaxs", "colGroup", "cova"),
-	      .packages = c("Rfast", "Rfast2") ) %dopar% {
+    if ( is.null(folds) )  folds <- .makefolds(ina, nfolds = nfolds, stratified = stratified, seed = seed)
+
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport( cl, envir = environment() )
+    ww <- parallel::parSapply(cl, 1:nfolds, function(vim) {
       test <- x[ folds[[ vim ]], , drop = FALSE]  ## test sample
       id <- ina[ folds[[ vim ]] ] ## groups of test sample
       train <- x[ -folds[[ vim ]], , drop = FALSE]   ## training sample
@@ -57,8 +56,8 @@ rda.tune <- function(x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0
           group[k1, k2] <- mean( g == id )
         }
       }
-      return( as.vector( group ) )
-    }
+      as.vector( group )
+    })
     parallel::stopCluster(cl)
 
     per <- array( dim = c( lg, ld, nfolds ) )
@@ -113,6 +112,7 @@ rda.tune <- function(x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0
   colnames(result) <- c('optimal', 'best gamma', 'best delta')
   list(per = per, percent = percent, se = su, result = result, runtime = runtime)
 }
+
 
 
 
