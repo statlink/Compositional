@@ -1,4 +1,4 @@
-kernreg.tune <- function(y, x,  h = seq(0.1, 1, length = 10), type = "gauss",
+kernreg.tune <- function(y, x, h = seq(0.1, 1, length = 10), type = "gauss",
                          nfolds = 10, folds = NULL, seed = NULL, graph = FALSE, ncores = 1) {
 
   if ( is.matrix(y) )  {
@@ -17,10 +17,10 @@ kernreg.tune <- function(y, x,  h = seq(0.1, 1, length = 10), type = "gauss",
   nfolds <- length(folds)
   msp <- matrix( nrow = length(folds), ncol = length(h) )
 
-  if (ncores == 1) {
-    for (i in 1:nfolds) {
+  if ( ncores <= 1 ) {
+    for ( i in 1:nfolds ) {
       nu <- folds[[ i ]]
-      if (D > 1)  {
+      if ( D > 1 )  {
         ytrain <- y[-nu, , drop = FALSE]
         ytest <- y[nu, , drop = FALSE]
       } else {
@@ -30,21 +30,18 @@ kernreg.tune <- function(y, x,  h = seq(0.1, 1, length = 10), type = "gauss",
       xtest <- x[nu, , drop = FALSE]
       xtrain <- x[-nu, , drop = FALSE]
       est <- Compositional::kern.reg(xtest, ytrain, xtrain, h, type = type)
-      if (D > 1) {
-        for ( i in 1:length(h) )  mspi[i, ] <- mean( est[[ i ]] - ytest)^2
+      if ( D > 1 ) {
+        for ( j in 1:length(h) )  msp[i, j] <- mean( est[[ j ]] - ytest)^2
       } else  msp[i, ] <- Rfast::colmeans( (ytest - est)^2 )
     }
 
   } else {
-
-    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-    cl <- parallel::makePSOCKcluster(ncores)
-    doParallel::registerDoParallel(cl)
     pe <- numeric( length(h) )
-    msp <- foreach(i = 1:nfolds, .combine = rbind, .export = "kern.reg",
-                   .packages = "Rfast") %dopar% {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    msp <- t( parallel::parSapply(cl, 1:nfolds, function(i) {
       nu <- folds[[ i ]]
-      if (D > 1)  {
+      if ( D > 1 )  {
         ytrain <- y[-nu, , drop = FALSE]
         ytest <- y[nu, , drop = FALSE]
       } else {
@@ -53,12 +50,12 @@ kernreg.tune <- function(y, x,  h = seq(0.1, 1, length = 10), type = "gauss",
       }
       xtest <- x[nu, , drop = FALSE]
       xtrain <- x[-nu, , drop = FALSE]
-      est <- kern.reg(xtest, ytrain, xtrain, h, type = type)
-      if (D > 1) {
-        for ( i in 1:length(h) )  pe[i] <- mean( est[[ i ]] - ytest)^2
-      } else  msp[i, ] <- Rfast::colmeans( (ytest - est)^2 )
-      return(pe)
-    }
+      est <- Compositional::kern.reg(xtest, ytrain, xtrain, h, type = type)
+      if ( D > 1 ) {
+        for ( j in 1:length(h) )  pe[j] <- mean( est[[ j ]] - ytest)^2
+      } else  pe <- Rfast::colmeans( (ytest - est)^2 )
+      pe
+    }))
     parallel::stopCluster(cl)
   }
 

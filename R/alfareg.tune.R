@@ -7,7 +7,7 @@
 #### Regression analysis with compositional data containing zero values
 #### Chilean Journal of Statistics, 6(2): 47-57
 ################################
-alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = NULL, nc = 1,
+alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = NULL, ncores = 1,
                          seed = NULL, graph = FALSE) {
   ## y is the compositional data (dependent variable)
   ## x is the independent variables
@@ -19,11 +19,10 @@ alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = N
   n <- dim(y)[1]
   ina <- 1:n
   x <- model.matrix(y ~., data.frame(x) )
-  if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
-                                                           stratified = FALSE, seed = seed)
+  if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds, stratified = FALSE, seed = seed)
   nfolds <- length(folds)
 
-  if (nc <= 1) {
+  if ( ncores <= 1 ) {
     apa <- proc.time()
     kula <- matrix(nrow = nfolds, ncol = la)
     for (j in 1:la) {
@@ -48,7 +47,7 @@ alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = N
 
   } else {
     apa <- proc.time()
-    val <- matrix(a, ncol = nc) ## if the length of a is not equal to the
+    val <- matrix(a, ncol = ncores) ## if the length of a is not equal to the
     ## dimensions of the matrix val a warning message should appear
     cl <- parallel::makeCluster(ncores)
     parallel::clusterExport( cl, c("val", "nfolds", "folds", "y", "x"), envir = environment() )

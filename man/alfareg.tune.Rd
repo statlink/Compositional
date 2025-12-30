@@ -10,7 +10,7 @@ Tuning the value of \eqn{\alpha} in the \eqn{\alpha}-regression.
 
 \usage{
 alfareg.tune(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10,
-folds = NULL, nc = 1, seed = NULL, graph = FALSE)
+folds = NULL, ncores = 1, seed = NULL, graph = FALSE)
 }
 
 \arguments{
@@ -29,7 +29,7 @@ The number of folds to split the data.
 \item{folds}{
 If you have the list with the folds supply it here. You can also leave it NULL and it will create folds.
 }
-\item{nc}{
+\item{ncores}{
 The number of cores to use. IF you have a multicore computer it is advisable to use more than 1. It makes the procedure faster. It is advisable to use it if you have many observations and or many variables, otherwise it will slow down th process.
 }
 \item{seed}{
