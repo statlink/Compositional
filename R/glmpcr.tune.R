@@ -64,21 +64,18 @@ glmpcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores = 1, 
 
   } else {
     runtime <- proc.time()
-    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-    cl <- parallel::makePSOCKcluster(ncores)
-    doParallel::registerDoParallel(cl)
     er <- numeric(maxk)
-    if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds,
-                                                             stratified = FALSE, seed = seed)
-    msp <- foreach::foreach(vim = 1:nfolds, .combine = rbind, .packages = "Rfast", .export = c("glm_logistic", "glm_poisson") ) %dopar% {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    msp <- t( parallel::parSapply(cl, 1:nfolds, function(vim) {
       ytest <- y[ folds[[ vim ]] ]  ## test set dependent vars
       ytrain <-  y[ -folds[[ vim ]] ]   ## train set dependent vars
       xtrain <- x[ -folds[[ vim ]], , drop = FALSE]   ## train set independent vars
       xtest <- x[ folds[[ vim ]], , drop = FALSE]  ## test set independent vars
-	  vec <- prcomp(xtrain, center = FALSE)$rotation
+	vec <- prcomp(xtrain, center = FALSE)$rotation
       z <- xtrain %*% vec  ## PCA scores
 
-      for ( j in 1:maxk) {
+      for ( j in 1:maxk ) {
         if (oiko == "binomial") {
           be <- Rfast::glm_logistic(z[, 1:j], ytrain)$be
         } else {
@@ -87,7 +84,7 @@ glmpcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores = 1, 
         ztest <- xtest %*% vec[, 1:j, drop = FALSE]  ## PCA scores
         es <- as.vector( ztest %*% be[-1] ) + be[1]
 
-        if (oiko == "binomial") {
+        if ( oiko == "binomial" ) {
           est <- exp(es) / ( 1 + exp(es) )
           ri <-  -2 *( ytest * log(est) + (1 - ytest) * log(1 - est) )
         } else {
@@ -96,9 +93,9 @@ glmpcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores = 1, 
         }
         er[j] <- sum( ri, na.rm = TRUE )
       }
-      return(er)
-    }
-    stopCluster(cl)
+      er
+    }))
+    parallel::stopCluster(cl)
     runtime <- proc.time() - runtime
   }
 

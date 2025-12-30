@@ -50,7 +50,7 @@ alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = N
     val <- matrix(a, ncol = ncores) ## if the length of a is not equal to the
     ## dimensions of the matrix val a warning message should appear
     cl <- parallel::makeCluster(ncores)
-    parallel::clusterExport( cl, c("val", "nfolds", "folds", "y", "x"), envir = environment() )
+    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
     kula <- parallel::parSapply(cl, 1:nc, function(j) {
        ba <- val[, j]
        ww <- matrix(nrow = nfolds, ncol = length(ba) )

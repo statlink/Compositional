@@ -56,7 +56,7 @@ tv.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
     } else {
       runtime <- proc.time()
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, c("y", "x", "n", "d", "con", "tvreg"), envir = environment() )
+      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]

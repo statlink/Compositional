@@ -47,7 +47,7 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
     } else {
       runtime <- proc.time()
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, c("x", "n", "pa"), envir = environment() )
+      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
       ab <- parallel::parSapply(cl, 1:B, function(i) {
         ind <- Rfast2::Sample.int(n, n, replace = TRUE)
         optimize(pa, c(-1, 1), x = x[ind, ], maximum = TRUE )$maximum

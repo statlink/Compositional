@@ -73,7 +73,7 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
     } else {
       runtime <- proc.time()
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, c("z1", "z2", "n1", "n2", "n", "muc", "elpa"), envir = environment() )
+      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
       tb <- parallel::parSapply(cl, 1:R, function(i) {
 	  b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
         b2 <- Rfast2::Sample.int(n2, n2, replace = TRUE)

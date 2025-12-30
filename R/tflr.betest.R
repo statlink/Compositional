@@ -15,7 +15,7 @@ tflr.betest <- function(y, x, B, tol = 1e-6, R = 999, ncores = 1) {
 
   } else {
     cl <- parallel::makeCluster(ncores)
-    parallel::clusterExport( cl, c("y", "x", "n"), envir = environment() )
+    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
     pkl <- parallel::parSapply(cl, 1:R, function(i) {
       id <- Rfast2::Sample.int(n, n)
       Compositional::tflr(y, x[id, ], tol = tol)$kl

@@ -1,4 +1,4 @@
-rda.tune <- function( x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0, 1, by = 0.1),
+rda.tune2 <- function( x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(0, 1, by = 0.1),
                       ncores = 1, folds = NULL, stratified = TRUE, seed = NULL ) {
   ## x contains the data
   ## gam is between pooled covariance and diagonal
@@ -25,7 +25,7 @@ rda.tune <- function( x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(
     if ( is.null(folds) )  folds <- .makefolds(ina, nfolds = nfolds, stratified = stratified, seed = seed)
 
     cl <- parallel::makeCluster(ncores)
-    parallel::clusterExport( cl, envir = environment() )
+    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
     ww <- parallel::parSapply(cl, 1:nfolds, function(vim) {
       test <- x[ folds[[ vim ]], , drop = FALSE]  ## test sample
       id <- ina[ folds[[ vim ]] ] ## groups of test sample

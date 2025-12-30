@@ -53,14 +53,10 @@ multinompcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores 
 
   } else {
     runtime <- proc.time()
-    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-    cl <- parallel::makePSOCKcluster(ncores)
-    doParallel::registerDoParallel(cl)
     er <- numeric(maxk)
-    if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds,
-                                                             stratified = FALSE, seed = seed)
-      msp <- foreach::foreach(vim = 1:nfolds, .combine = rbind, .packages = "Rfast", 
-	         .export = c("multinom.reg", "rowMaxs") ) %dopar% {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    msp <- t( parallel::parSapply(cl, 1:nfolds, function(vim) {
       ytest <- y[ folds[[ vim ]] ]  ## test set dependent vars
       ytrain <-  y[ -folds[[ vim ]] ]   ## train set dependent vars
       xtrain <- x[ -folds[[ vim ]], , drop = FALSE]   ## train set independent vars
@@ -81,18 +77,19 @@ multinompcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores 
         }
         er[j] <- mean( est == ytest )
       }
-      return(er)
-    }
+      er
+    }))
     parallel::stopCluster(cl)
     runtime <- proc.time() - runtime
   }
 
   mpd <- Rfast::colmeans(msp)
-  if ( graph )  plot(1:maxk, mpd, xlab = "Number of principal components",
-                     ylab = "Mean predicted deviance", type = "b", pch = 16,
-					           cex.lab = 1.2, cex.axis = 1.2, col = "green")
-  abline(v = 1:maxk, col = "lightgrey", lty = 2)
-  abline(h = seq(min(mpd), max(mpd), length = 10), col = "lightgrey", lty = 2)
+  if ( graph ) {
+    plot( 1:maxk, mpd, xlab = "Number of principal components", ylab = "Mean predicted deviance", 
+          type = "b", pch = 16, cex.lab = 1.2, cex.axis = 1.2, col = "green" )
+    abline(v = 1:maxk, col = "lightgrey", lty = 2)
+    abline(h = seq(min(mpd), max(mpd), length = 10), col = "lightgrey", lty = 2)
+  }
 
   names(mpd) <- paste("PC", 1:maxk, sep = " ")
   performance <- max(mpd)

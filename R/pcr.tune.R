@@ -38,21 +38,17 @@ pcr.tune <- function(y, x, nfolds = 10, maxk = 50, folds = NULL, ncores = 1, see
   } else {
 
     runtime <- proc.time()
-    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-    cl <- parallel::makePSOCKcluster(ncores)
-    doParallel::registerDoParallel(cl)
     er <- numeric(maxk)
-    if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds,
-                                                             stratified = FALSE, seed = seed)
-    msp <- foreach::foreach(vim = 1:nfolds, .combine = rbind, .packages = c("Rfast", "Compositional", "Rfast2") ) %dopar% {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    msp <- t( parallel::parSapply(cl, 1:nfolds, function(vim) {
       ytest <-  y[ folds[[ vim ]] ]  ## test set dependent vars
       ytrain <- y[ -folds[[ vim ]] ]   ## train set dependent vars
       xtrain <- x[ -folds[[ vim ]], , drop = FALSE]   ## train set independent vars
       xtest <- x[ folds[[ vim ]], , drop = FALSE]  ## test set independent vars
       est <- Rfast2::pcr(ytrain, xtrain, k = 1:maxk, xnew = xtest)$est
-      er <- Rfast::colmeans( (est - ytest)^2 )
-      return(er)
-    }
+      Rfast::colmeans( (est - ytest)^2 )
+    }))
     parallel::stopCluster(cl)
 
     runtime <- proc.time() - runtime
