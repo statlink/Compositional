@@ -14,14 +14,13 @@ tflr.betest <- function(y, x, B, tol = 1e-6, R = 999, ncores = 1) {
     }
 
   } else {
-    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-    cl <- parallel::makePSOCKcluster(ncores)
-    doParallel::registerDoParallel(cl)
-    pkl <- foreach::foreach(i = 1:R, .combine = "c",
-                           .packages = c("Compositional", "Rfast", "Rfast2") ) %dopar% {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport( cl, c("y", "x", "n"), envir = environment() )
+    pkl <- parallel::parSapply(cl, 1:R, function(i) {
       id <- Rfast2::Sample.int(n, n)
-      return( Compositional::tflr(y, x[id, ], tol = tol)$kl )
-    }
+      Compositional::tflr(y, x[id, ], tol = tol)$kl
+    })
+    parallel::stopCluster(cl)    
   }
 
   ( sum(pkl < kl) + 1 ) / (R + 1)

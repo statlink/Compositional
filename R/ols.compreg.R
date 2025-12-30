@@ -43,8 +43,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
         yb <- y[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          ini <- as.vector( t( Compositional::kl.compreg(yb, xb[, -1], con = con)$be ) )  ## initial values
-          mod <- minpack.lm::nls.lm( par = ini, fn = olsreg, y = y, x = x, d = d,
+          mod <- minpack.lm::nls.lm( par = be, fn = olsreg, y = yb, x = xb, d = d,
                                      control = minpack.lm::nls.lm.control(maxiter = 5000) )
         })
         betaboot[i, ] <- mod$par
@@ -54,22 +53,18 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
 
     } else {
       runtime <- proc.time()
-      requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-      betaboot <- matrix(nrow = B, ncol = length(ini) )
-      cl <- parallel::makePSOCKcluster(ncores)
-      doParallel::registerDoParallel(cl)
-      betaboot <- foreach::foreach( i = 1:B, .combine = rbind, .packages = "Rfast2",
-               .export = c( "Sample.int", "olsreg" ) ) %dopar% {
-               ida <- Rfast2::Sample.int(n, n, replace = TRUE)
-               yb <- y[ida, ]
-               xb <- x[ida, ]
-               suppressWarnings({
-                 ini <- as.vector( t( Compositional::kl.compreg(yb, xb[, -1], con = con)$be ) )  ## initial values
-                 mod <- minpack.lm::nls.lm( par = ini, fn = olsreg, y = y, x = x, d = d,
-                                            control = minpack.lm::nls.lm.control(maxiter = 5000) )
-              })
-              betaboot[i, ] <- mod$par
-      }  ##  end foreach
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport( cl, c("y", "x", "n", "d", "olsreg"), envir = environment() )
+      betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
+        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        yb <- y[ida, ]
+        xb <- x[ida, ]
+        suppressWarnings({
+          mod <- minpack.lm::nls.lm( par = be, fn = olsreg, y = yb, x = xb, d = d, 
+                                     control = minpack.lm::nls.lm.control(maxiter = 5000) )
+        })
+        mod$par
+      })) 
       parallel::stopCluster(cl)
       covbe <- cov(betaboot)
       runtime <- proc.time() - runtime

@@ -50,18 +50,14 @@ alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = N
     apa <- proc.time()
     val <- matrix(a, ncol = nc) ## if the length of a is not equal to the
     ## dimensions of the matrix val a warning message should appear
-    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-    cl <- parallel::makePSOCKcluster(nc)
-    doParallel::registerDoParallel(cl)
-    if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
-                                                             stratified = FALSE, seed = seed)
-    kula <- foreach::foreach(j = 1:nc, .combine = cbind, .packages = "Rfast", .export = c("alfa.reg",
-	        "alfa", "helm", "comp.reg", "multivreg", "rowsums", "colmeans", "colVars") ) %dopar% {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport( cl, c("val", "nfolds", "folds", "y", "x"), envir = environment() )
+    kula <- parallel::parSapply(cl, 1:nc, function(j) {
        ba <- val[, j]
        ww <- matrix(nrow = nfolds, ncol = length(ba) )
        for ( l in 1:length(ba) ) {
           ytr <- Compositional::alfa(y, ba[l])$aff
-          for (i in 1:nfolds) {
+          for ( i in 1:nfolds ) {
             xu <- x[ folds[[ i ]], -1 , drop = FALSE]
             yu <- y[ folds[[ i ]], ]
             xa <- x[ -folds[[ i ]], -1]
@@ -71,11 +67,10 @@ alfareg.tune <- function(y, x, a = seq(0.1, 1, by = 0.1), nfolds = 10, folds = N
             ww[i, l] <- sum(yu * log(yu / yest), na.rm = TRUE)
           }
        }
-       return(ww)
-    }
-    parallel::stopCluster(cl)
-
-    kula <- kula[, 1:la]
+       ww 
+    })
+    parallel::stopCluster(cl)    
+    kula <- matrix(kula, nrow = nfolds)[, 1:la]
     kl <- Rfast::colmeans(kula)
     opt <- a[ which.min(kl) ]
     val <- which.min(kl)

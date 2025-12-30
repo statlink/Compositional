@@ -10,8 +10,8 @@ Zero adjusted Dirichlet regression.
 }
 
 \usage{
-zadr(y, x, con = TRUE, B = 1, ncores = 2, xnew = NULL)
-zadr2(y, x, con = TRUE, B = 1, ncores = 2, xnew = NULL)
+zadr(y, x, con = TRUE, xnew = NULL)
+zadr2(y, x, con = TRUE, xnew = NULL)
 }
 
 \arguments{
@@ -26,23 +26,13 @@ The predictor variable(s), they can be either continnuous or categorical or both
 \item{con}{
 If this is TRUE (default) then the constant term is estimated, otherwise the model includes no constant term.
 }
-\item{B}{
-If B is greater than 1 bootstrap estimates of the standard error are returned.
-If you set this greater than 1, then you must define the number of clusters in
-order to run in parallel.
-}
-\item{ncores}{
-The number of cores to use when B>1. This is to be used for the
-case of bootstrap. If B = 1, this is not taken into consideration.
-If this does not work then you might need to load the doParallel yourselves.
-}
 \item{xnew}{
 If you have new data use it, otherwise leave it NULL.
 }
 }
 
 \details{
-A zero adjusted Dirichlet regression is being fittd. The likelihood conists of two components.
+A zero adjusted Dirichlet regression is being fitted. The likelihood conists of two components.
 The contributions of the non zero compositional values and the contributions of the compositional
 vectors with at least one zero value. The second component may have many different sub-categories,
 one for each pattern of zeros. The function "zadr2()" links the covariates to the alpha parameters
@@ -59,7 +49,7 @@ The time required by the regression.
 The value of the log-likelihood.
 }
 \item{phi}{
-The precision parameter.
+The precision parameter, \eqn{\phi}.
 }
 \item{be}{
 The beta coefficients.
@@ -68,7 +58,7 @@ The beta coefficients.
 The standard error of the beta coefficients.
 }
 \item{sigma}{
-Th covariance matrix of the regression parameters (for the mean vector and the phi parameter).
+Th covariance matrix of the regression parameters (for the mean vector and the \eqn{\phi} parameter).
 }
 \item{est}{
 The fitted or the predicted values (if xnew is not NULL).

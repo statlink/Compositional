@@ -36,7 +36,7 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
     ell <- optimize(pa, c(-1, 1), x = x, maximum = TRUE )
     ab <- numeric(B)
 
-    if ( ncores == 1 ) {
+    if ( ncores <= 1 ) {
       runtime <- proc.time()
       for (i in 1:B) {
         ind <- Rfast2::Sample.int(n, n, replace = TRUE)
@@ -46,15 +46,13 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
 
     } else {
       runtime <- proc.time()
-      requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-      cl <- parallel::makePSOCKcluster(ncores)
-      doParallel::registerDoParallel(cl)
-      ab <- foreach::foreach( i = 1:B, .combine = rbind, .packages = c("Rfast", "Rfast2"), 
-	        .export = c("alfa", "helm", "Sample.int") ) %dopar% {
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport( cl, c("x", "n", "pa"), envir = environment() )
+      ab <- parallel::parSapply(cl, 1:B, function(i) {
         ind <- Rfast2::Sample.int(n, n, replace = TRUE)
-        return( optimize(pa, c(-1, 1), x = x[ind, ], maximum = TRUE )$maximum )
-      }
-      parallel::stopCluster(cl)
+        optimize(pa, c(-1, 1), x = x[ind, ], maximum = TRUE )$maximum
+      })
+      parallel::stopCluster(cl)    
       runtime <- proc.time() - runtime
     }
 

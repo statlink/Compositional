@@ -6,7 +6,7 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
   ## If R = 2, the MNV F distribution is used
   ## If R > 2, bootstrap calibration is implemented
   ## the next function is for the EL
-  elpa <- function(mu) {
+  elpa <- function(mu, y1, y2, n) {
     t1 <- emplik::el.test(y1, mu, maxit = 1000)
     t2 <- emplik::el.test(y2, mu, maxit = 1000)
     g1 <- as.numeric( t1$"-2LLR" )
@@ -28,7 +28,7 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
   a1 <- n1 * v1    ;    a2 <-  n2 * v2
   muc <- solve( a1 + a2, a1 %*% m1 + a2 %*% m2 )
   runtime <- proc.time()
-  apot <- nlm( elpa, muc )
+  apot <- nlm( elpa, muc, y1 = y1, y2 = y2, n = n )
   test <- apot$minimum
   mu <- apot$estimate
   runtime <- proc.time() - runtime
@@ -36,13 +36,13 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
   if ( R == 0 ) {
     pvalue <- pchisq(test, d, lower.tail = FALSE)
     result <- list( test = test, dof = d, pvalue = pvalue, mu = mu, runtime = runtime,
-    note = paste("Chi-square approximation") )
+                    note = paste("Chi-square approximation") )
   } else if ( R == 1 ) {
     delta <- Compositional::james(y1, y2, R = 1)$info[3]
     stat <- as.numeric( test / delta )
     pvalue <- as.numeric( pchisq(test / delta, d, lower.tail = FALSE) )
-    result <- list(test = test, modif.test = stat, dof = d, pvalue = pvalue, mu = mu,
-    runtime = runtime, note = paste("James corrected chi-square approximation"))
+    result <- list( test = test, modif.test = stat, dof = d, pvalue = pvalue, mu = mu,
+                    runtime = runtime, note = paste("James corrected chi-square approximation") )
   } else if ( R == 2 ) {
     dof <- Compositional::james(y1, y2, R = 2)$info[5]
     v <- dof + d - 1
@@ -51,7 +51,7 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
     dof <- c(d, v - d + 1)
     names(dof) <- c("numer df", "denom df")
     result <- list( test = test, modif.test = stat, dof = dof, pvalue = pvalue,
-    mu = mu, runtime = runtime, note = paste("F approximation") )
+                    mu = mu, runtime = runtime, note = paste("F approximation") )
     ## else bootstrap calibration is implemented
   } else if (R > 2) {
     ybar1 <- Rfast::colmeans(y1)
@@ -59,35 +59,33 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
     z1 <- y1 - rep( ybar1 - muc, rep(n1, d) )
     z2 <- y2 - rep( ybar2 - muc, rep(n2, d) )
 
-    if (ncores == 1) {
+    if ( ncores == 1 ) {
       runtime <- proc.time()
       tb <- numeric(R)
-      for (i in 1:R) {
+      for ( i in 1:R ) {
         b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
         b2 <- Rfast2::Sample.int(n1, n2, replace = TRUE)
         y1 <- z1[b1, ]    ;    y2 <- z2[b2, ]
-        tb[i] <- nlm( elpa, muc )$minimum
+        tb[i] <- nlm( elpa, muc, y1 = y1, y2 = y2, n = n )$minimum
       }
       runtime <- proc.time() - runtime
 
     } else {
       runtime <- proc.time()
-      cl <- parallel::makePSOCKcluster(ncores)
-      doParallel::registerDoParallel(cl) ## make the cluster
-      tb <- foreach::foreach( i = 1:R, .combine = rbind, .packages = c("Rfast2", "emplik"),
-	          .export = c("Sample.int", "el.test") ) %dopar% {
-	      b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport( cl, c("z1", "z2", "n1", "n2", "n", "muc", "elpa"), envir = environment() )
+      tb <- parallel::parSapply(cl, 1:R, function(i) {
+	  b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
         b2 <- Rfast2::Sample.int(n2, n2, replace = TRUE)
-        y1 <- z1[b1, ]    ;    y2 <- z2[b2, ]
-        ww <- nlm( elpa, muc )$minimum
-      }
-      parallel::stopCluster(cl) ## stop the cluster
+        nlm( elpa, muc, y1 = z1[b1, ], y2 = z2[b2, ], n = n )$minimum
+      })
+      parallel::stopCluster(cl)    
       runtime <- proc.time() - runtime
     }
 
     pvalue <- ( sum(tb > test) + 1 ) / (R + 1)
-    result <- list(test = test, pvalue = pvalue, mu = mu, runtime = runtime,
-    note = paste("Bootstrap calibration") )
+    result <- list( test = test, pvalue = pvalue, mu = mu, runtime = runtime,
+                    note = paste("Bootstrap calibration") )
 
     if ( graph ) {
       hist(tb, xlab = "Bootstrapped test statistic", main = " ")

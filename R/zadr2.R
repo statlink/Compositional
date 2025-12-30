@@ -1,4 +1,4 @@
-zadr2 <- function(y, x, con = TRUE, B = 1, ncores = 2, xnew = NULL) {
+zadr2 <- function(y, x, con = TRUE, xnew = NULL) {
   ## y is the compositional data
   ## x is the independent variable(s)
   dm <- dim(y)
@@ -13,8 +13,8 @@ zadr2 <- function(y, x, con = TRUE, B = 1, ncores = 2, xnew = NULL) {
   beta.ini <- NULL
   if ( !con ) {
      x <- x[, -1, drop = FALSE]
-     for (i in 1:D)  beta.ini <- c(beta.ini, Rfast::prop.reg(y[, i], x)$info[-1, 1])
-  } else  for (i in 1:D)  beta.ini <- c(beta.ini, Rfast::prop.reg(y[, i], x[, -1])$info[, 1])
+     for ( i in 1:D )  beta.ini <- c(beta.ini, Rfast::prop.reg(y[, i], x)$info[-1, 1])
+  } else  for ( i in 1:D )  beta.ini <- c(beta.ini, Rfast::prop.reg(y[, i], x[, -1])$info[, 1])
 
   a1 <- which( Rfast::rowsums( y > 0 ) == D )
   a2 <- which( Rfast::rowsums( y > 0 ) != D )
@@ -45,72 +45,16 @@ zadr2 <- function(y, x, con = TRUE, B = 1, ncores = 2, xnew = NULL) {
   })
   be <- matrix( qa$par, ncol = D ) ## final beta values
 
-  if ( B > 1 ) {
-    runtime <- proc.time()
-    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-    cl <- parallel::makePSOCKcluster(ncores)
-    doParallel::registerDoParallel(cl)
-    betaboot <- foreach::foreach( i = 1:B, .combine = rbind, .export = c("Sample.int", ".mixreg2", "diri.nr"),
-                                 .packages = c("Rfast2", "Compositional") ) %dopar% {
-      ida <- Rfast2::Sample.int(n, n, replace = TRUE)
-      yb <- y[ida, ]
-      xb <- x[ida, ]
-
-      a1 <- which( Rfast::rowsums( yb > 0 ) == D )
-      a2 <- which( Rfast::rowsums( yb > 0 ) != D )
-      n1 <- length(a1)
-      n2 <- n - n1
-      ## n1 is the sample size of the compositional vectors with no zeros
-      ## n2 is the sample size of the compositional vectors with zeros
-      za <- yb[a2, , drop = FALSE]
-      za[za == 0] <- 1
-      za[ za < 1 ] <- 0
-      theta <- table( apply(za, 1, paste, collapse = ",") )
-      theta <- as.vector(theta)
-      const <- n1 * log(n1/n) + sum( theta * log(theta/n) )
-
-      y1 <- yb[a1, , drop = FALSE]
-      ly1 <- log( y1 )
-      x1 <- xb[a1, , drop = FALSE]
-      ly2 <- log( y[a2, , drop = FALSE] )
-      x2 <- xb[a2, , drop = FALSE]
-      n1 <- nrow(y1)    ;    n2 <- n - n1
-      ##############
-      beta.ini <- NULL
-      if ( !con ) {
-        for (i in 1:D)  beta.ini <- c(beta.ini, Rfast::prop.reg(y[, i], x)$info[-1, 1])
-      } else  for (i in 1:D)  beta.ini <- c(beta.ini, Rfast::prop.reg(y[, i], x[, -1])$info[, 1])
-      if ( identical(class(beta.ini), "try-error") ) {
-        beta.ini <- be
-      }
-      z <- list(ly1 = ly1, ly2 = ly2, x1 = x1, x2 = x2, a1 = a1, a2 = a2)
-      suppressWarnings({
-        qa <- optim( beta.ini, .mixreg2, z = z )
-        qa <- optim( qa$par, .mixreg2, z = z )
-        qa <- optim( qa$par, .mixreg2, z = z, control = list(maxit = 1000) )
-      })
-      return( qa$par )
-    }  ##  end foreach
-    parallel::stopCluster(cl)
-    sigma <- cov(betaboot)
+  sigma <- try( solve( qa$hessian ), silent = TRUE )
+  if ( !identical( class(sigma), "try-error") ) {
     seb <- sqrt( diag(sigma) )
     seb <- matrix(seb, ncol = D)
     colnames(seb) <- colnames(y)
     rownames(seb) <- colnames(x)
-    runtime <- proc.time() - runtime
-
   } else {
-    sigma <- try( solve( qa$hessian ), silent = TRUE )
-    if ( !identical( class(sigma), "try-error") ) {
-      seb <- sqrt( diag(sigma) )
-      seb <- matrix(seb, ncol = D)
-      colnames(seb) <- colnames(y)
-      rownames(seb) <- colnames(x)
-    } else {
-      sigma <- NULL
-      seb <- NULL
-    }
-  }  ##  end if (B > 1)
+    sigma <- NULL
+    seb <- NULL
+  }
 
   colnames(be) <- colnames( y )
   rownames(be) <- colnames(x)
@@ -157,8 +101,7 @@ zadr2 <- function(y, x, con = TRUE, B = 1, ncores = 2, xnew = NULL) {
   mu2[ind] <- 0
   phi2 <- Rfast::rowsums(mu2)
   zeros <-  sum( lgamma(phi2) ) - sum( lgamma(mu2[mu2>0]), na.rm = TRUE ) + sum( (mu2 - 1) * ly3, na.rm = TRUE )
-  f <-  - sum( lgamma(phi1) ) + sum( lgamma( mu1[mu1>0] ), na.rm = TRUE ) - sum( (mu1 - 1) * ly1, na.rm = TRUE ) - zeros
-  f
+  - sum( lgamma(phi1) ) + sum( lgamma( mu1[mu1>0] ), na.rm = TRUE ) - sum( (mu1 - 1) * ly1, na.rm = TRUE ) - zeros
 }
 
 

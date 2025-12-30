@@ -46,16 +46,14 @@ js.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
   runtime <- proc.time() - runtime
 
   if (B > 1) {
-  betaboot <- matrix( nrow = B, ncol = length(ini) )
-  nc <- ncores
-    if (nc <= 1) {
+    betaboot <- matrix( nrow = B, ncol = length(ini) )
+    if (ncores <= 1) {
       runtime <- proc.time()
       for (i in 1:B) {
-	      ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+	  ida <- Rfast2::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]
         xb <- x[ida, ]
-        ini <- as.vector( t( Compositional::kl.compreg(yb, xb[, -1, drop = FALSE], con = con)$be ) ) ## initial values
-        qa <- nlm(jsreg, ini, y = yb, x = xb, d = d)
+        qa <- nlm(jsreg, be, y = yb, x = xb, d = d)
         qa <- nlm(jsreg, qa$estimate, y = yb, x = xb, d = d)
         qa <- nlm(jsreg, qa$estimate, y = yb, x = xb, d = d)
         betaboot[i, ] <- qa$estimate
@@ -65,22 +63,19 @@ js.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
 
     } else {
       runtime <- proc.time()
-      requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-      cl <- parallel::makePSOCKcluster(ncores)
-      doParallel::registerDoParallel(cl)
-      betaboot <- foreach::foreach(i = 1:B, .combine = rbind, .packages = "Rfast2",
-	    .export = c("Sample.int", "jsreg", "kl.compreg") ) %dopar% {
-		  ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport( cl, c("y", "x", "n", "d", "con", "jsreg"), envir = environment() )
+      betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
+        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          ini <- as.vector( t( Compositional::kl.compreg(yb, xb[, -1, drop = FALSE], con = con)$be ) ) ## initial values
-          qa <- nlm(jsreg, ini, y = yb, x = xb, d = d)
+          qa <- nlm(jsreg, be, y = yb, x = xb, d = d)
           qa <- nlm(jsreg, qa$estimate, y = yb, x = xb, d = d)
           qa <- nlm(jsreg, qa$estimate, y = yb, x = xb, d = d)
+          qa$estimate  
         })
-        return( qa$estimate )
-      }  ##  end foreach
+      })) 
       parallel::stopCluster(cl)
       covb <- cov(betaboot)
       runtime <- proc.time() - runtime

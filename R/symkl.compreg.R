@@ -64,22 +64,20 @@ symkl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
 
     } else {
       runtime <- proc.time()
-      requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-      cl <- parallel::makePSOCKcluster(ncores)
-      doParallel::registerDoParallel(cl)
-      betaboot <- foreach::foreach( i = 1:B, .combine = rbind, .packages = "Rfast2",
-	              .export = "symkl" ) %dopar% {
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport( cl, c("y", "x", "n", "d", "con", "symkl"), envir = environment() )
+      betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
-        yb <- y[ida, ]
-        xb <- x[ida, ]
+        yb <- y[ida, ]  ;  xb <- x[ida, ]
         ini <- rnorm( d * dim(x)[2] )
-		    suppressWarnings({
+        suppressWarnings({
           qa <- nlm(symkl, ini, y = yb, x = xb, d = d)
           qa <- nlm(symkl, qa$estimate, y = yb, x = xb, d = d)
           qa <- nlm(symkl, qa$estimate, y = yb, x = xb, d = d)
+          qa$estimate  
         })
-        return(qa$estimate)
-      }  ##  end foreach
+      })) 
+
       parallel::stopCluster(cl)
       covb <- cov(betaboot)
       runtime <- proc.time() - runtime

@@ -17,10 +17,11 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
   if ( is.null( namy ) )  {
     namy <- paste("Y", 2:(d + 1), sep = "")
   } else namy <- namy[-1]
-
+  
+  sqy <- sqrt(y)
   runtime <- proc.time()
-  ini <- as.vector( t( Compositional::kl.compreg(y, x[, -1], con = con)$be ) ) ## initial values
-  mod <- minpack.lm::nls.lm( par = ini, fn = hreg, y = y, x = x, d = d,
+  ini <- as.vector( t( Compositional::kl.compreg(sqy, x[, -1], con = con)$be ) ) ## initial values
+  mod <- minpack.lm::nls.lm( par = ini, fn = hreg, sqy = sqy, x = x, d = d,
                              control = minpack.lm::nls.lm.control(maxiter = 5000) )
   be <- matrix(mod$par, ncol = d)
   runtime <- proc.time() - runtime
@@ -33,11 +34,10 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
       betaboot <- matrix( nrow = B, ncol = length(ini) )
       for (i in 1:B) {
         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
-        yb <- y[ida, ]
+        sqyb <- sqy[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          ini <- as.vector( t( Compositional::kl.compreg(yb, xb[, -1], con = con)$be ) )  ## initial values
-          mod <- minpack.lm::nls.lm( par = ini, fn = hreg, y = y, x = x, d = d,
+          mod <- minpack.lm::nls.lm( par = be, fn = hreg, sqy = sqyb, x = x, d = d,
                                      control = minpack.lm::nls.lm.control(maxiter = 5000) )
         })
         betaboot[i, ] <- mod$par
@@ -47,26 +47,21 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
 
     } else {
       runtime <- proc.time()
-      requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-      betaboot <- matrix(nrow = B, ncol = length(ini) )
-      cl <- parallel::makePSOCKcluster(ncores)
-      doParallel::registerDoParallel(cl)
-      betaboot <- foreach::foreach( i = 1:B, .combine = rbind, .packages = "Rfast2",
-               .export = c( "Sample.int", "hreg" ) ) %dopar% {
-               ida <- Rfast2::Sample.int(n, n, replace = TRUE)
-               yb <- y[ida, ]
-               xb <- x[ida, ]
-               suppressWarnings({
-                 ini <- as.vector( t( Compositional::kl.compreg(yb, xb[, -1], con = con)$be ) )  ## initial values
-                 mod <- minpack.lm::nls.lm( par = ini, fn = hreg, y = y, x = x, d = d,
-                                            control = minpack.lm::nls.lm.control(maxiter = 5000) )
-               })
-               betaboot[i, ] <- mod$par
-        }  ##  end foreach
-        parallel::stopCluster(cl)
-        covbe <- cov(betaboot)
-        runtime <- proc.time() - runtime
-      }  ## end if (nc <= 1) {
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport( cl, c("y", "x", "n", "d", "hreg"), envir = environment() )
+      betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
+        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        sqyb <- sqy[ida, ]
+        xb <- x[ida, ]
+        suppressWarnings({
+          mod <- minpack.lm::nls.lm( par = be, fn = hreg, sqy = sqyb, x = xb, d = d, control = minpack.lm::nls.lm.control(maxiter = 5000) )
+        })
+        mod$par
+      })) 
+      parallel::stopCluster(cl)
+      covbe <- cov(betaboot)
+      runtime <- proc.time() - runtime
+    }  ## end if (ncores <= 1) {
 
   }  ## end if (B > 1) {
 
