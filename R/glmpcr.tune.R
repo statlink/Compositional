@@ -19,8 +19,7 @@ glmpcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores = 1, 
   n <- dim(x)[1]
   p <- dim(x)[2]
   if ( maxk > p ) maxk <- p  ## just a check
-  if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds,
-                                                           stratified = FALSE, seed = seed)
+  if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds, stratified = FALSE, seed = seed)
   nfolds <- length(folds)
   msp <- matrix( nrow = nfolds, ncol = maxk )
   ## deigma will contain the positions of the test set

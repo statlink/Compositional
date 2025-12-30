@@ -14,15 +14,15 @@ ridge.tune <- function(y, x, nfolds = 10, lambda = seq(0, 2, by = 0.1), folds = 
   di <- dim(y)[2]  ## dimensionality of y
   p <- dim(x)[2]  ## dimensionality of x
   ina <- 1:n
-  if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
-                                                           stratified = FALSE, seed = seed)
+  if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds, stratified = FALSE, seed = seed)
   nfolds <- length(folds)
   msp <- matrix( nrow = nfolds, ncol = k)
   ## deigma will contain the positions of the test set
   ## this is stored but not showed in the end
   ## the user can access it though by running
   ## the commands outside this function
-  if (ncores <= 1) {
+
+  if ( ncores <= 1 ) {
     runtime <- proc.time()
     for (vim in 1:nfolds) {
       ytest <- y[ folds[[ vim ]] ]   ## test set dependent vars
@@ -45,14 +45,10 @@ ridge.tune <- function(y, x, nfolds = 10, lambda = seq(0, 2, by = 0.1), folds = 
 
   } else {
     runtime <- proc.time()
-    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-    cl <- parallel::makePSOCKcluster(ncores)
-    doParallel::registerDoParallel(cl)
     pe <- numeric(k)
-    if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
-                                                             stratified = FALSE, seed = seed)
-    nfolds <- length(folds)
-    msp <- foreach::foreach(vim = 1:nfolds, .combine = rbind, .packages = "Rfast", .export = c("colmeans", "colVars") ) %dopar% {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    msp <- t( parallel::parSapply(cl, 1:nfolds, function(vim) {
       ytest <- y[ folds[[ vim ]] ]   ## test set dependent vars
       ytrain <- y[ -folds[[ vim ]] ]   ## train set dependent vars
       my <- mean(ytrain)
@@ -68,8 +64,8 @@ ridge.tune <- function(y, x, nfolds = 10, lambda = seq(0, 2, by = 0.1), folds = 
         est <- xtest %*% beta + my
         pe[i] <- mean( (ytest - est)^2 )
       }
-      return(pe)
-    }
+      pe
+    }))
     parallel::stopCluster(cl)
     runtime <- proc.time() - runtime
   }
@@ -77,8 +73,8 @@ ridge.tune <- function(y, x, nfolds = 10, lambda = seq(0, 2, by = 0.1), folds = 
   mspe <- Rfast::colmeans(msp)
   if ( graph ) {
     plot( lambda, mspe, type = 'b', ylim = c( min(mspe), max(mspe) ), pch = 16,
-         ylab = "Mean squared error of prediction", xlab = expression( paste(lambda, " values") ),
-		 cex.lab = 1.2, cex.axis = 1.2, lwd = 2, col = "green" )
+          ylab = "Mean squared error of prediction", xlab = expression( paste(lambda, " values") ),
+	    cex.lab = 1.2, cex.axis = 1.2, lwd = 2, col = "green" )
     abline(v = lambda, col = "lightgrey", lty = 2)
     abline(h = seq(min(mspe), max(mspe), length = 10), col = "lightgrey", lty = 2)
   }
