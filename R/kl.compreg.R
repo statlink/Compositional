@@ -85,12 +85,13 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
       dm <- dim(Y)
       n <- dm[1]    ;   d <- dm[2]
       b1 <- mod$be
-      betaboot <- matrix( nrow = B, ncol = prod( dim(b1) ) )
       id <- matrix(1:c(p * d), ncol = d)
       der <- numeric(d * p)
       der2 <- matrix(0, p * d, p * d)
-      betaboot <- foreach::foreach( i = 1:B, .combine = rbind, .packages = c("Rfast", "Rfast2", "nnet"),
-	              .export = c("klcompreg.boot", "multinom", "Sample.int") ) %dopar% {
+      
+      cl <- parallel::makeCluster(ncores)
+      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+      betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
         yb <- Y[ida, ]
         xb <- X[ida, ]
@@ -99,8 +100,8 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
           mod <- nnet::multinom(yb ~ xb, trace = FALSE)
           bb <- t( coef(mod) )
         }
-        return( as.vector(bb$be) )
-      }  ##  end  foreach
+        as.vector(bb$be)
+      })) 
       parallel::stopCluster(cl)
     }  ##  end if (ncores <= 1) {
     covb <- cov(betaboot)
