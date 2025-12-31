@@ -1,0 +1,36 @@
+scls <- function(y, x, xnew = NULL, nbcores = 4) {
+  
+  py <- dim(y)[2]   ;    px <- dim(x)[2]
+  pyx <- py * px    ;    n <- dim(y)[1]
+  
+  dvec <- as.vector( crossprod(x, y) )
+  xx <- crossprod(x)
+ 
+  XX <- matrix(0, pyx, pyx)
+  ind <- matrix( 1:pyx, ncol = px, byrow = TRUE )
+  for ( i in 1:py )  XX[ ind[i, ], ind[i, ] ] <- xx
+  A <- matrix(0, pyx, pyx)
+  for ( i in 1:px )  A[i, ind[, i]] <- 1
+  A <- t( rbind( A, diag(pyx) ) )
+  A <- A[, -c( (px + 1): pyx) ]
+  bvec <- c( rep(1, px), rep(0, pyx) )
+  
+  f <- quadprog::solve.QP( Dmat = XX, dvec = dvec, Amat = A, bvec = bvec, meq = px )
+  
+  be <- matrix( abs(f$solution), ncol = py)
+  mse <- ( sum(y^2) + 2 * f$value ) / n
+  
+  if ( is.null( colnames(y) ) ) {
+    colnames(be) <- paste("Y", 1:py, sep = "")
+  } else colnames(be) <- colnames(y)
+  if ( is.null( colnames(x) ) ) {
+    rownames(be) <- paste("X", 1:px, sep = "")
+  } else rownames(be) <- colnames(x)
+  
+  est <- NULL
+  if ( !is.null(xnew) ) {
+    est <- xnew %*% be
+  }
+  
+  list( mse = mse, be = be, est = est )
+}

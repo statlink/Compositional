@@ -75,9 +75,6 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
       }  ##  end  for (i in 1:B) {
 
     } else {
-      requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
-      cl <- parallel::makePSOCKcluster(ncores)
-      doParallel::registerDoParallel(cl)
       X <- model.matrix(y~., data.frame(x) )
       if ( !con )  X <- X[, -1, drop = FALSE]
       p <- dim(X)[2]

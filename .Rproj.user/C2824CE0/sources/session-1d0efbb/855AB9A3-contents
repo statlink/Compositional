@@ -29,8 +29,7 @@ importFrom("Rfast2", kumar.mle, propols.reg, prophelling.reg, zil.mle,
 
 importFrom("rgl", open3d, bg3d, segments3d, triangles3d, points3d, text3d, view3d)
 importFrom("quadprog", solve.QP)
-importFrom("Matrix", nearPD, Matrix, crossprod, kronecker, Diagonal)
-importFrom("osqp", osqpSettings, osqp)
+importFrom("Matrix", nearPD)
 importFrom("Rnanoflann", nn)
 importFrom("mda", fda)
 importFrom("sn", msn.mle, rmsn)

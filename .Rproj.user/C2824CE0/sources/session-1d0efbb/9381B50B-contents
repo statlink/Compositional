@@ -10,7 +10,7 @@ Authors@R: c(person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsag
 Author: Michail Tsagris [aut, cre], Giorgos Athineou [aut], Abdulaziz Alenazi [ctb], Christos Adam [ctb]
 Maintainer: Michail Tsagris <mtsagris@uoc.gr>
 Depends: R (>= 4.0)
-Imports: bigstatsr, cluster, emplik, energy, glmnet, graphics, grDevices, quantreg, MASS, Matrix, mda, minpack.lm, mixture, nnet, osqp, quadprog, parallel, Rfast, Rfast2, rgl, Rnanoflann, sn, stats
+Imports: bigstatsr, cluster, emplik, energy, glmnet, graphics, grDevices, quantreg, MASS, Matrix, mda, minpack.lm, mixture, nnet, quadprog, parallel, Rfast, Rfast2, rgl, Rnanoflann, sn, stats
 Suggests: bigparallelr, codalm, FlexDir
 Description: Regression, classification, contour plots, hypothesis testing and fitting of distributions for compositional data are some of the functions included. We further include functions for percentages (or proportions).
              The standard textbook for such data is John Aitchison's (1986) "The statistical analysis of compositional data". Relevant papers include:
@@ -28,7 +28,7 @@ Description: Regression, classification, contour plots, hypothesis testing and f
 		         l) Alenazi A. (2023). "A review of compositional data analysis and recent advances". Communications in Statistics--Theory and Methods, 52(16): 5535--5567. <doi:10.1080/03610926.2021.2014890>.
 			       m) Tsagris M., Alenazi A. and Stewart C. (2023). "Flexible non-parametric regression models for compositional response data with zeros". Statistics and Computing, 33(106). <doi:10.1007/s11222-023-10277-5>. 
 			       n) Tsagris. M. (2025). "Constrained least squares simplicial-simplicial regression". Statistics and Computing, 35(27). <doi:10.1007/s11222-024-10560-z>.
-			       o) Sevinc V. and Tsagris. M. (2026). "Energy Based Equality of Distributions Testing for Compositional Data". <doi:10.48550/arXiv.2412.05199>.
-			       p) Tsagris M. (2026). "Scalable approximation of the transformation-free linear simplicial-simplicial regression via constrained iterative reweighted least squares". <doi:10.48550/arXiv.2511.13296>.
+			       o) Sevinc V. and Tsagris. M. (2024). "Energy Based Equality of Distributions Testing for Compositional Data". <doi:10.48550/arXiv.2412.05199>.
+			       p) Tsagris M. (2025). "Scalable approximation of the transformation-free linear simplicial-simplicial regression via constrained iterative reweighted least squares". <doi:10.48550/arXiv.2511.13296>.
 License: GPL (>= 2)
 
