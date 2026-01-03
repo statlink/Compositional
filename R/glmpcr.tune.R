@@ -63,15 +63,22 @@ glmpcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores = 1, 
 
   } else {
     runtime <- proc.time()
-    er <- numeric(maxk)
+    
     cl <- parallel::makeCluster(ncores)
-    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    # Load required packages on workers
+    parallel::clusterEvalQ(cl, library(Rfast))
+    # Export only what workers need
+    parallel::clusterExport(cl, 
+                           varlist = c("y", "x", "folds", "maxk", "oiko"), 
+                           envir = environment())
+    
     msp <- t( parallel::parSapply(cl, 1:nfolds, function(vim) {
+      er <- numeric(maxk)
       ytest <- y[ folds[[ vim ]] ]  ## test set dependent vars
       ytrain <-  y[ -folds[[ vim ]] ]   ## train set dependent vars
       xtrain <- x[ -folds[[ vim ]], , drop = FALSE]   ## train set independent vars
       xtest <- x[ folds[[ vim ]], , drop = FALSE]  ## test set independent vars
-	vec <- prcomp(xtrain, center = FALSE)$rotation
+	    vec <- prcomp(xtrain, center = FALSE)$rotation
       z <- xtrain %*% vec  ## PCA scores
 
       for ( j in 1:maxk ) {
@@ -94,6 +101,7 @@ glmpcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores = 1, 
       }
       er
     }))
+    
     parallel::stopCluster(cl)
     runtime <- proc.time() - runtime
   }

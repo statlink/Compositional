@@ -21,7 +21,6 @@ ridge.tune <- function(y, x, nfolds = 10, lambda = seq(0, 2, by = 0.1), folds = 
   ## this is stored but not showed in the end
   ## the user can access it though by running
   ## the commands outside this function
-
   if ( ncores <= 1 ) {
     runtime <- proc.time()
     for (vim in 1:nfolds) {
@@ -42,13 +41,17 @@ ridge.tune <- function(y, x, nfolds = 10, lambda = seq(0, 2, by = 0.1), folds = 
       }
     }
     runtime <- proc.time() - runtime
-
   } else {
     runtime <- proc.time()
-    pe <- numeric(k)
+    
     cl <- parallel::makeCluster(ncores)
-    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    # Export only what workers need
+    parallel::clusterExport(cl, 
+                           varlist = c("y", "x", "folds", "lambda", "k"), 
+                           envir = environment())
+    
     msp <- t( parallel::parSapply(cl, 1:nfolds, function(vim) {
+      pe <- numeric(k)
       ytest <- y[ folds[[ vim ]] ]   ## test set dependent vars
       ytrain <- y[ -folds[[ vim ]] ]   ## train set dependent vars
       my <- mean(ytrain)
@@ -66,10 +69,10 @@ ridge.tune <- function(y, x, nfolds = 10, lambda = seq(0, 2, by = 0.1), folds = 
       }
       pe
     }))
+    
     parallel::stopCluster(cl)
     runtime <- proc.time() - runtime
   }
-
   mspe <- Rfast::colmeans(msp)
   if ( graph ) {
     plot( lambda, mspe, type = 'b', ylim = c( min(mspe), max(mspe) ), pch = 16,
@@ -78,7 +81,6 @@ ridge.tune <- function(y, x, nfolds = 10, lambda = seq(0, 2, by = 0.1), folds = 
     abline(v = lambda, col = "lightgrey", lty = 2)
     abline(h = seq(min(mspe), max(mspe), length = 10), col = "lightgrey", lty = 2)
   }
-
   names(mspe) <- lambda
   performance <- min(mspe)
   names(performance) <- "MSPE"

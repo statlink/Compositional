@@ -22,11 +22,20 @@ rda.tune <- function( x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(
   if (ncores > 1) {
     runtime <- proc.time()
     group <- matrix(nrow = length(gam), ncol = length(del) )
-    if ( is.null(folds) )  folds <- .makefolds(ina, nfolds = nfolds, stratified = stratified, seed = seed)
 
     cl <- parallel::makeCluster(ncores)
-    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    # Load required packages on workers
+    parallel::clusterEvalQ(cl, {
+      library(Rfast)
+      library(Rfast2)
+    })
+    # Export only what workers need
+    parallel::clusterExport(cl, 
+                           varlist = c("x", "ina", "folds", "gam", "del", "D", "nc"), 
+                           envir = environment())
+    
     ww <- parallel::parSapply(cl, 1:nfolds, function(vim) {
+      sk <- array( dim = c(D, D, nc) )
       test <- x[ folds[[ vim ]], , drop = FALSE]  ## test sample
       id <- ina[ folds[[ vim ]] ] ## groups of test sample
       train <- x[ -folds[[ vim ]], , drop = FALSE]   ## training sample
@@ -41,6 +50,7 @@ rda.tune <- function( x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(
       Sp <- colSums( aperm(s) ) / (sum(na) - nc)  ## pooled covariance matrix
       sp <- diag( sum( diag( Sp ) ) / D, D )
       gr <- matrix(nrow = length( folds[[ vim ]] ), ncol = nc)
+      group <- matrix(nrow = length(gam), ncol = length(del) )
 
       for ( k1 in 1:length(gam) ) {
         Sa <- gam[k1] * Sp + (1 - gam[k1]) * sp  ## regularised covariance matrix
@@ -58,6 +68,7 @@ rda.tune <- function( x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(
       }
       as.vector( group )
     })
+    
     parallel::stopCluster(cl)
 
     per <- array( dim = c( lg, ld, nfolds ) )
@@ -154,6 +165,3 @@ rda.tune <- function( x, ina, nfolds = 10, gam = seq(0, 1, by = 0.1), del = seq(
   if ( length(runs[[ nfolds ]]) == 0 ) runs[[ nfolds ]] <- NULL
   runs
 }
-
-
-

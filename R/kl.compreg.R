@@ -87,7 +87,18 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
       der2 <- matrix(0, p * d, p * d)
       
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+      # Load required packages on workers
+      parallel::clusterEvalQ(cl, {
+        library(Rfast2)
+        library(Compositional)
+        library(nnet)
+      })
+      # Export only what workers need
+      parallel::clusterExport(cl, 
+                             varlist = c("Y", "X", "n", "p", "d", "b1", "id", 
+                                        "der", "der2", "tol", "maxiters"), 
+                             envir = environment())
+      
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
         yb <- Y[ida, ]
@@ -99,6 +110,7 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
         }
         as.vector(bb$be)
       })) 
+      
       parallel::stopCluster(cl)
     }  ##  end if (ncores <= 1) {
     covb <- cov(betaboot)
@@ -117,9 +129,3 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
   }
   res
 }
-
-
-
-
-
-
