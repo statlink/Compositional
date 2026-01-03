@@ -16,7 +16,6 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
     } else  g <- 1000
     g
   }
-
   d <- dim(y1)[2]  ## number of variables
   n1 <- dim(y1)[1]   ;   n2 <- dim(y2)[1]  ## sample sizes
   n <- n1 + n2  ## total sample size
@@ -32,7 +31,6 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
   test <- apot$minimum
   mu <- apot$estimate
   runtime <- proc.time() - runtime
-
   if ( R == 0 ) {
     pvalue <- pchisq(test, d, lower.tail = FALSE)
     result <- list( test = test, dof = d, pvalue = pvalue, mu = mu, runtime = runtime,
@@ -58,40 +56,46 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
     ybar2 <- Rfast::colmeans(y2)
     z1 <- y1 - rep( ybar1 - muc, rep(n1, d) )
     z2 <- y2 - rep( ybar2 - muc, rep(n2, d) )
-
     if ( ncores == 1 ) {
       runtime <- proc.time()
       tb <- numeric(R)
       for ( i in 1:R ) {
         b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
-        b2 <- Rfast2::Sample.int(n1, n2, replace = TRUE)
+        b2 <- Rfast2::Sample.int(n2, n2, replace = TRUE)
         y1 <- z1[b1, ]    ;    y2 <- z2[b2, ]
         tb[i] <- nlm( elpa, muc, y1 = y1, y2 = y2, n = n )$minimum
       }
       runtime <- proc.time() - runtime
-
     } else {
       runtime <- proc.time()
+      
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+      # Load required packages on workers
+      parallel::clusterEvalQ(cl, {
+        library(Rfast2)
+        library(emplik)
+      })
+      # Export only what workers need
+      parallel::clusterExport(cl, 
+                             varlist = c("elpa", "muc", "z1", "z2", "n1", "n2", "n"), 
+                             envir = environment())
+      
       tb <- parallel::parSapply(cl, 1:R, function(i) {
-	  b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
+        b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
         b2 <- Rfast2::Sample.int(n2, n2, replace = TRUE)
         nlm( elpa, muc, y1 = z1[b1, ], y2 = z2[b2, ], n = n )$minimum
       })
+      
       parallel::stopCluster(cl)    
       runtime <- proc.time() - runtime
     }
-
     pvalue <- ( sum(tb > test) + 1 ) / (R + 1)
     result <- list( test = test, pvalue = pvalue, mu = mu, runtime = runtime,
                     note = paste("Bootstrap calibration") )
-
     if ( graph ) {
       hist(tb, xlab = "Bootstrapped test statistic", main = " ")
       abline(v = test, lty = 2, lwd = 2)  ## The line is the test statistic
     }
   }
-
   result
 }

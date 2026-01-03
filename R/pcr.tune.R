@@ -18,12 +18,9 @@ pcr.tune <- function(y, x, nfolds = 10, maxk = 50, folds = NULL, ncores = 1, see
   if ( is.null(folds) )  folds <- Compositional::makefolds(y, nfolds = nfolds,
                                                            stratified = FALSE, seed = seed)
   nfolds <- length(folds)
-
   if (ncores <= 1) {
-
     runtime <- proc.time()
     msp <- matrix( nrow = nfolds, ncol = maxk )
-
     for (vim in 1:nfolds) {
       ytest <- y[ folds[[ vim ]] ]  ## test set dependent vars
       ytrain <- y[ -folds[[ vim ]] ]   ## train set dependent vars
@@ -32,15 +29,21 @@ pcr.tune <- function(y, x, nfolds = 10, maxk = 50, folds = NULL, ncores = 1, see
       est <- Rfast2::pcr(ytrain, xtrain, k = 1:maxk, xnew = xtest)$est
       msp[vim, ] <- Rfast::colmeans( (est - ytest)^2 )
     }
-
     runtime <- proc.time() - runtime
-
   } else {
-
     runtime <- proc.time()
-    er <- numeric(maxk)
+    
     cl <- parallel::makeCluster(ncores)
-    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    # Load required packages on workers
+    parallel::clusterEvalQ(cl, {
+      library(Rfast)
+      library(Rfast2)
+    })
+    # Export only what workers need
+    parallel::clusterExport(cl, 
+                           varlist = c("y", "x", "folds", "maxk"), 
+                           envir = environment())
+    
     msp <- t( parallel::parSapply(cl, 1:nfolds, function(vim) {
       ytest <-  y[ folds[[ vim ]] ]  ## test set dependent vars
       ytrain <- y[ -folds[[ vim ]] ]   ## train set dependent vars
@@ -49,20 +52,17 @@ pcr.tune <- function(y, x, nfolds = 10, maxk = 50, folds = NULL, ncores = 1, see
       est <- Rfast2::pcr(ytrain, xtrain, k = 1:maxk, xnew = xtest)$est
       Rfast::colmeans( (est - ytest)^2 )
     }))
+    
     parallel::stopCluster(cl)
-
     runtime <- proc.time() - runtime
   }
-
   mspe <- Rfast::colmeans(msp)
-
   if ( graph ) {
     plot(1:maxk, mspe, xlab = "Number of principal components", ylab = "MSPE", type = "b",
          cex.lab = 1.2, cex.axis = 1.2, col = "green", pch = 16)
     abline(v = 1:maxk, col = "lightgrey", lty = 2)
     abline(h = seq(min(mspe), max(mspe), length = 10), col = "lightgrey", lty = 2)
   }
-
   names(mspe) <- paste("PC", 1:maxk, sep = " ")
   performance <- min(mspe)
   names(performance) <- "MSPE"
