@@ -16,46 +16,51 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
   d <- D - 1  ## dimensionality of the simplex
   ja <- sum( log(x) )  ## part of the Jacobian of the alpha transformation
   con <-  - 0.5 * n * d * log(2 * pi * f) - 0.5 * (n - 1) * d + n * (d + 0.5) * log(D)
-
-  pa <- function(a, x) {
+  pa <- function(a, x, n, D) {
     trans <- Compositional::alfa(x, a)
     z <- trans$aff  ## the alpha-transformation
     -0.5 * n * log( abs( det( cov(z) ) ) ) + (a - 1) * sum( log(x) ) - D * trans$sa
   }
-
   if ( B == 1 ) {
-    ell <- optimize(pa, c(-1, 1), x = x, maximum = TRUE )
+    ell <- optimize(pa, c(-1, 1), x = x, n = n, D = D, maximum = TRUE )
     aff0 <- Compositional::alfa(x, 0)
     z0 <- aff0$aff
     sa <- aff0$sa  ## part of the Jacobian determinant as well
     lik0 <- con -  n/2 * log( abs( det( Rfast::cova(z0) ) ) ) - sum( log(x) ) - D * sa
     result <- c(ell$maximum, ell$objective + con, lik0)
     names(result) <- c("best alpha", "max log-lik", "log-lik at 0")
-
   } else {  ## bootstrap confidence intervals
-    ell <- optimize(pa, c(-1, 1), x = x, maximum = TRUE )
+    ell <- optimize(pa, c(-1, 1), x = x, n = n, D = D, maximum = TRUE )
     ab <- numeric(B)
-
     if ( ncores <= 1 ) {
       runtime <- proc.time()
       for (i in 1:B) {
         ind <- Rfast2::Sample.int(n, n, replace = TRUE)
-        ab[i] <- optimize(pa, c(-1, 1), x = x[ind, ], maximum = TRUE )$maximum
+        ab[i] <- optimize(pa, c(-1, 1), x = x[ind, ], n = n, D = D, maximum = TRUE )$maximum
       }
       runtime <- proc.time() - runtime
-
     } else {
       runtime <- proc.time()
+      
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+      # Load required packages on workers
+      parallel::clusterEvalQ(cl, {
+        library(Rfast2)
+        library(Compositional)
+      })
+      # Export only what workers need
+      parallel::clusterExport(cl, 
+                             varlist = c("pa", "x", "n", "D"), 
+                             envir = environment())
+      
       ab <- parallel::parSapply(cl, 1:B, function(i) {
         ind <- Rfast2::Sample.int(n, n, replace = TRUE)
-        optimize(pa, c(-1, 1), x = x[ind, ], maximum = TRUE )$maximum
+        optimize(pa, c(-1, 1), x = x[ind, ], n = n, D = D, maximum = TRUE )$maximum
       })
+      
       parallel::stopCluster(cl)    
       runtime <- proc.time() - runtime
     }
-
     param <- c(ell$maximum, ell$objective + con, quantile( ab, c(0.025, 0.975) ) )
     names(param)[1:2] <- c("best alpha", "max log-lik")
     hist( ab, main = "Bootstrapped alpha values", xlab = expression( paste(alpha, " values", sep = "") ),

@@ -20,7 +20,6 @@ symkl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
     mu <- mu1 / rowSums(mu1)
     sum( (y - mu) * log(y / mu), na.rm = TRUE )
   }
-
   n <- dim(y)[1]  ## sample size
   x <- model.matrix(y ~ ., data.frame(x) )
   if ( !con )  x <- x[, -1, drop = FALSE]
@@ -31,7 +30,6 @@ symkl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
   if ( is.null( namy ) )  {
     namy <- paste("Y", 2:(d + 1), sep = "")
   } else namy <- namy[-1]
-
   ## the next lines minimize the symkl function and obtain the estimated betas
   runtime <- proc.time()
   ini <- rnorm( d * dim(x)[2] )
@@ -43,7 +41,6 @@ symkl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
   be <- matrix(qa$estimate, byrow = TRUE, ncol = d)
   covb <- NULL
   runtime <- proc.time() - runtime
-
   if (B > 1) {
   betaboot <- matrix( nrow = B, ncol = length(ini) )
   nc <- ncores
@@ -61,11 +58,17 @@ symkl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
       }
       covb <- cov(betaboot)
       runtime <- proc.time() - runtime
-
     } else {
       runtime <- proc.time()
+      
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+      # Load required packages on workers
+      parallel::clusterEvalQ(cl, library(Rfast2))
+      # Export only what workers need
+      parallel::clusterExport(cl, 
+                             varlist = c("symkl", "y", "x", "n", "d"), 
+                             envir = environment())
+      
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]  ;  xb <- x[ida, ]
@@ -77,17 +80,15 @@ symkl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
           qa$estimate  
         })
       })) 
-
+      
       parallel::stopCluster(cl)
       covb <- cov(betaboot)
       runtime <- proc.time() - runtime
     }  ##  end if (nc < 1)
-
   nam <- NULL
   for (i in 1:p)  nam <- c(nam, paste(namy, ":", namx[i], sep = "") )
   colnames(covb) <- rownames(covb) <- nam
   }  ##  end if (B > 1) {
-
   if ( !is.null(xnew) ) {
     xnew <- model.matrix(~., data.frame(xnew) )
     if ( !con )  xnew <- xnew[, -1, drop = FALSE]
@@ -95,7 +96,6 @@ symkl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
     est <- mu / Rfast::rowsums(mu)
     colnames(est) <- colnames(y)
   }  else  est <- NULL
-
   colnames(be) <- namy
   rownames(be) <- namx
   list(runtime = runtime, be = be, covbe = covb, est = est)

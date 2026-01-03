@@ -1,12 +1,10 @@
 hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
-
   hreg <- function(para, sqy, x, d) {
     be <- matrix(para, ncol = d)
     mu1 <- cbind(1, exp(x %*% be))
     mu <- mu1 / rowSums(mu1)
     as.vector( sqy - sqrt(mu) )
   }
-
   x <- model.matrix(y ~ ., data.frame(x) )
   if ( !con )  x <- x[, -1, drop = FALSE]
   p <- dim(x)[2]
@@ -26,7 +24,6 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
   be <- matrix(mod$par, ncol = d)
   runtime <- proc.time() - runtime
   covbe <- solve(mod$hessian)
-
   if (B > 1) {
     nc <- ncores
     if (nc <= 1) {
@@ -37,47 +34,54 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
         sqyb <- sqy[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          mod <- minpack.lm::nls.lm( par = be, fn = hreg, sqy = sqyb, x = x, d = d,
+          mod <- minpack.lm::nls.lm( par = be, fn = hreg, sqy = sqyb, x = xb, d = d,
                                      control = minpack.lm::nls.lm.control(maxiter = 5000) )
         })
         betaboot[i, ] <- mod$par
       }  ##  end  for (i in 1:B) {
       covbe <- cov(betaboot)
       runtime <- proc.time() - runtime
-
     } else {
       runtime <- proc.time()
+      
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+      # Load required packages on workers
+      parallel::clusterEvalQ(cl, {
+        library(Rfast2)
+        library(minpack.lm)
+      })
+      # Export only what workers need
+      parallel::clusterExport(cl, 
+                             varlist = c("hreg", "sqy", "x", "n", "d", "be"), 
+                             envir = environment())
+      
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
         sqyb <- sqy[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          mod <- minpack.lm::nls.lm( par = be, fn = hreg, sqy = sqyb, x = xb, d = d, control = minpack.lm::nls.lm.control(maxiter = 5000) )
+          mod <- minpack.lm::nls.lm( par = be, fn = hreg, sqy = sqyb, x = xb, d = d, 
+                                    control = minpack.lm::nls.lm.control(maxiter = 5000) )
         })
         mod$par
       })) 
+      
       parallel::stopCluster(cl)
       covbe <- cov(betaboot)
       runtime <- proc.time() - runtime
     }  ## end if (ncores <= 1) {
-
   }  ## end if (B > 1) {
-
   nam <- NULL
   for (i in 1:p)  nam <- c(nam, paste(namy, ":", namx[i], sep = "") )
   colnames(covbe) <- rownames(covbe) <- nam
-
   est <- NULL
   if ( !is.null(xnew) ) {
-  xnew <- model.matrix(~., data.frame(xnew) )
-  if ( !con )  xnew <- xnew[, -1, drop = FALSE]
-    mu <- cbind( 1, exp(xnew %*% beta) )
+    xnew <- model.matrix(~., data.frame(xnew) )
+    if ( !con )  xnew <- xnew[, -1, drop = FALSE]
+    mu <- cbind( 1, exp(xnew %*% be) )  ## FIXED: was 'beta', should be 'be'
     est <- mu / Rfast::rowsums(mu)
     colnames(est) <- colnames(y)
   }
-
   colnames(be) <- namy
   rownames(be) <- namx
   list(runtime = runtime, be = be, covbe = covbe, est = est)

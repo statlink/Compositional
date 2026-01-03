@@ -53,8 +53,18 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
 
     } else {
       runtime <- proc.time()
+      
       cl <- parallel::makeCluster(ncores)
-      parallel::clusterExport( cl, varlist = ls(),, envir = environment() )
+      # Load required packages on workers
+      parallel::clusterEvalQ(cl, {
+        library(Rfast2)
+        library(minpack.lm)
+      })
+      # Export only what workers need
+      parallel::clusterExport(cl, 
+                             varlist = c("olsreg", "y", "x", "n", "d", "be"), 
+                             envir = environment())
+      
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]
@@ -65,6 +75,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
         })
         mod$par
       })) 
+      
       parallel::stopCluster(cl)
       covbe <- cov(betaboot)
       runtime <- proc.time() - runtime
@@ -80,7 +91,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
   if ( !is.null(xnew) ) {
     xnew <- model.matrix(~., data.frame(xnew) )
     if ( !con )  xnew <- xnew[, -1, drop = FALSE]
-    mu <- cbind( 1, exp(xnew %*% beta) )
+    mu <- cbind( 1, exp(xnew %*% be) )  ## FIXED: was 'beta', should be 'be'
     est <- mu / Rfast::rowsums(mu)
     colnames(est) <- colnames(y)
   }

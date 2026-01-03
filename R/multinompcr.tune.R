@@ -53,10 +53,17 @@ multinompcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores 
 
   } else {
     runtime <- proc.time()
-    er <- numeric(maxk)
+    
     cl <- parallel::makeCluster(ncores)
-    parallel::clusterExport( cl, varlist = ls(), envir = environment() )
+    # Load required packages on workers
+    parallel::clusterEvalQ(cl, library(Rfast))
+    # Export only what workers need
+    parallel::clusterExport(cl, 
+                           varlist = c("y", "x", "folds", "maxk"), 
+                           envir = environment())
+    
     msp <- t( parallel::parSapply(cl, 1:nfolds, function(vim) {
+      er <- numeric(maxk)
       ytest <- y[ folds[[ vim ]] ]  ## test set dependent vars
       ytrain <-  y[ -folds[[ vim ]] ]   ## train set dependent vars
       xtrain <- x[ -folds[[ vim ]], , drop = FALSE]   ## train set independent vars
@@ -79,6 +86,7 @@ multinompcr.tune <- function(y, x, nfolds = 10, maxk = 10, folds = NULL, ncores 
       }
       er
     }))
+    
     parallel::stopCluster(cl)
     runtime <- proc.time() - runtime
   }
