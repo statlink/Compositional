@@ -3,7 +3,7 @@
     "path": "~/GitHub/Compositional/man/Compositional-package.Rd",
     "project_path": "man/Compositional-package.Rd",
     "type": "r_doc",
-    "hash": "0",
+    "hash": "769387485",
     "contents": "",
     "dirty": false,
     "created": 1771260498699.0,
@@ -16,11 +16,11 @@
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1771260503,
+    "lastKnownWriteTime": 1771314173,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1771260503320,
+    "last_content_update": 1771314173108,
     "read_only": false,
     "read_only_alternatives": []
 }

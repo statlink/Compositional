@@ -74,7 +74,6 @@ scls <- function(y, x, xnew = NULL, nbcores = 4) {
   P <- 2 * Matrix::kronecker(Matrix::Diagonal(py), xx)
   # q vector (usually dense, but keep efficient)
   q <- -2 * as.vector( as.matrix(xy) )
-  # Constraints: l ≤ Aβ ≤ u
   # Equality: sum-to-one for each predictor
   A_eq <- Matrix::kronecker(Matrix::Diagonal(px), Matrix::Matrix(rep(1, py), nrow = 1, sparse = TRUE))
   # Inequality: non-negativity
