@@ -26,8 +26,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
   runtime <- proc.time()
   suppressWarnings({
     ini <- as.vector( t( Compositional::kl.compreg(y, x[, -1], con = con)$be ) ) ## initial values
-    mod <- minpack.lm::nls.lm( par = ini, fn = olsreg, y = y, x = x, d = d,
-                               control = minpack.lm::nls.lm.control(maxiter = 5000) )
+    mod <- minpack.lm::nls.lm(par = ini, fn = olsreg, y = y, x = x, d = d)
   })
   be <- matrix(mod$par, ncol = d)
   runtime <- proc.time() - runtime
@@ -43,8 +42,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
         yb <- y[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          mod <- minpack.lm::nls.lm( par = be, fn = olsreg, y = yb, x = xb, d = d,
-                                     control = minpack.lm::nls.lm.control(maxiter = 5000) )
+          mod <- minpack.lm::nls.lm(par = be, fn = olsreg, y = yb, x = xb, d = d)
         })
         betaboot[i, ] <- mod$par
       }  ##  end  for (i in 1:B) {
@@ -70,8 +68,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
         yb <- y[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          mod <- minpack.lm::nls.lm( par = be, fn = olsreg, y = yb, x = xb, d = d, 
-                                     control = minpack.lm::nls.lm.control(maxiter = 5000) )
+          mod <- minpack.lm::nls.lm(par = be, fn = olsreg, y = yb, x = xb, d = d)
         })
         mod$par
       })) 

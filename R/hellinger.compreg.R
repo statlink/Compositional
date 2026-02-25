@@ -19,8 +19,7 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
   sqy <- sqrt(y)
   runtime <- proc.time()
   ini <- as.vector( t( Compositional::kl.compreg(sqy, x[, -1], con = con)$be ) ) ## initial values
-  mod <- minpack.lm::nls.lm( par = ini, fn = hreg, sqy = sqy, x = x, d = d,
-                             control = minpack.lm::nls.lm.control(maxiter = 5000) )
+  mod <- minpack.lm::nls.lm(par = ini, fn = hreg, sqy = sqy, x = x, d = d)
   be <- matrix(mod$par, ncol = d)
   runtime <- proc.time() - runtime
   covbe <- solve(mod$hessian)
@@ -34,8 +33,7 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
         sqyb <- sqy[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          mod <- minpack.lm::nls.lm( par = be, fn = hreg, sqy = sqyb, x = xb, d = d,
-                                     control = minpack.lm::nls.lm.control(maxiter = 5000) )
+          mod <- minpack.lm::nls.lm(par = be, fn = hreg, sqy = sqyb, x = xb, d = d)
         })
         betaboot[i, ] <- mod$par
       }  ##  end  for (i in 1:B) {
@@ -60,8 +58,7 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
         sqyb <- sqy[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
-          mod <- minpack.lm::nls.lm( par = be, fn = hreg, sqy = sqyb, x = xb, d = d, 
-                                    control = minpack.lm::nls.lm.control(maxiter = 5000) )
+          mod <- minpack.lm::nls.lm(par = be, fn = hreg, sqy = sqyb, x = xb, d = d)
         })
         mod$par
       })) 
