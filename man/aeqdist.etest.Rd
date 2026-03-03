@@ -58,8 +58,9 @@ transformation for compositional data.
 In Proceedings of the 4th Compositional Data Analysis Workshop, Girona, Spain.
 https://arxiv.org/pdf/1106.1451
 
-Sevinc V. and Tsagris. M. (2025).
+Sevinc V. and Tsagris. M. (2026).
 Energy Based Equality of Distributions Testing for Compositional Data.
+Communications in Statistics-Simulation and Computation (Accepted for publication).
 https://arxiv.org/pdf/2412.05199
 }
 
