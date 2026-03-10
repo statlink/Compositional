@@ -2,7 +2,7 @@ Package: Compositional
 Type: Package
 Title: Compositional Data Analysis
 Version: 8.2
-Date: 2026-02-25
+Date: 2026-03-10
 Authors@R: c(person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsagris@uoc.gr"),
            person("Giorgos", "Athineou", role = "aut", email = "gioathineou@gmail.com"),
            person("Abdulaziz", "Alenazi", role = "ctb", email = "a.alenazi@nbu.edu.sa"),
@@ -28,7 +28,7 @@ Description: Regression, classification, contour plots, hypothesis testing and f
 		         l) Alenazi A. (2023). "A review of compositional data analysis and recent advances". Communications in Statistics--Theory and Methods, 52(16): 5535--5567. <doi:10.1080/03610926.2021.2014890>.
 			       m) Tsagris M., Alenazi A. and Stewart C. (2023). "Flexible non-parametric regression models for compositional response data with zeros". Statistics and Computing, 33(106). <doi:10.1007/s11222-023-10277-5>. 
 			       n) Tsagris. M. (2025). "Constrained least squares simplicial-simplicial regression". Statistics and Computing, 35(27). <doi:10.1007/s11222-024-10560-z>.
-			       o) Sevinc V. and Tsagris. M. (2026). "Energy Based Equality of Distributions Testing for Compositional Data". <doi:10.1080/03610918.2026.2636167>.
+			       o) Sevinc V. and Tsagris. M. (2026). "Energy Based Equality of Distributions Testing for Compositional Data". Communications in Statistics - Simulation and Computation. <doi:10.1080/03610918.2026.2636167>.
 			       p) Tsagris M. and Alzeley O. (2025). "Scalable approximation of the transformation-free linear simplicial-simplicial regression via constrained iterative reweighted least squares". <doi:10.48550/arXiv.2511.13296>.
 License: GPL (>= 2)
 
