@@ -60,7 +60,7 @@ tflr.irls <- function(y, x, xnew = NULL, tol = 1e-08, maxit = 100) {
   i <- 2
 
   # IRLS iteration
-  while ( dev1 - dev2 > tol  |  i < maxit ) {
+  while ( dev1 - dev2 > tol  &  i < maxit ) {
     i <- i + 1
     dev1 <- dev2
     be1 <- be2
