@@ -42,7 +42,7 @@ tflr.irls <- function(y, x, xnew = NULL, tol = 1e-08, maxit = 100) {
                                 meq = px), silent = TRUE )
   }
   if ( identical(class(f), "try-error") ) {
-    w <- 1 / ( pi_hat * (1 - pi_hat) + 1e-6)
+    w <- 1 / ( pi_hat * (1 - pi_hat) + 1e-4)
     # z <- y
     # Weighted least squares update: beta = (X'WX)^(-1) X'Wz
     #wx <- w * x
@@ -74,7 +74,7 @@ tflr.irls <- function(y, x, xnew = NULL, tol = 1e-08, maxit = 100) {
                                     meq = px ), silent = TRUE )
     }
     if ( identical(class(f), "try-error") ) {
-      w <- 1 / ( pi_hat * (1 - pi_hat) + 1e-6)
+      w <- 1 / ( pi_hat * (1 - pi_hat) + 1e-4)
       # z <- y
       # Weighted least squares update: beta = (X'WX)^(-1) X'Wz
       #wx <- w * x
