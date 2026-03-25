@@ -64,7 +64,7 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
       der <- numeric(d * p)
       der2 <- matrix(0, p * d, p * d)
       for (i in 1:B) {
-        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ida <- rangen::Sample.int(n, n, replace = TRUE)
         yb <- Y[ida, ]
         xb <- X[ida, ]
         bb <- Compositional::klcompreg.boot(yb, xb, der, der2, id, b1, n, p, d, tol = tol, maxiters = maxiters)
@@ -89,7 +89,7 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
       cl <- parallel::makeCluster(ncores)
       # Load required packages on workers
       parallel::clusterEvalQ(cl, {
-        library(Rfast2)
+        library(rangen)
         library(Compositional)
         library(nnet)
       })
@@ -100,7 +100,7 @@ kl.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1
                              envir = environment())
       
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
-        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ida <- rangen::Sample.int(n, n, replace = TRUE)
         yb <- Y[ida, ]
         xb <- X[ida, ]
         bb <- Compositional::klcompreg.boot(yb, xb, der, der2, id, b1, n, p, d, tol = tol, maxiters = maxiters)

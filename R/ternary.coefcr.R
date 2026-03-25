@@ -7,13 +7,13 @@ ternary.coefcr <- function(y, x, type = "scls", conf = 0.95, R = 1000, dg = FALS
   if ( type == "scls" ) {
     B <- Compositional::scls(y, x)$be
     for (i in 1:R) {
-      id <- Rfast2::Sample.int(n, n, replace = TRUE)
+      id <- rangen::Sample.int(n, n, replace = TRUE)
       bb[i, ] <- as.vector( t( Compositional::scls(y[id, ], x[id, ])$be ) )
     }
   } else {
     B <- Compositional::tflr(y, x)$be
     for (i in 1:R) {
-      id <- Rfast2::Sample.int(n, n, replace = TRUE)
+      id <- rangen::Sample.int(n, n, replace = TRUE)
       bb[i, ] <- as.vector( t( Compositional::tflr(y[id, ], x[id, ])$be ) )
     }
   }

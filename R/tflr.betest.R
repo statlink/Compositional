@@ -8,7 +8,7 @@ tflr.betest <- function(y, x, B, tol = 1e-6, R = 999, ncores = 1) {
   
   if ( ncores <= 1 ) {
     for ( i in 1:R ) {
-      id <- Rfast2::Sample.int(n, n)
+      id <- rangen::Sample.int(n, n)
       pkl[i] <- Compositional::tflr.irls(y, x[id, ], tol = tol)$kl
     }
 	
@@ -16,13 +16,13 @@ tflr.betest <- function(y, x, B, tol = 1e-6, R = 999, ncores = 1) {
     cl <- parallel::makeCluster(ncores)
     # Load required packages on all workers
     parallel::clusterEvalQ( cl, { 
-	  library(Rfast2)  
+	  library(rangen)  
 	  library(Compositional) 
 	})
     # Export only what workers need
     parallel::clusterExport(cl, varlist = c("y", "x", "n", "tol"), envir = environment())
     pkl <- parallel::parSapply(cl, 1:R, function(i) {
-      id <- Rfast2::Sample.int(n, n)
+      id <- rangen::Sample.int(n, n)
       Compositional::tflr.irls(y, x[id, ], tol = tol)$kl
     })
     parallel::stopCluster(cl)

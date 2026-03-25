@@ -29,7 +29,7 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
       runtime <- proc.time()
       betaboot <- matrix( nrow = B, ncol = length(ini) )
       for (i in 1:B) {
-        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ida <- rangen::Sample.int(n, n, replace = TRUE)
         sqyb <- sqy[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
@@ -45,7 +45,7 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
       cl <- parallel::makeCluster(ncores)
       # Load required packages on workers
       parallel::clusterEvalQ(cl, {
-        library(Rfast2)
+        library(rangen)
         library(minpack.lm)
       })
       # Export only what workers need
@@ -54,7 +54,7 @@ hellinger.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) 
                              envir = environment())
       
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
-        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ida <- rangen::Sample.int(n, n, replace = TRUE)
         sqyb <- sqy[ida, ]
         xb <- x[ida, ]
         suppressWarnings({

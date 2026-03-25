@@ -38,7 +38,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
       runtime <- proc.time()
       betaboot <- matrix( nrow = B, ncol = length(ini) )
       for (i in 1:B) {
-        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ida <- rangen::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
@@ -55,7 +55,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
       cl <- parallel::makeCluster(ncores)
       # Load required packages on workers
       parallel::clusterEvalQ(cl, {
-        library(Rfast2)
+        library(rangen)
         library(minpack.lm)
       })
       # Export only what workers need
@@ -64,7 +64,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
                              envir = environment())
       
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
-        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ida <- rangen::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]
         xb <- x[ida, ]
         suppressWarnings({
@@ -143,7 +143,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
 #       runtime <- proc.time()
 #       betaboot <- matrix( nrow = B, ncol = length(ini) )
 #       for (i in 1:B) {
-#         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+#         ida <- rangen::Sample.int(n, n, replace = TRUE)
 #         yb <- y[ida, ]
 #         xb <- x[ida, ]
 #         ini <- as.vector( t( Compositional::kl.compreg(yb, xb[, -1], con = con)$be ) )  ## initial values
@@ -163,7 +163,7 @@ ols.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
 #       doParallel::registerDoParallel(cl)
 #       betaboot <- foreach::foreach( i = 1:B, .combine = rbind, .packages = "Rfast2",
 #                       .export = c( "Sample.int", "olsreg" ) ) %dopar% {
-#         ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+#         ida <- rangen::Sample.int(n, n, replace = TRUE)
 #         yb <- y[ida, ]
 #         xb <- x[ida, ]
 #         suppressWarnings({

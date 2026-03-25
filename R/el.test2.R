@@ -60,8 +60,8 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
       runtime <- proc.time()
       tb <- numeric(R)
       for ( i in 1:R ) {
-        b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
-        b2 <- Rfast2::Sample.int(n2, n2, replace = TRUE)
+        b1 <- rangen::Sample.int(n1, n1, replace = TRUE)
+        b2 <- rangen::Sample.int(n2, n2, replace = TRUE)
         y1 <- z1[b1, ]    ;    y2 <- z2[b2, ]
         tb[i] <- nlm( elpa, muc, y1 = y1, y2 = y2, n = n )$minimum
       }
@@ -72,7 +72,7 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
       cl <- parallel::makeCluster(ncores)
       # Load required packages on workers
       parallel::clusterEvalQ(cl, {
-        library(Rfast2)
+        library(rangen)
         library(emplik)
       })
       # Export only what workers need
@@ -81,8 +81,8 @@ el.test2 <- function(y1, y2, R = 0, ncores = 1, graph = FALSE) {
                              envir = environment())
       
       tb <- parallel::parSapply(cl, 1:R, function(i) {
-        b1 <- Rfast2::Sample.int(n1, n1, replace = TRUE)
-        b2 <- Rfast2::Sample.int(n2, n2, replace = TRUE)
+        b1 <- rangen::Sample.int(n1, n1, replace = TRUE)
+        b2 <- rangen::Sample.int(n2, n2, replace = TRUE)
         nlm( elpa, muc, y1 = z1[b1, ], y2 = z2[b2, ], n = n )$minimum
       })
       

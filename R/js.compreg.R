@@ -47,7 +47,7 @@ js.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
     if (ncores <= 1) {
       runtime <- proc.time()
       for (i in 1:B) {
-	      ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+	      ida <- rangen::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]
         xb <- x[ida, ]
         qa <- nlm(jsreg, be, y = yb, x = xb, d = d)
@@ -62,14 +62,14 @@ js.compreg <- function(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL) {
       
       cl <- parallel::makeCluster(ncores)
       # Load required packages on workers
-      parallel::clusterEvalQ(cl, library(Rfast2))
+      parallel::clusterEvalQ(cl, library(rangen))
       # Export only what workers need
       parallel::clusterExport(cl, 
                              varlist = c("jsreg", "y", "x", "n", "d", "be"), 
                              envir = environment())
       
       betaboot <- t( parallel::parSapply(cl, 1:B, function(i) {
-        ida <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ida <- rangen::Sample.int(n, n, replace = TRUE)
         yb <- y[ida, ]
         xb <- x[ida, ]
         suppressWarnings({

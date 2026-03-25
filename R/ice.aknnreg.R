@@ -5,7 +5,7 @@ ice.aknnreg <- function(y, x, a, k, apostasi = "euclidean",
   n <- dm[1]  ;  d <- dm[2]
   nu <- ceiling(frac * n)
   x <- as.matrix(x)
-  xsel <- sort( Rfast2::Sample(x[, ind], nu) )
+  xsel <- sort( rangen::Sample(x[, ind], nu) )
   est <- matrix(NA, nu, d)
   for (i in 1:nu) {
     X <- x

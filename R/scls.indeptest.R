@@ -20,7 +20,7 @@ scls.indeptest <- function(y, x, R = 999) {
   mse <- f$value
   pmse <- numeric(R)
   for (i in 1:R) {
-    id <- Rfast2::Sample.int(n, n)
+    id <- rangen::Sample.int(n, n)
     dvec <- as.vector( crossprod(x[id, ], y) )
     pf <- quadprog::solve.QP( Dmat = Dmat, dvec = dvec, Amat = A, bvec = bvec, meq = px )
     pmse[i] <- pf$value

@@ -5,14 +5,14 @@ tflr.indeptest <- function(y, x, tol = 1e-6, R = 999, ncores = 1) {
   
   if ( ncores <= 1 ) {
     for ( i in 1:R ) {
-      id <- Rfast2::Sample.int(n, n)
+      id <- rangen::Sample.int(n, n)
       pkl[i] <- Compositional::tflr.irls(y, x[id, ], tol = tol)$kl
     }
   } else {
     cl <- parallel::makeCluster(ncores)
     # Load required packages on all workers
     parallel::clusterEvalQ(cl, {
-      library(Rfast2)
+      library(rangen)
       library(Compositional)
     })
     # Export only what workers need
@@ -20,7 +20,7 @@ tflr.indeptest <- function(y, x, tol = 1e-6, R = 999, ncores = 1) {
                            envir = environment())
     
     pkl <- parallel::parSapply(cl, 1:R, function(i) {
-      id <- Rfast2::Sample.int(n, n)
+      id <- rangen::Sample.int(n, n)
       Compositional::tflr.irls(y, x[id, ], tol = tol)$kl
     })
     

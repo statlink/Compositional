@@ -35,7 +35,7 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
     if ( ncores <= 1 ) {
       runtime <- proc.time()
       for (i in 1:B) {
-        ind <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ind <- rangen::Sample.int(n, n, replace = TRUE)
         ab[i] <- optimize(pa, c(-1, 1), x = x[ind, ], n = n, D = D, maximum = TRUE )$maximum
       }
       runtime <- proc.time() - runtime
@@ -45,7 +45,7 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
       cl <- parallel::makeCluster(ncores)
       # Load required packages on workers
       parallel::clusterEvalQ(cl, {
-        library(Rfast2)
+        library(rangen)
         library(Compositional)
       })
       # Export only what workers need
@@ -54,7 +54,7 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
                              envir = environment())
       
       ab <- parallel::parSapply(cl, 1:B, function(i) {
-        ind <- Rfast2::Sample.int(n, n, replace = TRUE)
+        ind <- rangen::Sample.int(n, n, replace = TRUE)
         optimize(pa, c(-1, 1), x = x[ind, ], n = n, D = D, maximum = TRUE )$maximum
       })
       

@@ -4,7 +4,7 @@ ice.akernreg <- function(y, x, a, h, type = "gauss", ind = 1, frac = 0.1, qpos =
   n <- dm[1]  ;  d <- dm[2]
   nu <- ceiling(frac * n)
   x <- as.matrix(x)
-  xsel <- sort( Rfast2::Sample(x[, ind], nu) )
+  xsel <- sort( rangen::Sample(x[, ind], nu) )
   est <- matrix(NA, nu, d)
   for (i in 1:nu) {
     X <- x
