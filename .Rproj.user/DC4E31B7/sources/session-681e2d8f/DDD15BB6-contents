@@ -1,0 +1,35 @@
+cv.knnimp <- function(x, k = 2:10, type = "Ait", R = 200) {
+
+  pou <- which( is.na(x), arr.ind = TRUE)
+  ind <- unique( pou[, 1] )
+  xf <- x[-ind, ]
+  xm <- x[ind, ]
+  nf <- dim(xf)[1]   ;   nm <- dim(xm)[1]
+  names <- paste("poia", 1:nm)
+  poia <- sapply(names, function(x) NULL)
+  for ( i in 1:nm )  poia[[ i ]] <- which( is.na( x[ind[i], ] ) )
+
+  per <- array( dim = c(nm, length(k), R) )
+  perf <- matrix(nrow = R, ncol = length(k) )
+
+  runtime <- proc.time()
+  for (i in 1:R) {
+    yf <- xf
+    index <- sample(1:nf, nm)
+    for ( j in 1:nm )  yf[index[j], poia[[ j ]]] <- NA
+    mod <- knnimp(yf, k = k)
+
+    if ( type == "Ait" )  {
+      for ( vim in 1:length(k) )  per[, vim, i] <- diag( Compositional::alfadista( mod$x[[ vim ]][index, ], xf[index, ], a = 0 ) )
+
+    } else if  ( type == "js" ) {
+      for ( vim in 1:length(k) )  per[, vim, i] <- diag( Compositional::esova( mod$x[[ vim ]][index, ], xf[index, ] ) )
+    }
+    perf[i, ] <- Rfast::colmeans( per[, , i] )  ## Euclidean for knn
+  }
+  runtime <- proc.time() - runtime
+  performance <- colmeans(perf)
+  colnames(perf) <- names(performance) <- paste("k=", k, sep = "")
+  list( perf = perf, performance = performance, best_k = k[which.min(performance)], runtime = runtime )
+}
+
