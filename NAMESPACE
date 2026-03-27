@@ -6,8 +6,8 @@ importFrom("graphics", filled.contour, contour, lines, plot, axis, par,
            points, abline, hist, legend, text, image, segments, mtext)
 
 importFrom("stats", cor, lm, cov, optim, optimize, quantile, rnorm, sd, cmdscale,
-           qnorm, nlminb, nlm, lm.fit, rchisq, deviance, pchisq, qchisq, rgamma,
-           mahalanobis, runif, qt, qf, pf, model.matrix, prcomp, .lm.fit, na.omit,
+           qnorm, nlminb, nlm, lm.fit, rchisq, deviance, pchisq, qchisq,
+           mahalanobis, qt, qf, pf, model.matrix, prcomp, .lm.fit, na.omit,
            ppr, predict, coef, cancor, loess, fitted, as.dist, rweibull, ks.test,
            rmultinom, quasibinomial)
 
@@ -38,12 +38,11 @@ importFrom("mixture", gpcm)
 importFrom("emplik", el.test)
 importFrom("nnet", multinom)
 importFrom("glmnet", glmnet, cv.glmnet)
-importFrom("energy", eqdist.etest)
 importFrom("cluster", ellipsoidhull)
 importFrom("minpack.lm", nls.lm)
 importFrom("quantreg", rq)
 importFrom("bigstatsr", big_crossprodSelf, big_apply, big_cprodMat, FBM, big_read)
-importFrom("rangen", Rnorm, Runif, Sample.int, Sample)
+importFrom("rangen", Rnorm, Runif, Sample.int, Sample, Rnorm.mat, rgamma)
 
 import("parallel")
 
