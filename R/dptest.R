@@ -1,6 +1,6 @@
 dptest <- function(x1, x2, B = 100) {
   d <- dim(x1)[2]
-  u <- Rfast::matrnorm(B, d)
+  u <- rangen::Rnorm.mat(B, d)
   u / sqrt( Rfast::rowsums(u^2) )
   x1 <- sqrt(x1)  ;   x2 <- sqrt(x2)
   z1 <- tcrossprod(x1, u)
