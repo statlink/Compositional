@@ -9,7 +9,7 @@ ICE plot for projection pursuit regression with compositional predictor variable
 }
 
 \usage{
-ice.pprcomp(model, x, k = 1, frac = 0.1, type = "log")
+ice.pprcomp(model, x, k = 1, frac = 0.25, type = "log")
 }
 
 \arguments{
@@ -23,7 +23,7 @@ A matrix with the compositional data. No zero values are allowed.
 Which variable to select?.
 }
 \item{frac}{
-Fraction of observations to use. The default value is 0.1.
+Fraction of observations to use. The default value is 0.25.
 }
 \item{type}{
 Either "alr" or "log" corresponding to the additive log-ratio transformation or the simple

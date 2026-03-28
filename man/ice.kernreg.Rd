@@ -9,7 +9,7 @@ ICE plot for univariate kernel regression.
 }
 
 \usage{
-ice.kernreg(y, x, h, type = "gauss", k = 1, frac = 0.1)
+ice.kernreg(y, x, h, type = "gauss", k = 1, frac = 0.25)
 }
 
 \arguments{
@@ -29,7 +29,7 @@ The type of kernel to use, "gauss" or "laplace".
 Which variable to select?.
 }
 \item{frac}{
-Fraction of observations to use. The default value is 0.1.
+Fraction of observations to use. The default value is 0.25.
 }
 }
 

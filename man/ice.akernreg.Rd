@@ -9,7 +9,7 @@ ICE plot for the \eqn{\alpha}-kernel regression.
 }
 
 \usage{
-ice.akernreg(y, x, a, h, type = "gauss", ind = 1, frac = 0.1, qpos = 0.9)
+ice.akernreg(y, x, a, h, type = "gauss", ind = 1, frac = 0.25, qpos = 0.9)
 }
 
 \arguments{
@@ -32,7 +32,7 @@ The type of kernel to use, "gauss" or "laplace".
 Which variable to select?.
 }
 \item{frac}{
-Fraction of observations to use. The default value is 0.1.
+Fraction of observations to use. The default value is 0.25.
 }
 \item{qpos}{
 A number between 0.8 and 1. This is used to place the legend of the figure better.

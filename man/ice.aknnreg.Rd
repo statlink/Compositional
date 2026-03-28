@@ -10,12 +10,12 @@ ICE plot for the \eqn{\alpha-k-NN} regression.
 
 \usage{
 ice.aknnreg(y, x, a, k, apostasi = "euclidean", rann = FALSE,
-ind = 1, frac = 0.2, qpos = 0.9)
+ind = 1, frac = 0.25, qpos = 0.9)
 }
 
 \arguments{
 \item{y}{
-A numerical vector with the response values.
+A numerical vector with the compositional response values.
 }
 \item{x}{
 A numerical matrix with the predictor variables.
@@ -38,7 +38,7 @@ Note however, that in this case, the only available distance is by default "eucl
 Which variable to select?.
 }
 \item{frac}{
-Fraction of observations to use. The default value is 0.1.
+Fraction of observations to use. The default value is 0.25.
 }
 \item{qpos}{
 A number between 0.8 and 1. This is used to place the legend of the figure better.
