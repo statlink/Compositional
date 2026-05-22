@@ -16,7 +16,7 @@ eqdist.etest <- function(x, y, R = 999) {
 
   pstat <- numeric(R)
   for ( i in 1:R ) {
-    id <- rangen::Sample.int(n, nx)
+    id <- sample.int(n, nx)
     zx <- z[id, ]  ;  zy <- z[-id, ]
     mij <- Rfast::dista(zx, zy, result = "sum")
     if ( nx > ny ) { 
