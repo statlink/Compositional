@@ -46,8 +46,8 @@ Biometrics, 78(3): 974--987.
 Tsagris. M. (2025). Constrained least squares simplicial-simplicial regression.
 Statistics and Computing, 35(27).
 
-Tsagris M. (2025) and Alzeley O. Scalable approximation of the transformation-free linear simplicial-simplicial regression via constrained iterative reweighted least squares.
-https://arxiv.org/pdf/2511.13296
+Tsagris M. and Alzeley O. (2026). Scalable approximation of the transformation--free linear simplicial--simplicial regression via constrained iterative reweighted least squares. 
+Statistical Analysis and Data Mining, 19(4):e70100.
 }
 
 \author{

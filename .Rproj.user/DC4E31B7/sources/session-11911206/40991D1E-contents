@@ -1,7 +1,0 @@
-rgendiri <- function(n, a, b) {
-  ##  n is the sample size
-  ##  a is the parameters vector
-  D <- length(a)
-  y <- rangen::colRgamma(n, D, shape = a, rate = b)
-  y / Rfast::rowsums(y)  ## Dirichlet simulated values
-}
