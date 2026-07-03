@@ -1,0 +1,26 @@
+library(Rfast)
+
+library(nnmf)
+library(RcppML)
+library(NMF)
+library(NMFN)
+library(hNMF)
+
+
+x <- abs( matrnorm(1000, 30) + 10 )
+
+m1 <- nnmf::nmf.qp(x, 3, maxiter = 5000, tol = 1e-6)
+m1$obj  ## SSE
+
+m2 <- RcppML::nmf(x, 3, tol = 1e-6, maxit = 5000, verbose = FALSE, diag = FALSE)
+sum( (x - m2$w %*% m2$h)^2 ) ## SSE
+
+m3 <- NMF::nmf(x, rank = 3, method = "lee", maxIter = 5000, .stop = nmf.stop.threshold(threshold = 1e-6) )
+summary(m3)[6] * 2 ## SSE
+
+m4 <- NMFN::nnmf_als(x, k = 3, maxiter = 5000, eps = 1e-6)
+sum( (x - m4$W %*% m4$H)^2 ) ## SSE
+
+
+m5 <- hNMF::oneLevelNMF(x, 3, method = "PGNMF", nruns = 5000, checkDivergence = TRUE) ## Tooooo slow!!
+
