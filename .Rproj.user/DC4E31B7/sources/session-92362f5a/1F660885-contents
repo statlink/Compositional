@@ -83,5 +83,5 @@ diri.reg.irls <- function(y, x, xnew = NULL, tol = 1e-6, maxit = 100) {
 
   runtime <- proc.time() - runtime
 
-  list( runtime = runtime, iters = iter, loglik = loglik, phi = phi, be = beta, est = est)
+  list( runtime = runtime, iters = iter, loglik = loglik, be = beta, phi = phi, est = est)
 }
