@@ -13,7 +13,7 @@ Zero adjusted Dirichlet regression.
 \usage{
 zadr(y, x, con = TRUE, xnew = NULL)
 zadr2(y, x, con = TRUE, xnew = NULL)
-zadr.irls(y, x, tol = 1e-6, maxit = 100)
+zadr.irls(y, x, xnew = NULL, tol = 1e-6, maxit = 100)
 }
 
 \arguments{
