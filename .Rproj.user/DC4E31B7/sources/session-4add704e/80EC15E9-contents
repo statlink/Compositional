@@ -1,0 +1,81 @@
+\name{Dirichlet mixture models for compositional data}
+\alias{mix.diri}
+\title{
+Dirichlet mixture models for compositional data
+}
+
+\description{
+Dirichlet mixture models for compositional data.
+}
+
+\usage{
+mix.diri(x, g, tol = 1e-4)
+}
+
+\arguments{
+\item{x}{
+A matrix with the compositional data.
+}
+\item{g}{
+How many clusters to create.
+}
+\item{tol}{
+The tolerance level indicating no further increase in the log-likelihood.
+}
+}
+
+\details{
+A Dirichlet mixture model is fitted.
+}
+
+\value{
+A list including:
+\item{param}{
+A matrix where each row corresponds to the mixing probability and the estimated parameters
+of each cluster.
+}
+\item{loglik}{
+The log-likelihood of the model.
+}
+\item{probs}{
+A vector with the probability of each observation belonging to each cluster.
+}
+\item{est}{
+The estimated cluster membership values.
+}
+\item{iters}{
+The number of iterations the EM algorithm performed.
+}
+\item{runtime}{
+The runtime of the algorithm.
+}
+}
+
+\references{
+Ryan P. Browne, Aisha ElSherbiny and Paul D. McNicholas (2015). R package mixture: Mixture Models
+for Clustering and Classification.
+
+Aitchison J. (1986). The statistical analysis of compositional data. Chapman & Hall.
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+%\note{
+%%  ~~further notes~~
+%}
+
+\seealso{
+\code{\link{bic.mixcompnorm}, \link{rmixcomp}, \link{mix.compnorm.contour}
+}
+}
+
+\examples{
+\donttest{
+x <- as.matrix(iris[, 1:4])
+x <- x/ rowSums(x)
+mod <- mix.diri(x, 3)
+}
+}

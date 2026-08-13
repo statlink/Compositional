@@ -1,11 +1,11 @@
-\name{Gaussian mixture model selection via BIC}
+\name{Mixture model selection via BIC}
 \alias{bic.mixcompnorm}
 \title{
-Gaussian mixture model selection via BIC
+Mixture model selection via BIC
 }
 
 \description{
-Gaussian mixture model selection via BIC.
+Mixture model selection via BIC.
 }
 
 \usage{
