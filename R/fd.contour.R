@@ -1,8 +1,3 @@
- ################################
-#### Contour plot of the Dirichlet distribution in S^2
-#### Tsagris Michail 1/2013
-#### mtsagris@yahoo.gr
-################################
 fd.contour <- function(alpha, prob, tau, n = 100, x = NULL, cont.line = FALSE) {
   ## a are the estimated Dirichlet parameters
   ## n shows the number of points at which the density is calculated
