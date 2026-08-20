@@ -31,7 +31,7 @@ ternary <- function(x, dg = FALSE, hg = FALSE, means = TRUE, pca = FALSE, colour
   proj <- matrix(c(0, 1, 0.5, 0, 0, sqrt(3)/2), ncol = 2)
   d <- x %*% proj
   if ( is.null(colour) )  colour <- numeric(n) + 1
-  
+
   text( b[1, 1], b[1, 2] + 0.02, nam[3], col = "black", font = 2 )
   text( b[2, 1] + 0.02, b[2, 2] - 0.02, nam[1], col = "black", font = 2 )
   text( b[3, 1] - 0.02, b[2, 2] - 0.02, nam[2], col = "black", font = 2 )
@@ -107,7 +107,7 @@ ternary <- function(x, dg = FALSE, hg = FALSE, means = TRUE, pca = FALSE, colour
     lines(wa, lwd = 2, lty = 2)
   }
 
-   mu <- rbind(m1, m2)
+  mu <- rbind(m1, m2)
   rownames(mu) <- c("closed geometric", "arithmetic mean")
   colnames(mu) <- nam
   mu
