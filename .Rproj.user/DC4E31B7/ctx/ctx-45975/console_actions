@@ -1,0 +1,20 @@
+{
+    "type": [
+        2,
+        2,
+        3,
+        3,
+        0,
+        1,
+        2
+    ],
+    "data": [
+        "\nR version 4.5.2 (2025-10-31 ucrt) -- \"[Not] Part in a Rumble\"\nCopyright (C) 2025 The R Foundation for Statistical Computing\nPlatform: x86_64-w64-mingw32/x64\n\nR is free software and comes with ABSOLUTELY NO WARRANTY.\nYou are welcome to redistribute it under certain conditions.\nType 'license()' or 'licence()' for distribution details.\n\n  Natural language support but running in an English locale\n\nR is a collaborative project with many contributors.\nType 'contributors()' for more information and\n'citation()' o",
+        "n how to cite R or R packages in publications.\n\nType 'demo()' for some demos, 'help()' for on-line help, or\n'help.start()' for an HTML browser interface to help.\nType 'q()' to quit R.\n\n\u001BG3;Restarting R session...\u001Bg",
+        "\nCompositional: 8.3\n  _ _ _ _\n /   _ _ _\\\n/  /\n| |           _ _ _ _     _    _     _ _ _ _    _ _ _ _    _ _ _ _    _      _      _    _ _ _ _    _ _ _ _    _ _ _ _      _\n| |          |  _ _  |   / \\  / \\   |  _ _  |  |  _ _  |  |  _ _ _/  |_|   _| |_   |_|  |  _ _  |  /  _ _  \\  /  _ _  \\    | |\n| |          | |   | |  |   \\/   |  | |   | |  | |   | |  |_ _ _  |   _   |_   _|   _   | |   | |  | |   | |  | |   | |    | |\n\\  \\ _ _ _   | |_ _| |  | |\\__/| |  | |_ _| |  | |_ _| |   _ _ _| |  | |    | |_   | ",
+        "|  | |_ _| |  | |   | |  | |_ _| \\_   | |\n \\_ _ _ _ /  |_ _ _ _|  |_|    |_|  |  _ _ _|  |_ _ _ _|  /_ _ _ _|  |_|    |_ _\\  |_|  |_ _ _ _|  |_|   |_|  \\_ _ _ _ _/  |_|\n                                    | |\n                                    |_|\n",
+        "> ",
+        "probout",
+        "function(mu, su, a) {\n  n <- 1e+7 \n  z <- Rfast::rmvnorm(n, mu, su)\n  D <- dim(z)[2]\n  z1 <- z %*% helm(D + 1)\n  mi <- abs(a) * Rfast::rowMins(z1, value = TRUE)\n  p1 <- mean( mi <  - 1)\n  z <- Rfast::rmvnorm(n, mu, su)\n  z1 <- z %*% helm(D + 1)\n  mi <- abs(a) * Rfast::rowMins(z1, value = TRUE)\n  p2 <- mean( mi <  - 1)\n  0.5 * (p1 + p2)\n}\n<bytecode: 0x000001c8200e2ef8>\n<environment: namespace:Compositional>\n\u001BG3;Restarting R session...\u001Bg"
+    ]
+}
