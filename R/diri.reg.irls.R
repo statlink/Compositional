@@ -23,11 +23,9 @@ diri.reg.irls <- function(y, x, xnew = NULL, tol = 1e-6, maxit = 100) {
     alpha <- phi * mu
     loglik <- sum( lgamma(phi) - Rfast::rowsums( lgamma(alpha) ) + Rfast::rowsums( (alpha - 1) * ly) )
 
-    if ( abs(loglik - loglik_old) < tol ) {
-      break
-    }
+    if ( abs(loglik - loglik_old) < tol )  break
 
-    contribs <- lapply(1:n, function(i) {
+    contribs <- lapply( 1:n, function(i) {
       x_i <- x[i, ]
       mu_i <- mu[i, ]
       eta_i <- eta[i, ]
@@ -50,9 +48,8 @@ diri.reg.irls <- function(y, x, xnew = NULL, tol = 1e-6, maxit = 100) {
       Jt_h <- crossprod(J, h_i)
       S_i <- as.vector( phi * tcrossprod(x_i, Jt_h) )
       I_i <- phi^2 * kronecker(JtCJ, txi[[ i ]] )
-
       list(S = S_i, I = I_i)
-    })
+    } )
 
     S_vec <- Reduce(`+`, lapply(contribs, `[[`, "S"))
     I_mat <- Reduce(`+`, lapply(contribs, `[[`, "I"))
@@ -65,7 +62,7 @@ diri.reg.irls <- function(y, x, xnew = NULL, tol = 1e-6, maxit = 100) {
     S_phi <- sum( digamma(phi) - Rfast::rowsums(mu * digamma(alpha)) + Rfast::rowsums(mu * ly) )
     H_phi <- sum( trigamma(phi) - Rfast::rowsums( mu^2 * trigamma(alpha) ) )
     phi_new <- phi - S_phi / H_phi
-    if ( phi_new <= 0 ) phi_new <- 1e-4
+    if ( phi_new <= 0 )  phi_new <- 1e-4
     phi <- phi_new
 
     loglik_old <- loglik
