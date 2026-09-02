@@ -19,8 +19,8 @@ dfolded <- function(x, a, mu, su, logged = FALSE) {
   z <- x^(a - 1)
   ta <- Rfast::rowsums(x^a)
   J <- exp( (d + 0.5) * log(D) + (a - 1) * Rfast::rowsums(lx) - D * log(ta) )
-  detsa <-  sqrt( det(2 * pi * su) )
-  f <- ( J * f1 + J * lamd * f2 ) / detsa
+  detsa <-  sqrt( det(2 * pi * sa) )
+  d <- ( J * f1 + J * lamd * f2 ) / detsa
 
   if (logged)  f <- log(f)
   f
