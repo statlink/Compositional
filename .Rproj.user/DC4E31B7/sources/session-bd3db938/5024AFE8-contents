@@ -1,5 +1,6 @@
 \name{The alpha-transformation}
 \alias{alfa}
+\alias{alef}
 \title{
 The \eqn{\alpha}-transformation
 }
@@ -10,6 +11,7 @@ The \eqn{\alpha}-transformation.
 
 \usage{
 alfa(x, a, h = TRUE)
+alef(x, a)
 }
 
 \arguments{
@@ -29,14 +31,20 @@ Hence, from the simplex constraint the data go to another constraint.
 }
 
 \details{
-The \eqn{\alpha}-transformation is applied to the compositional data.
+The \eqn{\alpha}-transformation is applied to the compositional data. The command "alef" is
+the same as "alfa(x, a, h = FALSE)", but reurns a different element as well and is necessary
+for the functions \code{\link{a.est}}, \code{\link{a.mle}} and \code{\link{alpha.mle}}.
 }
 
 \value{
 A list including:
 \item{sa}{
-The logarithm of the Jacobian determinant of the \eqn{\alpha}-transformation. This is used in the
-"profile" function to speed up the computations.
+The logarithm of the Jacobian determinant of the \eqn{\alpha}-transformation. This is used in the "profile"
+function to speed up the computations.
+}
+\item{sk}{
+If the "alef" was called, this will return the sum of the \eqn{\alpha}-power transformed data, prior to
+being normalised to sum to 1. If \eqn{\alpha=0}, this will not be returned.
 }
 \item{aff}{
 The \eqn{\alpha}-transformed data.

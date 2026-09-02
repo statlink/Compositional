@@ -29,14 +29,16 @@ Hence, from the simplex constraint the data go to another constraint.
 }
 
 \details{
-The \eqn{\alpha}-transformation is applied to the compositional data.
+The \eqn{\alpha}-transformation is applied to the compositional data. The command "alef" is
+the same as "alfa(x, a, h = FALSE)", but reurns a different element as well and is necessary
+for the functions \code{\link{a.est}}, \code{\link{a.mle}} and \code{\link{alpha.mle}}.
 }
 
 \value{
 A list including:
 \item{sa}{
-The logarithm of the Jacobian determinant of the \eqn{\alpha}-transformation. This is used in the
-"profile" function to speed up the computations.
+The logarithm of the Jacobian determinant of the \eqn{\alpha}-transformation. This is used in the "profile"
+function to speed up the computations.
 }
 \item{aff}{
 The \eqn{\alpha}-transformed data.

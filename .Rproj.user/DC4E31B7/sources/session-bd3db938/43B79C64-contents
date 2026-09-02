@@ -5,6 +5,6 @@ a.est <- function(x) {
    best <- opt$maximum
    mod <- Compositional::alpha.mle(x, best)
    runtime <- proc.time() - runtime
-   list(runtime = runtime, alpha = best, loglik = mod$loglik,
+   list(runtime = runtime, best = best, loglik = mod$loglik,
         p = mod$p, mu = mod$mu, su = mod$su)
 }

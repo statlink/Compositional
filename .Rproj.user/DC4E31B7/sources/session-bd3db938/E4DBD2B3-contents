@@ -22,7 +22,7 @@ a.mle <- function(a, x) {
     }
     y1 <- y %*% t( helm(D) )
     y2 <- y1 * lam
-    com <-  - 0.5 * n * d * log(2 * pi ) + sk + n * 0.5 * log(D)
+    com <-  - 0.5 * n * d * log(2 * pi ) + mod$sa + n * 0.5 * log(D)
     ## step 1
     ma <- Rfast::colmeans(y1)
     sa <- Rfast::cova(y1)

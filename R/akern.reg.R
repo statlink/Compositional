@@ -19,7 +19,7 @@ akern.reg <- function(xnew, y, x, a = seq(0.1, 1, by = 0.1), h = seq(0.1, 1, len
   }	
   for ( i in 1:la ) {
     if ( abs( a[i] ) < 1e-9 ) {
-      ua <- Compositional::alef(y, 0)$aff
+      ua <- Compositional::alfa(y, 0, h = FALSE)$aff
 	  for ( j in 1:nh ) {
         w <- exp( di / h[j] )
         es <- exp( w %*% ua )
