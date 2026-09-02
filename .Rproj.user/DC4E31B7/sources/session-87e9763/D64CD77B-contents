@@ -4,46 +4,69 @@ alpha.mle <- function(x, a) {
   dm <- dim(x)
   n <- dm[1]  ;  D <- dm[2]  ## dimensions of x
   d <- D - 1  ## dimensionality of the simplex
-  ja <- sum( Rfast::Log(x) )  ## sum(log(x)) – part of the Jacobian determinant
-
-  if ( abs(a) < 1e-9 ) {  ## alpha = 0 -> ILR transformation (no folding)
+  ja <- sum( Rfast::Log(x) )  ## part of the Jacobian determinant (sum log(x))
+  
+  if ( abs(a) < 1e-9 ) {  ## alpha = 0 -> ILR transformation
     mod <- Compositional::alfa(x, 0)
-    aff <- mod$aff                # ILR coordinates
-    su <- Rfast::cova(aff)        # full-rank (d x d) covariance
+    aff <- mod$aff
+    su <- Rfast::cova(aff)
     con <- - n/2 * d * log(2 * pi * (n - 1)/n) - (n - 1) * d/2 + n * (d + 0.5) * log(D)
     lik <- - n/2 * log( abs( det( cov(aff) ) ) ) - ja - D * mod$sa + con
     result <- list(loglik = lik, mu = Rfast::colmeans(aff), su = su)
-
+    
   } else {
     mod <- Compositional::alef(x, a)
     y <- mod$aff          # ILR coordinates of the Alpha transformation
     sk <- mod$sk          # sum(x^a) per row (used in Jacobian)
-    # Correct computation of lam from min/max of xi = (x^a - 1)/a
+    
+    # ---- CORRECTED: compute lam from min/max of xi = (x^a - 1)/a ----
     xi <- (x^a - 1) / a                     # raw alpha-transformed components
     if (a > 0) {
       m <- Rfast::rowMins(xi, value = TRUE) # minimum per row
-    } else  m <- Rfast::rowMaxs(xi, value = TRUE) # maximum per row
+    } else {
+      m <- Rfast::rowMaxs(xi, value = TRUE) # maximum per row
+    }
+    # Avoid division by zero (if any xi_k = 0)
     eps <- 1e-12
     m[abs(m) < eps] <- sign(m[abs(m) < eps]) * eps
     lam <- 1 / (a^2 * m^2)
-    y1 <- y                     # non-folded ILR coordinates
-    y2 <- y * lam               # folded ILR coordinates (element-wise scaling)
-    lamd <- lam^d               # Jacobian factor for the folded component
-    # Constants from the Jacobian of the Alpha transformation (log |J_Alpha|)
-    com <- -0.5 * n * d * log(2 * pi) + n * (d + 0.5) * log(D) + (a - 1) * ja - D * sum( log(sk) )
-    ## EM algorithm for mixture of two normals (common mean & covariance in ILR)
-    ma <- Rfast::colmeans(y1)                # initial mean
-    sa <- Rfast::cova(y1)                    # full-rank (d x d) covariance
+    # ----------------------------------------------------------------
+    
+    y1 <- y %*% t( helm(D) )   # move to CLR coordinates (still linear)
+    y2 <- y1 * lam             # folded version in CLR
+    lamd <- lam^d              # Jacobian correction factor for folded component
+    
+    # Constants for log-likelihood (from Jacobian of Alpha transformation)
+    com <- -0.5 * n * d * log(2 * pi) + n * (d + 0.5) * log(D) +
+      (a - 1) * ja - D * sum( log(sk) )
+    
+    ## EM algorithm for mixture of two normals (common mean & covariance)
+    ma <- Rfast::colmeans(y1)
+    sa <- Rfast::cova(y1)
     con <- -0.5 * n * log( det(sa) )
     f1 <- exp(-0.5 * Rfast::mahala(y1, ma, sa))
     f2 <- lamd * exp(-0.5 * Rfast::mahala(y2, ma, sa))
     p <- f1 / (f1 + f2)
     per <- sum(p) / n
     ela1 <- sum( log(per * f1 + (1 - per) * f2) ) + con
-
-    ## EM iterations
+    
+    ## Step 2
+    ma <- colMeans(p * y1 + (1 - p) * y2, na.rm = TRUE)
+    z1 <- sqrt(p) * Rfast::eachrow(y1, ma, oper = "-")
+    z2 <- sqrt(1 - p) * Rfast::eachrow(y2, ma, oper = "-")
+    sa <- ( crossprod(z1) + crossprod(z2) ) / n
+    con <- -0.5 * n * log( det(sa) )
+    f1 <- exp(-0.5 * Rfast::mahala(y1, ma, sa))
+    f2 <- lamd * exp(-0.5 * Rfast::mahala(y2, ma, sa))
+    p <- f1 / (f1 + f2)
+    per <- sum(p) / n
+    ela2 <- sum( log(per * f1 + (1 - per) * f2) ) + con
+    
+    ## Iterate until convergence
     k <- 2
-    while (TRUE) {
+    while ( abs(ela2 - ela1) > 1e-06 ) {
+      k <- k + 1
+      ela1 <- ela2
       ma <- colMeans(p * y1 + (1 - p) * y2, na.rm = TRUE)
       z1 <- sqrt(p) * Rfast::eachrow(y1, ma, oper = "-")
       z2 <- sqrt(1 - p) * Rfast::eachrow(y2, ma, oper = "-")
@@ -54,13 +77,11 @@ alpha.mle <- function(x, a) {
       p <- f1 / (f1 + f2)
       per <- sum(p) / n
       ela2 <- sum( log(per * f1 + (1 - per) * f2) ) + con
-
-      if ( abs(ela2 - ela1) < 1e-06 ) break
-      ela1 <- ela2
-      k <- k + 1
     }
-
-    result <- list(iters = k, p = per, loglik = ela2 + com + 0.5 * d, mu = ma, su = sa)
+    
+    result <- list(iters = k, p = per,
+                   loglik = ela2 + com + 0.5 * d,
+                   mu = ma, su = sa)
   }
   result
 }

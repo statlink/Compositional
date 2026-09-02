@@ -1,26 +1,26 @@
 {
-    "id": "96E52319",
-    "path": "~/GitHub/Compositional/R/dfolded.R",
-    "project_path": "R/dfolded.R",
+    "id": "E2905434",
+    "path": "~/GitHub/Compositional/R/alpha.mle.R",
+    "project_path": "R/alpha.mle.R",
     "type": "r_source",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1788335478701.0,
+    "created": 1788336408019.0,
     "source_on_save": false,
-    "relative_order": 4,
+    "relative_order": 8,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "14,0",
-        "scrollLine": "0"
+        "cursorPosition": "24,67",
+        "scrollLine": "15"
     },
     "folds": "",
-    "lastKnownWriteTime": 1788335625,
+    "lastKnownWriteTime": 1788336919,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1788335625750,
+    "last_content_update": 1788336919028,
     "read_only": false,
     "read_only_alternatives": []
 }

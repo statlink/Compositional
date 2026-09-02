@@ -7,10 +7,11 @@ dfolded <- function(x, a, p, mu, su, logged = TRUE) {
 
   z1 <- Compositional::alef(x, a)$aff
   y1 <- z1 %*% h
-  lam <- Rfast::rowMins( a * z1, value = TRUE ) ^ (-2)
+  if ( a > 0)  lam <- Rfast::rowMins( a * z1, value = TRUE ) ^ (-2)
+  if ( a < 0)  lam <- Rfast::rowMaxs( a * z1, value = TRUE ) ^ (-2)
+
   y2 <- lam * y1
   f <- p * down * exp( -0.5 * Rfast::mahala(y1, mu, su) ) + (1 - p) * down * lam^d * exp( -0.5 * Rfast::mahala(y2, mu, su) )
-
   if (logged) f <- log(f)
   f
 }
