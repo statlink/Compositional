@@ -1,26 +1,26 @@
 {
-    "id": "A7EF4D7D",
-    "path": "~/GitHub/Compositional/R/a.mle.R",
-    "project_path": "R/a.mle.R",
+    "id": "E2905434",
+    "path": "~/GitHub/Compositional/R/alpha.mle.R",
+    "project_path": "R/alpha.mle.R",
     "type": "r_source",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1788334759921.0,
+    "created": 1788336408019.0,
     "source_on_save": false,
-    "relative_order": 2,
+    "relative_order": 3,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "70,0",
-        "scrollLine": "51"
+        "cursorPosition": "14,37",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1788336327,
+    "lastKnownWriteTime": 1788339766,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1788336327058,
+    "last_content_update": 1788339766674,
     "read_only": false,
     "read_only_alternatives": []
 }
