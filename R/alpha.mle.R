@@ -1,83 +1,65 @@
 alpha.mle <- function(x, a) {
-  ## x: compositional data (n x D)
-  ## a: alpha parameter (can be positive or negative)
-  ## ridge: small constant added to diagonal of covariance to ensure positive definiteness
+  ## x is the compositional data
+  ## a is the value of the alpha parameter
   dm <- dim(x)
-  n <- dm[1] ; D <- dm[2]
-  d <- D - 1
-  ja <- sum(Rfast::Log(x))   # sum(log x) – part of the Jacobian
+  n <- dm[1]  ;  D <- dm[2]  ## dimensions of x
+  d <- D - 1  ## dimensionality of the simplex
+  ja <- sum( Rfast::Log(x) )  ## part of the Jacobian determinant
+  #########
+  if ( abs(a) < 1e-9 ) {  ## i.e. if alpha = 0
+    mod <- alfa(x, 0)
+    aff <- mod$aff
+    su <- Rfast::cova(aff)
+    con <-  - n/2 * d * log(2 * pi * (n - 1)/n ) - (n - 1) * d/2 + n * (d + 0.5) * log(D)
+    lik <-  - n/2 * log( abs( det( cov(aff) ) ) ) - ja - D * mod$sa + con
+    result <- list(loglik = lik, mu = Rfast::colmeans(aff), su = su)
 
-  if (abs(a) < 1e-9) {
-    ## alpha = 0 -> ILR transformation (no folding)
-    mod <- Compositional::alfa(x, 0)
-    aff <- mod$aff                     # ILR coordinates
-    su <- Rfast::cova(aff)             # full-rank covariance
-    con <- - n/2 * d * log(2 * pi * (n - 1)/n) - (n - 1) * d/2 + n * (d + 0.5) * log(D)
-    lik <- - n/2 * log(abs(det(cov(aff)))) - ja - D * mod$sa + con
-    return(list(loglik = lik, mu = Rfast::colmeans(aff), su = su))
-  }
-
-  ## Alpha transformation (non‑folded)
-  mod <- Compositional::alfa(x, a)
-  y <- mod$aff      # ILR coordinates
-  sk <- mod$sa      # sum(x^a) per row
-
-  ## ---- Correct folding scaling: use min/max of xi = (x^a - 1)/a ----
-  xi <- (x^a - 1) / a
-  if (a > 0) {
-    m <- Rfast::rowMins(xi, value = TRUE)  # minimum per row
   } else {
-    m <- Rfast::rowMaxs(xi, value = TRUE)  # maximum per row
-  }
-  eps <- 1e-12
-  m[abs(m) < eps] <- sign(m[abs(m) < eps]) * eps  # avoid division by zero
-  lam <- 1 / (a^2 * m^2)                 # scalar per observation
-  lamd <- lam^d                          # Jacobian factor |J1|/|J0|
-  ## ----------------------------------------------------------------
-
-  ## Work directly in ILR space (no Helmert matrix)
-  y1 <- y                     # non‑folded ILR
-  y2 <- y * lam               # folded ILR
-
-  ## Constants: Jacobian of Alpha transformation (log |J0|)
-  com <- -0.5 * n * d * log(2 * pi) + n * (d + 0.5) * log(D) +
-    (a - 1) * ja - D * sum(log(sk))
-
-  ## ---- EM algorithm for common mean & covariance ----
-  ma <- Rfast::colmeans(y1)
-  sa <- Rfast::cova(y1)
-
-  ## Evaluate initial log‑likelihood (NO mixing proportion)
-  f1 <- exp(-0.5 * Rfast::mahala(y1, ma, sa))
-  f2 <- lamd * exp(-0.5 * Rfast::mahala(y2, ma, sa))
-  loglik_old <- sum(log(f1 + f2)) - 0.5 * n * log(det(sa))
-
-  k <- 1
-  while (TRUE) {
-    ## E‑step: posterior probabilities (used only for weighting)
+    mod <- alef(x, a)
+    y <- mod$aff
+    sk <- mod$sk
+    lam <- 1 /(a^2 * Rfast::rowMins(y, value = TRUE)^2)   ##  1 / apply(a * y, 1, min)^2
+    y1 <- y %*% t( helm(D) )
+    y2 <- y1 * lam
+    lamd <- lam^d
+    ma <- Rfast::colmeans(y1)
+    sa <- Rfast::cova(y1)
+    com <-  - 0.5 * n * d * log(2 * pi ) + n * (d + 0.5) * log(D) + (a - 1) * ja - D * sum( log(sk) )
+    ## step 1
+    con <-  - 0.5 * n * log( det(sa) )
+    f1 <- exp( -0.5 * Rfast::mahala(y1, ma, sa) )
+    f2 <- lamd * exp(-0.5 * Rfast::mahala(y2, ma, sa) )
     p <- f1 / (f1 + f2)
-
-    ## M‑step: update common mean and covariance
+    per <- sum(p) / n
+    ela1 <- sum( log(per * f1 + (1 - per) * f2) ) + con
+    ## step 2
     ma <- colMeans(p * y1 + (1 - p) * y2, na.rm = TRUE)
-    z1 <- sqrt(p) * Rfast::eachrow(y1, ma, oper = "-")
-    z2 <- sqrt(1 - p) * Rfast::eachrow(y2, ma, oper = "-")
-    sa <- (crossprod(z1) + crossprod(z2)) / n
-
-    ## Evaluate new log‑likelihood (still NO mixing proportion)
-    f1 <- exp(-0.5 * Rfast::mahala(y1, ma, sa))
-    f2 <- lamd * exp(-0.5 * Rfast::mahala(y2, ma, sa))
-    loglik_new <- sum(log(f1 + f2)) - 0.5 * n * log(det(sa))
-
-    k <- k + 1
-    if (abs(loglik_new - loglik_old) < 1e-6) break
-    loglik_old <- loglik_new
-  }
-
-  ## Final log‑likelihood (add Jacobian of Alpha transformation)
-  loglik <- loglik_new + com + 0.5 * d   # +0.5*d is a constant
-
-  return(list(iters = k,
-              loglik = loglik,
-              mu = ma,
-              su = sa))
+    z1 <- sqrt(p) * Rfast::eachrow(y1, ma, oper = "-")       ## ( y1 - rep(ma, rep(n, d)) )
+	  z2 <- sqrt(1 - p) * Rfast::eachrow(y2, ma, oper = "-")   ## ( y2 - rep( ma, rep(n, d) ) )
+    sa <- ( crossprod(z1) + crossprod(z2) )/n
+    con <-  - 0.5 * n * log( det(sa) )
+    f1 <- exp( -0.5 * Rfast::mahala(y1, ma, sa) )
+    f2 <- lamd * exp( -0.5 * Rfast::mahala(y2, ma, sa) )
+    p <- f1 / (f1 + f2)
+    per <- sum(p) / n
+    ela2 <- sum( log(per * f1 + (1 - per) * f2) ) + con
+    ## step 3 and beyond
+    k <- 2
+    while ( abs(ela2 - ela1) > 1e-06 ) {
+     k <- k + 1
+     ela1 <- ela2
+     ma <- colMeans(p * y1 + (1 - p) * y2, na.rm = TRUE)
+     z1 <- sqrt(p) * Rfast::eachrow(y1, ma, oper = "-")       ## ( y1 - rep(ma, rep(n, d)) )
+	   z2 <- sqrt(1 - p) * Rfast::eachrow(y2, ma, oper = "-")   ## ( y2 - rep( ma, rep(n, d) ) )
+     sa <- ( crossprod(z1) + crossprod(z2) )/n
+     con <-  - 0.5 * n * log( det(sa) )
+     f1 <- exp( -0.5 * Rfast::mahala(y1, ma, sa) )
+     f2 <- lamd * exp(-0.5 * Rfast::mahala(y2, ma, sa) )
+     p <- f1 / (f1 + f2)
+     per <- sum(p) / n
+     ela2 <- sum( log(per * f1 + (1 - per) * f2) ) + con
+    }
+   result <- list(iters = k, p = per, loglik = ela2 + com + 0.5 * d, mu = ma, su = sa)
+   }
+   result
 }
