@@ -10,8 +10,7 @@ alpha.mle <- function(x, a) {
     mod <- Compositional::alfa(x, 0)
     aff <- mod$aff
     su <- Rfast::cova(aff)
-    con <-  - n/2 * d * log(2 * pi * (n - 1)/n ) - (n - 1) * d/2 + n * (d + 0.5) * log(D)
-    lik <-  - n/2 * log( abs( det( cov(aff) ) ) ) - ja - D * mod$sa + con
+    loglik <-  - 0.5 * n * d - 0.5 * n * log( abs( det(2 * pi * (n - 1)/n * su) ) ) - ja - n/2 * log(D)
     result <- list(iters = 1, p = 1, loglik = lik, mu = Rfast::colmeans(aff), su = su)
 
   } else {
