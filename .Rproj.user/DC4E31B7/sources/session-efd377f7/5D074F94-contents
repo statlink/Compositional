@@ -30,5 +30,5 @@ beta.reg <- function(y, x, xnew = NULL) {
     est <- 1 / (1 + est)
   } else  est <- NULL
 
-  list(loglik = - mod2$value - sly2, info = info, phi = exp(mod2$par[1]), est = est)
+  list(phi = exp(mod2$par[1]), info = info, loglik = - mod2$value - sly2, est = est)
 }
