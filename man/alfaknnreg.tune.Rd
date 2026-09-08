@@ -1,11 +1,11 @@
-\name{cross-validation for the alpha-k-NN regression with compositional predictor variables}
+\name{Cross-validation for the alpha-k-NN regression with compositional predictor variables}
 \alias{alfaknnreg.tune}
 \title{
-cross-validation for the \eqn{\alpha}-k-NN regression with compositional predictor variables
+Cross-validation for the \eqn{\alpha}-k-NN regression with compositional predictor variables
 }
 
 \description{
-cross-validation for the \eqn{\alpha}-k-NN regression with compositional predictor variables.
+Cross-validation for the \eqn{\alpha}-k-NN regression with compositional predictor variables.
 }
 
 \usage{

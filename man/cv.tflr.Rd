@@ -1,11 +1,11 @@
-\name{cross-validation for the TFLR model}
+\name{Cross-validation for the TFLR model}
 \alias{cv.tflr}
 \title{
-cross-validation for the TFLR model
+Cross-validation for the TFLR model
 }
 
 \description{
-cross-validation for the TFLR model.
+Cross-validation for the TFLR model.
 }
 
 \usage{

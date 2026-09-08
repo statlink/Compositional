@@ -1,11 +1,11 @@
-\name{cross-validation for the ridge regression}
+\name{Cross-validation for the ridge regression}
 \alias{ridge.tune}
 \title{
-cross-validation for the ridge regression
+Cross-validation for the ridge regression
 }
 
 \description{
-cross-validation for the ridge regression is performed. There is an option for the GCV criterion which is automatic.
+Cross-validation for the ridge regression is performed. There is an option for the GCV criterion which is automatic.
 }
 
 \usage{

@@ -53,7 +53,7 @@ If graph is TRUE a plot of the performance for each fold along the values of \eq
 }
 
 \details{
-cross-validation is performed to select the optimal number of principal components in the GLMs 
+Cross-validation is performed to select the optimal number of principal components in the GLMs 
 or the multinomial regression. This is used
 by \code{\link{alfapcr.tune}}.
 }

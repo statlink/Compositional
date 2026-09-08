@@ -1,11 +1,11 @@
-\name{cross-validation for the ridge regression with compositional data as predictor using the alpha-transformation}
+\name{Cross-validation for the ridge regression with compositional data as predictor using the alpha-transformation}
 \alias{alfaridge.tune}
 \title{
-cross-validation for the ridge regression with compositional data as predictor using the \eqn{\alpha}-transformation
+Cross-validation for the ridge regression with compositional data as predictor using the \eqn{\alpha}-transformation
 }
 
 \description{
-cross-validation for the ridge regression is performed.
+Cross-validation for the ridge regression is performed.
 There is an option for the GCV criterion which is automatic. The predictor variables are compositional data and the \eqn{\alpha}-transformation is applied first.
 }
 

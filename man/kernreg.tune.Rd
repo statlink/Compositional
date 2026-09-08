@@ -1,11 +1,11 @@
-\name{cross-validation for the kernel regression with Euclidean response data}
+\name{Cross-validation for the kernel regression with Euclidean response data}
 \alias{kernreg.tune}
 \title{
-cross-validation for the kernel regression with Euclidean response data
+Cross-validation for the kernel regression with Euclidean response data
 }
 
 \description{
-cross-validation for the kernel regression with Euclidean response data.
+Cross-validation for the kernel regression with Euclidean response data.
 }
 
 \usage{

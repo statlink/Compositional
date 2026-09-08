@@ -1,11 +1,11 @@
-\name{cross-validation for some compositional regression models}
+\name{Cross-validation for some compositional regression models}
 \alias{cv.comp.reg}
 \title{
-cross-validation for some compositional regression models
+Cross-validation for some compositional regression models
 }
 
 \description{
-cross-validation for some compositional regression models.
+Cross-validation for some compositional regression models.
 }
 
 \usage{

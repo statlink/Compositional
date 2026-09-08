@@ -1,12 +1,12 @@
-\name{cross-validation for the regularised and flexible discriminant analysis with compositional data using the alpha-transformation}
+\name{Cross-validation for the regularised and flexible discriminant analysis with compositional data using the alpha-transformation}
 \alias{alfarda.tune}
 \alias{alfafda.tune}
 \title{
-cross-validation for the regularised and flexible discriminant analysis with compositional data using the \eqn{\alpha}-transformation
+Cross-validation for the regularised and flexible discriminant analysis with compositional data using the \eqn{\alpha}-transformation
 }
 
 \description{
-cross-validation for the regularised and flexible discriminant analysis with compositional data using the \eqn{\alpha}-transformation.
+Cross-validation for the regularised and flexible discriminant analysis with compositional data using the \eqn{\alpha}-transformation.
 }
 
 \usage{

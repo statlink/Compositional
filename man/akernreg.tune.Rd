@@ -1,11 +1,11 @@
-\name{cross-validation for the alpha-kernel regression with compositional response data}
+\name{Cross-validation for the alpha-kernel regression with compositional response data}
 \alias{akernreg.tune}
 \title{
-cross-validation for the \eqn{\alpha}-kernel regression with compositional response data
+Cross-validation for the \eqn{\alpha}-kernel regression with compositional response data
 }
 
 \description{
-cross-validation for the \eqn{\alpha}-kernel regression with compositional response data.
+Cross-validation for the \eqn{\alpha}-kernel regression with compositional response data.
 }
 
 \usage{

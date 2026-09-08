@@ -45,7 +45,7 @@ You can specify your own seed number here or leave it NULL.
 }
 
 \details{
-cross-validation is performed to select the optimal parameters for the regularisded discriminant analysis and also estimate the rate of accuracy.
+Cross-validation is performed to select the optimal parameters for the regularisded discriminant analysis and also estimate the rate of accuracy.
 
 The covariance matrix of each group is calcualted and then the pooled covariance matrix. The spherical covariance matrix consists of the average of the pooled variances in its diagonal and zeros in the off-diagonal elements. gam is the weight of the pooled covariance matrix and 1-gam is the weight of the spherical covariance matrix, Sa = gam * Sp + (1-gam) * sp. Then it is a compromise between LDA and QDA. del is the weight of Sa and 1-del the weight of each group covariance group.
 }
