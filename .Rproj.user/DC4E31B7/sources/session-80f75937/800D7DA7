@@ -1,26 +1,26 @@
 {
-    "id": "62A7BAA8",
-    "path": "~/GitHub/Compositional/man/alfa.contour.Rd",
-    "project_path": "man/alfa.contour.Rd",
+    "id": "800D7DA7",
+    "path": "~/GitHub/Compositional/man/alfa.tune.Rd",
+    "project_path": "man/alfa.tune.Rd",
     "type": "r_doc",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1789024603999.0,
+    "created": 1789026717162.0,
     "source_on_save": false,
-    "relative_order": 1,
+    "relative_order": 6,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "75,1",
-        "scrollLine": "58"
+        "cursorPosition": "65,0",
+        "scrollLine": "53"
     },
     "folds": "",
-    "lastKnownWriteTime": 1789025342,
+    "lastKnownWriteTime": 1789026725,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1789025342003,
+    "last_content_update": 1789026725988,
     "read_only": false,
     "read_only_alternatives": []
 }

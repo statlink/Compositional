@@ -13,7 +13,8 @@ alfa.mix.norm <- function(x, g, a, model, veo = FALSE) {
   ## type is either 'alr' or 'ilr'
   p <- dim(x)[2]  ## dimensionality of the data
   n <- dim(x)[1]  ## sample size
-  y <- Compositional::alfa(x, a)$aff
+  z <- Compositional::alfa(x, a)
+  y <- z$aff
 
   mod <- mixture::gpcm(y, G = g, mnames = model, start = 0, mmax = 100, veo = veo)
   param <- mod$gpar
