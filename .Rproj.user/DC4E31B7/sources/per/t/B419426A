@@ -3,7 +3,7 @@
     "path": "~/GitHub/Compositional/R/alfa.profile.R",
     "project_path": "R/alfa.profile.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "2697151794",
     "contents": "",
     "dirty": false,
     "created": 1789034608973.0,
@@ -12,8 +12,8 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "21,32",
-        "scrollLine": "6"
+        "cursorPosition": "8,13",
+        "scrollLine": "0"
     },
     "folds": "",
     "lastKnownWriteTime": 1789037505,
