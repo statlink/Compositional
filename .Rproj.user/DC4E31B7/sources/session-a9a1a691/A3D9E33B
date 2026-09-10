@@ -1,26 +1,26 @@
 {
-    "id": "25D2E6AC",
-    "path": "~/GitHub/Compositional/R/akern.reg.R",
-    "project_path": "R/akern.reg.R",
+    "id": "A3D9E33B",
+    "path": "~/GitHub/Compositional/R/alfa.tune.R",
+    "project_path": "R/alfa.tune.R",
     "type": "r_source",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1789043538788.0,
+    "created": 1789045418829.0,
     "source_on_save": false,
     "relative_order": 2,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "7,28",
-        "scrollLine": "0"
+        "cursorPosition": "48,0",
+        "scrollLine": "34"
     },
     "folds": "",
-    "lastKnownWriteTime": 1789043572,
+    "lastKnownWriteTime": 1789045447,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1789043572958,
+    "last_content_update": 1789045447361,
     "read_only": false,
     "read_only_alternatives": []
 }

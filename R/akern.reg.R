@@ -19,6 +19,7 @@ akern.reg <- function(xnew, y, x, a = seq(0.1, 1, by = 0.1), h = seq(0.1, 1, len
       for ( j in 1:nh )  {
         es[[ j ]] <- es[[ j ]]^(1/a[i])
         est[[ i ]][[ j ]] <- es[[ j ]] / Rfast::rowsums(es[[ j ]])
+      }
     }
   }  ##  end  for ( i in 1:la ) {
 
