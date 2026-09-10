@@ -15,11 +15,11 @@ diri.nr <- function(x, type = 1, tol = 1e-07) {
     p <- dim(x)[2]  ## dimensionality
     m <- Rfast::colmeans(x)
     zx <- t( Rfast::Log(x) )
-    down <-  - sum( m * ( Rfast::rowmeans(zx) - Rfast::Log(m) ) )
+    down <-  - sum( m * ( Rfast::rowmeans( zx ) - log(m) ) )
     sa <- 0.5 * (p - 1) / down  ## initial value for precision
     a1 <- sa * m  ## initial values
     gm <- Rfast::rowsums(zx)
-    z <- n * digamma(sa)
+    z <- n * digamma( sa )
     g <- z - n * digamma(a1) + gm
     qk <-  - n * trigamma(a1)
     b <- sum(g / qk) / ( 1/z - sum(1 / qk) )
