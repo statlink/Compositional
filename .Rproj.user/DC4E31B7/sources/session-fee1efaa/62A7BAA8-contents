@@ -73,10 +73,10 @@ Christos Adam \email{pada4m4@gmail.com}.
 \examples{
 x <- as.matrix(iris[, 1:3])
 x <- x / rowSums(x)
-a <- alfa.tune(x)[1]
-m <- colMeans(alfa(x, a)$aff)
-s <- cov(alfa(x, a)$aff)
-alfa.contour(m, s, a)
+#a <- alfa.tune(x)[1]
+m <- colMeans(alfa(x, 1)$aff)
+s <- cov(alfa(x, 1)$aff)
+alfa.contour(m, s, 1)
 }
 
 
