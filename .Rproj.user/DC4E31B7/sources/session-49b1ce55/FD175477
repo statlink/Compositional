@@ -1,26 +1,26 @@
 {
-    "id": "B3DBEA05",
-    "path": "~/GitHub/Compositional/man/Compositional-package.Rd",
-    "project_path": "man/Compositional-package.Rd",
+    "id": "FD175477",
+    "path": "~/GitHub/Compositional/man/alfa.Rd",
+    "project_path": "man/alfa.Rd",
     "type": "r_doc",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1789035297870.0,
+    "created": 1789035493768.0,
     "source_on_save": false,
-    "relative_order": 6,
+    "relative_order": 7,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "16,19",
-        "scrollLine": "0"
+        "cursorPosition": "78,19",
+        "scrollLine": "63"
     },
     "folds": "",
-    "lastKnownWriteTime": 1789023711,
+    "lastKnownWriteTime": 1789035522,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1789023711,
+    "last_content_update": 1789035522146,
     "read_only": false,
     "read_only_alternatives": []
 }

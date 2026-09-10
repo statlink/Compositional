@@ -20,7 +20,7 @@ alfainv <- function(x, a, h = TRUE) {
     y <- x %*% h
   }	 else y <- x
 
-  if ( a != 0 ) {
+  if ( abs(a) > 1e-7 ) {
     z <- ( a * y + 1 )^( 1/a )
     z <- z / Rfast::rowsums(z)
   } else {
