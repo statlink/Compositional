@@ -12,10 +12,12 @@ akern.reg <- function(xnew, y, x, a = seq(0.1, 1, by = 0.1), h = seq(0.1, 1, len
     if ( abs( a[i] ) < 1e-6 ) {
       ua <- Compositional::alfa(y, 0, h = FALSE)$aff
       es <- kernreg::kern_reg(xnew, ua, x, h = h, type = type, ncores = ncores)
+      if ( nh == 1 )  es <- list(es)
       for ( j in 1:nh )  est[[ i ]][[ j ]] <- Compositional::alfainv(es[[ j ]], 0, h = FALSE)
     } else {
       ua <- y^a[i]
       es <- kernreg::kern_reg(xnew, ua, x, h = h, type = type, ncores = ncores)
+      if ( nh == 1 )  es <- list(es)
       for ( j in 1:nh )  {
         es[[ j ]] <- es[[ j ]]^(1/a[i])
         est[[ i ]][[ j ]] <- es[[ j ]] / Rfast::rowsums(es[[ j ]])
