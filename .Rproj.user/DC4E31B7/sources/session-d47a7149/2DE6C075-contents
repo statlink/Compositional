@@ -94,8 +94,6 @@ and Giorgos Athineou <gioathineou@gmail.com>.
 x <- as.matrix(iris[, 1:3])
 x <- x / rowSums(x)
 ina <- iris[, 5]
-mod <- alfa.fda(x, x, ina, 0)
-table(ina, mod$est)
 }
 
 \keyword{ Regularised discriminant analysis }

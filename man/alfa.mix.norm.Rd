@@ -95,10 +95,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 }
 
 \examples{
-\donttest{
 x <- as.matrix(iris[, 1:3])
 x <- x/ rowSums(x)
-mod2 <- alfa.mix.norm(x, 3, 0, model = "VII")
-}
 }
 
