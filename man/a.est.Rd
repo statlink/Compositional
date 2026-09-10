@@ -77,7 +77,6 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 \examples{
 x <- as.matrix(iris[, 1:4])
 x <- x / rowSums(x)
-alfa.tune(x)
 a.est(x)
 }
 

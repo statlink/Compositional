@@ -1,26 +1,26 @@
 {
-    "id": "20A2B30A",
-    "path": "~/GitHub/Compositional/man/alfa.profile.Rd",
-    "project_path": "man/alfa.profile.Rd",
+    "id": "DD4C1AEA",
+    "path": "~/GitHub/Compositional/man/alpha.mle.Rd",
+    "project_path": "man/alpha.mle.Rd",
     "type": "r_doc",
-    "hash": "0",
+    "hash": "3891000499",
     "contents": "",
     "dirty": false,
-    "created": 1789046108939.0,
+    "created": 1789048510453.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "59,25",
-        "scrollLine": "41"
+        "cursorPosition": "89,0",
+        "scrollLine": "73"
     },
     "folds": "",
-    "lastKnownWriteTime": 1789045836,
+    "lastKnownWriteTime": 1789048593,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1789045836,
+    "last_content_update": 1789048593394,
     "read_only": false,
     "read_only_alternatives": []
 }
