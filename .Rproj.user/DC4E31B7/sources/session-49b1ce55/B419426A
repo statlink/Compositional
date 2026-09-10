@@ -1,26 +1,26 @@
 {
-    "id": "D8BDB1DF",
-    "path": "~/GitHub/Compositional/R/alfa.mix.norm.R",
-    "project_path": "R/alfa.mix.norm.R",
+    "id": "B419426A",
+    "path": "~/GitHub/Compositional/R/alfa.profile.R",
+    "project_path": "R/alfa.profile.R",
     "type": "r_source",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1789026277366.0,
+    "created": 1789034608973.0,
     "source_on_save": false,
-    "relative_order": 1,
+    "relative_order": 4,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "16,0",
-        "scrollLine": "0"
+        "cursorPosition": "20,11",
+        "scrollLine": "9"
     },
     "folds": "",
-    "lastKnownWriteTime": 1789026291,
+    "lastKnownWriteTime": 1788344301,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1789026291693,
+    "last_content_update": 1788344301,
     "read_only": false,
     "read_only_alternatives": []
 }

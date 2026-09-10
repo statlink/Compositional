@@ -44,7 +44,7 @@ https://arxiv.org/pdf/1106.1451.pdf
 \author{
 Michail Tsagris.
 
-R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr} 
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}
 and Giorgos Athineou <gioathineou@gmail.com>.
 }
 %\note{
@@ -63,4 +63,3 @@ alfa.tune(x)
 alfa.profile(x)
 }
 
-\keyword{ profile log-likelihood }
