@@ -67,6 +67,7 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
     abline(v = mean(ab), lty = 2, col = 4)
     message <- paste("The green is the best alpha value. The blue line is the bootstrap mean value of alpha.")
     result <- list(param = param, message = message, runtime = runtime )
-  }
+  }  ##  end if ( B == 1 ) {
+
   result
 }

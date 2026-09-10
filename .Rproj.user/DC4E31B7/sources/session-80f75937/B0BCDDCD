@@ -1,26 +1,26 @@
 {
-    "id": "800D7DA7",
-    "path": "~/GitHub/Compositional/man/alfa.tune.Rd",
-    "project_path": "man/alfa.tune.Rd",
-    "type": "r_doc",
+    "id": "B0BCDDCD",
+    "path": "~/GitHub/Compositional/R/alfa.profile.R",
+    "project_path": "R/alfa.profile.R",
+    "type": "r_source",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1789026717162.0,
+    "created": 1789027950266.0,
     "source_on_save": false,
     "relative_order": 6,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "65,0",
-        "scrollLine": "53"
+        "cursorPosition": "10,25",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1789026725,
+    "lastKnownWriteTime": 1788344301,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1789026725988,
+    "last_content_update": 1788344301,
     "read_only": false,
     "read_only_alternatives": []
 }
