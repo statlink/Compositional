@@ -12,7 +12,7 @@ cv.dda <- function(x, ina, nfolds = 10, folds = NULL, stratified = TRUE, seed = 
     xtest <- x[ folds[[ k ]], , drop = FALSE ]   ## test sample
     idtest <- ina[ folds[[ k ]] ] ## groups of test sample
     mat <- matrix(nrow = length(idtest), ncol = g)
-    for (j in 1:g) {
+    for ( j in 1:g ) {
       a <- Compositional::diri.nr(xtrain[idtrain == j, ])$param
       mat[, j] <- Compositional::ddiri(xtest, a, logged = TRUE)
     }
