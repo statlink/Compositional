@@ -1,27 +1,27 @@
 alfa.tune <- function(x, B = 1, ncores = 1) {
   n <- dim(x)[1]  ## sample size
-  f <- (n - 1) / n
+  fc <- (n - 1) / n
   D <- dim(x)[2]   ;   d <- D - 1
   con <-  - 0.5 * n * d * log(2 * pi) - 0.5 * n * d
 
-  pa <- function(a, x, n) {
+  pa <- function(a, x, n, fc) {
     trans <- Compositional::alfa(x, a)
     z <- trans$aff  ## the alpha-transformation
-    - 0.5 * n * log( abs( det( f * cov(z) ) ) ) + trans$sa
+    - 0.5 * n * log( abs( det( fc * cov(z) ) ) ) + trans$sa
   }
   if ( B == 1 ) {
     suppressWarnings({
-      ell <- optimize(pa, c(-1, 1), x = x, n = n, maximum = TRUE )
+      ell <- optimize(pa, c(-1, 1), x = x, n = n, fc = fc, maximum = TRUE )
     })
     aff0 <- Compositional::alfa(x, 0)
     z0 <- aff0$aff
-    lik0 <-  - 0.5 * n * log( abs( det( f * Rfast::cova(z0) ) ) ) + aff0$sa
+    lik0 <-  - 0.5 * n * log( abs( det( fc * Rfast::cova(z0) ) ) ) + aff0$sa
     result <- c(ell$maximum, ell$objective + con, lik0 + con)
     names(result) <- c("best alpha", "max log-lik", "log-lik at 0")
 
   } else {  ## bootstrap confidence intervals
     suppressWarnings({
-      ell <- optimize(pa, c(-1, 1), x = x, n = n, maximum = TRUE )
+      ell <- optimize(pa, c(-1, 1), x = x, n = n, fc = fc, maximum = TRUE )
     })
     ab <- numeric(B)
 
@@ -30,7 +30,7 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
       for (i in 1:B) {
         ind <- rangen::Sample.int(n, n, replace = TRUE)
         suppressWarnings({
-          ab[i] <- optimize(pa, c(-1, 1), x = x[ind, ], n = n, maximum = TRUE )$maximum
+          ab[i] <- optimize(pa, c(-1, 1), x = x[ind, ], n = n, fc = fc, maximum = TRUE )$maximum
         })
       }
       runtime <- proc.time() - runtime
@@ -45,13 +45,13 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
       })
       # Export only what workers need
       parallel::clusterExport(cl,
-                             varlist = c("pa", "x", "n", "D"),
+                             varlist = c("pa", "x", "n", "D", "fc"),
                              envir = environment())
 
       ab <- parallel::parSapply(cl, 1:B, function(i) {
         ind <- rangen::Sample.int(n, n, replace = TRUE)
         suppressWarnings({
-          optimize(pa, c(-1, 1), x = x[ind, ], n = n, maximum = TRUE )$maximum
+          optimize(pa, c(-1, 1), x = x[ind, ], n = n, fc = fc, maximum = TRUE )$maximum
         })
       })
 
