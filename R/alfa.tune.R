@@ -17,7 +17,7 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
     })
     aff0 <- Compositional::alfa(x, 0)
     z0 <- aff0$aff
-    lik0 <-  - 0.5 * n * log( abs( det( fc * Rfast::cova(z0) ) ) ) + aff0$sa
+    lik0 <-  - 0.5 * n * as.numeric( determinant( fc * cov(z0), logarithm = TRUE)$modulus ) + aff0$sa
     result <- c(ell$maximum, ell$objective + con, lik0 + con)
     names(result) <- c("best alpha", "max log-lik", "log-lik at 0")
 

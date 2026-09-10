@@ -3,7 +3,7 @@
     "path": "~/GitHub/Compositional/R/alfa.tune.R",
     "project_path": "R/alfa.tune.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "3736214709",
     "contents": "",
     "dirty": false,
     "created": 1789026459526.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "7,12",
-        "scrollLine": "0"
+        "cursorPosition": "19,61",
+        "scrollLine": "10"
     },
     "folds": "",
-    "lastKnownWriteTime": 1789032701,
+    "lastKnownWriteTime": 1789037364,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1789032701877,
+    "last_content_update": 1789037364059,
     "read_only": false,
     "read_only_alternatives": []
 }

@@ -6,9 +6,9 @@ alfa.profile <- function(x, a = seq(-1, 1, by = 0.01) ) {
   con <-  - 0.5 * n * d * log(2 * pi) - 0.5 * n * d
 
   for ( i in 1:length(a) ) {
-    trans <- Compositional::alfa( x, a[i] )
+    trans <- Compositional::alfa(x, a[i])
     aff <- trans$aff
-    qa[i] <-  - 0.5 * n * log( abs( det( f * cov(aff) ) ) ) + trans$sa
+    qa[i] <-  - 0.5 * n * as.numeric( determinant( f * cov(aff), logarithm = TRUE)$modulus ) + trans$sa
   }
   qa <- qa + con
 
