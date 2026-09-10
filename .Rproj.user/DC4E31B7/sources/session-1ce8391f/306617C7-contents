@@ -7,8 +7,10 @@ alfa.tune <- function(x, B = 1, ncores = 1) {
   pa <- function(a, x, n, fc) {
     trans <- Compositional::alfa(x, a)
     z <- trans$aff  ## the alpha-transformation
-    - 0.5 * n * log( abs( det( fc * cov(z) ) ) ) + trans$sa
+    #- 0.5 * n * log( abs( det( fc * cov(z) ) ) ) + trans$sa
+    - 0.5 * n * as.numeric( determinant( fc * cov(z), logarithm = TRUE)$modulus ) + trans$sa
   }
+
   if ( B == 1 ) {
     suppressWarnings({
       ell <- optimize(pa, c(-1, 1), x = x, n = n, fc = fc, maximum = TRUE )
