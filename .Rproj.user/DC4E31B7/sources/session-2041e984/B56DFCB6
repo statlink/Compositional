@@ -1,26 +1,26 @@
 {
-    "id": "2AE5618E",
-    "path": "~/GitHub/Compositional/man/zadr.Rd",
-    "project_path": "man/zadr.Rd",
+    "id": "B56DFCB6",
+    "path": "~/GitHub/Compositional/man/akern.reg.Rd",
+    "project_path": "man/akern.reg.Rd",
     "type": "r_doc",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1789332728982.0,
+    "created": 1789566063226.0,
     "source_on_save": false,
-    "relative_order": 1,
+    "relative_order": 4,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "105,0",
-        "scrollLine": "90"
+        "cursorPosition": "81,19",
+        "scrollLine": "57"
     },
     "folds": "",
-    "lastKnownWriteTime": 1789332734,
+    "lastKnownWriteTime": 1789036251,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1789332734463,
+    "last_content_update": 1789036251,
     "read_only": false,
     "read_only_alternatives": []
 }
