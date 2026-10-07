@@ -33,7 +33,8 @@ klalfapcr.tune <- function(y, x, covar = NULL, nfolds = 10, maxk = 50,
           z <- za[, 1:j, drop = FALSE ]
           znew <- zanew[, 1:j, drop = FALSE]
         }
-        est <- Compositional::kl.compreg(y = ytrain, x = z, xnew = znew, tol = 1e-07, maxiters = maxiters)$est
+        est <- Compositional::kl.compreg(y = ytrain, x = z, xnew = znew,
+                                         tol = 1e-07, maxiters = maxiters)$est
         res <- sum(ytest * log(est), na.rm = TRUE)
         msp[vim, j] <- 2 * abs( com - res * is.finite(res) )/length(folds[[ vim ]] )
       }
