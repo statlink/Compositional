@@ -28,7 +28,6 @@ diri.reg.irls <- function(y, x, xnew = NULL, tol = 1e-6, maxit = 100) {
     h <- ly - digamma(alpha)                 # n x D
     hbar <- Rfast::rowsums(mu * h)
     R <- phi * mu[, -1] * (h[, -1] - hbar)   # n x (D-1) score residuals for beta
-    rphi <- digamma(phi) + hbar                 # score residuals for phi
     S_vec <- as.vector( crossprod(x, R) )
 
     a  <- trigamma(alpha) * mu^2          # n x D
