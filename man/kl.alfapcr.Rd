@@ -9,8 +9,8 @@ Divergence based regression for compositional data with compositional data in th
 }
 
 \usage{
-kl.alfapcr(y, x, covar = NULL, a, k, xnew = NULL, B = 1, ncores = 1, tol = 1e-07,
-maxiters = 50)
+kl.alfapcr(y, x, covar = NULL, a, k, xnew = NULL, covarnew = NULL,
+B = 1, ncores = 1, tol = 1e-07, maxiters = 50)
 }
 
 \arguments{
@@ -32,6 +32,10 @@ A number at least equal to 1. How many principal components to use.
 }
 \item{xnew}{
 A matrix containing the new compositional data whose response is to be predicted. If you have no new data,
+leave this NULL as is by default.
+}
+\item{covarnew}{
+A matrix containing the new predictors data whose response is to be predicted. If you have no new data,
 leave this NULL as is by default.
 }
 \item{B}{
