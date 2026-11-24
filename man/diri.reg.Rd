@@ -98,12 +98,12 @@ For the rest functions if xnew is NULL, this is also NULL.
 }
 
 \references{
-Maier, Marco J. (2014) DirichletReg: Dirichlet Regression for Compositional Data in R.
+Maier Marco J. (2014) DirichletReg: Dirichlet Regression for Compositional Data in R.
 Research Report Series/Department of Statistics and Mathematics, 125. WU Vienna University of
 Economics and Business, Vienna.
 http://epub.wu.ac.at/4077/1/Report125.pdf
 
-Gueorguieva, Ralitza, Robert Rosenheck, and Daniel Zelterman (2008). Dirichlet component
+Gueorguieva Ralitza, Robert Rosenheck, and Daniel Zelterman (2008). Dirichlet component
 regression and its applications to psychiatric data. Computational statistics & data analysis
 52(12): 5344-5355.
 
