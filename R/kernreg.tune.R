@@ -1,69 +1,36 @@
 kernreg.tune <- function(y, x, h = seq(0.1, 1, length = 10), type = "gauss",
-                         nfolds = 10, folds = NULL, seed = NULL, graph = FALSE, ncores = 1) {
+                         nfolds = 10, folds = NULL, graph = FALSE, ncores = 1) {
+
+  runtime <- proc.time()
+
   if ( is.matrix(y) )  {
     n <- dim(y)[1]
-    D <- dim(y)[2]
-  } else {
-    n <- length(y)
-    D <- 1
-  }
-  runtime <- proc.time()
-  if ( !is.matrix(x) )  x <- as.matrix(x)
+  } else  n <- length(y)
+  x <- as.matrix(x)
+
   ina <- 1:n
   if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
-                                  stratified = FALSE, seed = seed)
+                                  stratified = FALSE)
   nfolds <- length(folds)
   msp <- matrix( nrow = length(folds), ncol = length(h) )
-  if ( ncores <= 1 ) {
-    for ( i in 1:nfolds ) {
-      nu <- folds[[ i ]]
-      if ( D > 1 )  {
-        ytrain <- y[-nu, , drop = FALSE]
-        ytest <- y[nu, , drop = FALSE]
-      } else {
-        ytest <- y[nu]
-        ytrain <- y[-nu]
-      }
-      xtest <- x[nu, , drop = FALSE]
-      xtrain <- x[-nu, , drop = FALSE]
-      est <- Compositional::kern.reg(xtest, ytrain, xtrain, h, type = type)
-      if ( D > 1 ) {
-        for ( j in 1:length(h) )  msp[i, j] <- mean( est[[ j ]] - ytest)^2
-      } else  msp[i, ] <- Rfast::colmeans( (ytest - est)^2 )
+
+  for ( i in 1:nfolds ) {
+    nu <- folds[[ i ]]
+    if ( D > 1 )  {
+      ytrain <- y[-nu, , drop = FALSE]
+      ytest <- y[nu, , drop = FALSE]
+    } else {
+      ytest <- y[nu]
+      ytrain <- y[-nu]
     }
-  } else {
-    cl <- parallel::makeCluster(ncores)
-    # Load required packages on workers
-    parallel::clusterEvalQ(cl, {
-      library(Rfast)
-      library(Compositional)
-    })
-    # Export only what workers need
-    parallel::clusterExport(cl, 
-                           varlist = c("y", "x", "folds", "h", "type", "D"), 
-                           envir = environment())
-    
-    msp <- t( parallel::parSapply(cl, 1:nfolds, function(i) {
-      pe <- numeric( length(h) )
-      nu <- folds[[ i ]]
-      if ( D > 1 )  {
-        ytrain <- y[-nu, , drop = FALSE]
-        ytest <- y[nu, , drop = FALSE]
-      } else {
-        ytest <- y[nu]
-        ytrain <- y[-nu]
-      }
-      xtest <- x[nu, , drop = FALSE]
-      xtrain <- x[-nu, , drop = FALSE]
-      est <- Compositional::kern.reg(xtest, ytrain, xtrain, h, type = type)
-      if ( D > 1 ) {
-        for ( j in 1:length(h) )  pe[j] <- mean( est[[ j ]] - ytest)^2
-      } else  pe <- Rfast::colmeans( (ytest - est)^2 )
-      pe
-    }))
-    
-    parallel::stopCluster(cl)
+    xtest <- x[nu, , drop = FALSE]
+    xtrain <- x[-nu, , drop = FALSE]
+    est <- Compositional::kern.reg(xtest, ytrain, xtrain, h, type, ncores)
+    if ( D > 1 ) {
+      for ( j in 1:length(h) )  msp[i, j] <- mean( est[[ j ]] - ytest)^2
+    } else  msp[i, ] <- Rfast::colmeans( (ytest - est)^2 )
   }
+
   runtime <- proc.time() - runtime
   mspe <- Rfast::colmeans(msp)
   names(mspe) <- paste("h=", h, sep = "")

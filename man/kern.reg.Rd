@@ -10,7 +10,7 @@ Kernel regression (Nadaraya-Watson estimator) with a numerical response vector o
 }
 
 \usage{
-kern.reg(xnew, y, x, h = seq(0.1, 1, length = 10), type = "gauss" )
+kern.reg(xnew, y, x, h = seq(0.1, 1, length = 10), type = "gauss", ncores = 1 )
 }
 
 \arguments{
@@ -28,6 +28,9 @@ The bandwidth value(s) to consider.
 }
 \item{type}{
 The type of kernel to use, "gauss" or "laplace".
+}
+\item{ncores}{
+The number of cores to use, default value is 1.
 }
 }
 

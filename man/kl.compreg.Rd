@@ -14,7 +14,7 @@ Regression for compositional data based on the Kullback-Leibler the Jensen-Shann
 
 \usage{
 kl.compreg(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1e-07, maxiters = 50)
-js.compreg(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL)
+js.compreg(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL, tol = 1e-07, maxiters = 100)
 tv.compreg(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL)
 symkl.compreg(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL)
 hellinger.compreg(y, x, con = TRUE, B = 1, ncores = 1, xnew = NULL)
@@ -91,7 +91,7 @@ Osterreicher F. and Vajda I. (2003). A new class of metric divergences on probab
 spaces and its applicability in statistics. Annals of the Institute of Statistical
 Mathematics 55, 639-653.
 
-Alenazi A. A. (2022). f-divergence regression models for compositional data. 
+Alenazi A. A. (2022). f-divergence regression models for compositional data.
 Pakistan Journal of Statistics and Operation Research, 18(4): 867--882.
 }
 

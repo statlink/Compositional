@@ -1,0 +1,6 @@
+kern.reg <- function(xnew, y, x, h = seq(0.1, 1, length = 10), type = "gauss", ncores = 1) {
+
+  kernreg::kern_reg(xnew, y, x, h, type, ncores)
+
+}
+

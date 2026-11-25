@@ -10,7 +10,7 @@ Cross-validation for the kernel regression with Euclidean response data.
 
 \usage{
 kernreg.tune(y, x, h = seq(0.1, 1, length = 10), type = "gauss",
-nfolds = 10, folds = NULL, seed = NULL, graph = FALSE, ncores = 1)
+nfolds = 10, folds = NULL, graph = FALSE, ncores = 1)
 }
 
 \arguments{
@@ -31,9 +31,6 @@ The number of folds. Set to 10 by default.
 }
 \item{folds}{
 If you have the list with the folds supply it here. You can also leave it NULL and it will create folds.
-}
-\item{seed}{
-You can specify your own seed number here or leave it NULL.
 }
 \item{graph}{
 If graph is TRUE (default value) a plot will appear.
