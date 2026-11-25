@@ -5,7 +5,11 @@ kernreg.tune <- function(y, x, h = seq(0.1, 1, length = 10), type = "gauss",
 
   if ( is.matrix(y) )  {
     n <- dim(y)[1]
-  } else  n <- length(y)
+    D <- dim(y)[2]
+  } else  {
+    n <- length(y)
+    D <- 1
+  }
   x <- as.matrix(x)
 
   ina <- 1:n
